@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.videoPostValidator = void 0;
-const interface_video_1 = require("./dto/interface.video");
+const interface_video_1 = require("../dto/interface.video");
 function videoPostValidator(req) {
     let errorsMessagesObj = {
         errorsMessages: []

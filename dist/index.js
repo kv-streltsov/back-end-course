@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const db_1 = require("./db/db");
-const video_post_validator_1 = require("./video.post.validator");
+const video_post_validator_1 = require("./video/video.post.validator");
+const video_post_create_1 = require("./video/video.post.create");
+const video_put_update_1 = require("./video/video.put.update");
 exports.app = (0, express_1.default)();
 const port = 3000;
 exports.app.use(express_1.default.json());
@@ -15,24 +17,19 @@ exports.app.get('/videos', (req, res) => {
 });
 exports.app.get('/videos/:id', (req, res) => {
     let video = db_1.video_list.find(video => video.id === +req.params.id);
-    video === undefined ? res.send(404) : res.status(200).send(video);
+    video === undefined ?
+        res.send(404) :
+        res.status(200).send(video);
 });
 exports.app.post('/videos', (req, res) => {
     let valid = (0, video_post_validator_1.videoPostValidator)(req.body);
-    if (valid)
+    valid === true ?
+        res.status(201).send((0, video_post_create_1.videoPostCreate)(req.body)) :
         res.status(400).send(valid);
-    else {
-        let newVideo = {
-            id: db_1.video_list.length + 1,
-            title: req.body.title,
-            author: req.body.author,
-            canBeDownloaded: false,
-            minAgeRestriction: 18,
-            createdAt: new Date().toISOString(),
-            publicationDate: new Date().toISOString(),
-        };
-        console.log(newVideo);
-    }
+});
+exports.app.put('/videos/:id', (req, res) => {
+    (0, video_put_update_1.videoPutUpdate)(req.params.id, req.body);
+    res.send(200);
 });
 if (process.env.NODE_ENV !== 'test') {
     exports.app.listen(port, () => {

@@ -1,4 +1,4 @@
-import {Resolutions} from "./dto/interface.video";
+import {Resolutions} from "../dto/interface.video";
 
 export function videoPostValidator(req:any):any{
 
@@ -15,6 +15,7 @@ export function videoPostValidator(req:any):any{
 		"message": "maxLength: 40",
 		"field": "title"
 	})}
+
 	//check author
 	if(req.author === undefined){errorsMessagesObj.errorsMessages.push({
 		"message": "undefined",
@@ -24,6 +25,7 @@ export function videoPostValidator(req:any):any{
 		"message": "maxLength: 20",
 		"field": "author"
 	})}
+
 	//check resolutions
 	if(req.availableResolutions){
 
@@ -37,10 +39,6 @@ export function videoPostValidator(req:any):any{
 
 	}
 
-
 	if(errorsMessagesObj.errorsMessages.length) return errorsMessagesObj
-
-
-
-
+	return true
 }
