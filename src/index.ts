@@ -6,9 +6,12 @@ import {videoPostCreate} from "./video/video.post.create";
 import {videoPutUpdate} from "./video/video.put.update";
 
 export const app = express()
-const port = 3000
+const port = 5000
 
 app.use( express.json())
+app.get('/',(req,res)=>{
+    res.send('Hello')
+})
 
 app.get('/videos', (req:Request, res:Response) => {
     res.status(200).send(video_list)

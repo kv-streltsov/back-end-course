@@ -10,8 +10,11 @@ const video_post_validator_1 = require("./video/video.post.validator");
 const video_post_create_1 = require("./video/video.post.create");
 const video_put_update_1 = require("./video/video.put.update");
 exports.app = (0, express_1.default)();
-const port = 3000;
+const port = 5000;
 exports.app.use(express_1.default.json());
+exports.app.get('/', (req, res) => {
+    res.send('Hello');
+});
 exports.app.get('/videos', (req, res) => {
     res.status(200).send(db_1.video_list);
 });
