@@ -12,3 +12,5 @@ export function videoDeleteDel(id:string):boolean {
 
 	return check_id
 }
+
+
