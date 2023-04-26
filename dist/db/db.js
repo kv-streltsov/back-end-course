@@ -7,7 +7,7 @@ exports.video_list = [
         id: 1,
         title: 'snowboard',
         author: 'kv.streltsov',
-        canBeDownloaded: true,
+        canBeDownloaded: false,
         minAgeRestriction: 18,
         createdAt: '2023-04-25T03:39:35.504Z',
         publicationDate: '2023-04-26T03:39:35.504Z',
