@@ -7,7 +7,7 @@ export function videoPostValidator(req:any):any{
 	}
 
 	//check title
-	if(req.title === undefined){errorsMessagesObj.errorsMessages.push({
+	if(!req.title){errorsMessagesObj.errorsMessages.push({
 		"message": "undefined",
 		"field": "title"
 	})}
@@ -17,7 +17,7 @@ export function videoPostValidator(req:any):any{
 	})}
 
 	//check author
-	if(req.author === undefined){errorsMessagesObj.errorsMessages.push({
+	if(!req.author){errorsMessagesObj.errorsMessages.push({
 		"message": "undefined",
 		"field": "author"
 	})}

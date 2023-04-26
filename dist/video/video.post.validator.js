@@ -7,7 +7,7 @@ function videoPostValidator(req) {
         errorsMessages: []
     };
     //check title
-    if (req.title === undefined) {
+    if (!req.title) {
         errorsMessagesObj.errorsMessages.push({
             "message": "undefined",
             "field": "title"
@@ -20,7 +20,7 @@ function videoPostValidator(req) {
         });
     }
     //check author
-    if (req.author === undefined) {
+    if (!req.author) {
         errorsMessagesObj.errorsMessages.push({
             "message": "undefined",
             "field": "author"
