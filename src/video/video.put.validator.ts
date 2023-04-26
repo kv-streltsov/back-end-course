@@ -5,13 +5,20 @@ export function videoPutValidator(req:any):any{
 	let errorsMessagesObj:any = {
 		errorsMessages:[]
 	}
-
+	if(req.minAgeRestriction){
+		if(typeof req.minAgeRestriction !== "number" || req.minAgeRestriction < 1 || req.minAgeRestriction > 18){
+			errorsMessagesObj.errorsMessages.push({
+				"message": "should be number and in the range 1-18",
+				"field": "canBeDownloaded"})
+		}
+	}
 	//check canBeDownloaded
 	if(req.canBeDownloaded){
-		if(typeof req.canBeDownloaded !== "boolean") {errorsMessagesObj.errorsMessages.push({
+		if(typeof req.canBeDownloaded !== "boolean") {
+			errorsMessagesObj.errorsMessages.push({
 			"message": "should be boolean",
-			"field": "canBeDownloaded"
-		})}
+			"field": "canBeDownloaded"})
+		}
 	}
 
 	if(req.title || req.title === null){

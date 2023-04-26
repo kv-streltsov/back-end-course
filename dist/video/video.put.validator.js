@@ -6,6 +6,14 @@ function videoPutValidator(req) {
     let errorsMessagesObj = {
         errorsMessages: []
     };
+    if (req.minAgeRestriction) {
+        if (typeof req.minAgeRestriction !== "number" || req.minAgeRestriction < 1 || req.minAgeRestriction > 18) {
+            errorsMessagesObj.errorsMessages.push({
+                "message": "should be number and in the range 1-18",
+                "field": "canBeDownloaded"
+            });
+        }
+    }
     //check canBeDownloaded
     if (req.canBeDownloaded) {
         if (typeof req.canBeDownloaded !== "boolean") {
