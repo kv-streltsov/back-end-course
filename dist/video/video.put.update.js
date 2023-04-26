@@ -3,13 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.videoPutUpdate = void 0;
 const db_1 = require("../db/db");
 function videoPutUpdate(id, body) {
-    db_1.video_list.forEach(value => {
-        if (value.id = +id) {
-            console.log(value);
+    let check_id = false;
+    for (const video of db_1.video_list) {
+        if (video.id === +id) {
+            check_id = true;
+            for (const bodyElement in body) {
+                video[bodyElement] = body[bodyElement];
+            }
         }
-    });
-    for (const bodyKey in body) {
-        // console.log(bodyKey)
     }
+    return check_id;
 }
 exports.videoPutUpdate = videoPutUpdate;
