@@ -10,7 +10,7 @@ function videoPutValidator(req) {
         if (typeof req.minAgeRestriction !== "number" || req.minAgeRestriction < 1 || req.minAgeRestriction > 18) {
             errorsMessagesObj.errorsMessages.push({
                 "message": "should be number and in the range 1-18",
-                "field": "canBeDownloaded"
+                "field": "minAgeRestriction"
             });
         }
     }
