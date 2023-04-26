@@ -48,6 +48,7 @@ exports.app.delete('/videos/:id', (req, res) => {
     (0, video_delete_del_1.videoDeleteDel)(req.params.id) ? res.sendStatus(204) : res.sendStatus(404);
 });
 exports.app.delete('/testing/all-data', (req, res) => {
+    let video_list = [];
     res.send(204);
 });
 if (process.env.NODE_ENV !== 'test') {

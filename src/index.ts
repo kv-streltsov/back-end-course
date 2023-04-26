@@ -62,6 +62,7 @@ app.delete('/videos/:id',(req: Request,res:Response)=>{
 
 
 app.delete('/testing/all-data',(req: Request,res:Response)=>{
+    let video_list: InterfaceVideo[] = []
     res.send(204)
 })
 
