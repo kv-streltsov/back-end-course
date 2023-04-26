@@ -74,6 +74,7 @@ function videoPutValidator(req) {
             }
         });
     }
+    //end
     if (errorsMessagesObj.errorsMessages.length)
         return errorsMessagesObj;
     return true;
