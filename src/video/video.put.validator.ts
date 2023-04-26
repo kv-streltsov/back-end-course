@@ -6,6 +6,14 @@ export function videoPutValidator(req:any):any{
 		errorsMessages:[]
 	}
 
+	//check canBeDownloaded
+	if(req.canBeDownloaded){
+		if(typeof req.canBeDownloaded !== "boolean") {errorsMessagesObj.errorsMessages.push({
+			"message": "should be boolean",
+			"field": "canBeDownloaded"
+		})}
+	}
+
 	if(req.title || req.title === null){
 
 		if(req.title == null) {errorsMessagesObj.errorsMessages.push({
