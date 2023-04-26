@@ -57,7 +57,6 @@ app.put('/videos/:id',(req: Request,res:Response)=> {
 
 })
 app.delete('/videos/:id',(req: Request,res:Response)=>{
-
     videoDeleteDel(req.params.id) ? res.sendStatus(204) : res.sendStatus(404)
 })
 

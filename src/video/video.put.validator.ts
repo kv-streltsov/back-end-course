@@ -7,11 +7,10 @@ export function videoPutValidator(req:any):any{
 	}
 
 	//check publicationDate
-	if(req.publicationDate){
-
-		if(!req.publicationDate.match('\\d{4}(.\\d{2}){2}(\\s|T)(\\d{2}.){2}\\d{2}')){
+	if(req.publicationDate || req.publicationDate === null){
+		if(typeof req.publicationDate !== "string" || req.publicationDate.match('\\d{4}(.\\d{2}){2}(\\s|T)(\\d{2}.){2}\\d{2}' )){
 			errorsMessagesObj.errorsMessages.push({
-				"message": "should be ISO format",
+				"message": "should be date ISO format and string",
 				"field": "publicationDate"})
 		}
 	}
