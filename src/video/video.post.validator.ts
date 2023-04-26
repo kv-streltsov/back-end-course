@@ -5,7 +5,13 @@ export function videoPostValidator(req:any):any{
 	let errorsMessagesObj:any = {
 		errorsMessages:[]
 	}
-
+	//check canBeDownloaded
+	if(req.canBeDownloaded){
+		if(typeof req.canBeDownloaded !== "boolean") {errorsMessagesObj.errorsMessages.push({
+			"message": "should be boolean",
+			"field": "canBeDownloaded"
+		})}
+	}
 	//check title
 	if(!req.title){errorsMessagesObj.errorsMessages.push({
 		"message": "undefined",
