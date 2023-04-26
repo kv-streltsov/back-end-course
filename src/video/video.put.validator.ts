@@ -5,6 +5,18 @@ export function videoPutValidator(req:any):any{
 	let errorsMessagesObj:any = {
 		errorsMessages:[]
 	}
+
+	//check publicationDate
+	if(req.publicationDate){
+
+		if(!req.publicationDate.match('\\d{4}(.\\d{2}){2}(\\s|T)(\\d{2}.){2}\\d{2}')){
+			errorsMessagesObj.errorsMessages.push({
+				"message": "should be ISO format",
+				"field": "publicationDate"})
+		}
+	}
+
+	//check minAgeRestriction
 	if(req.minAgeRestriction || req.minAgeRestriction === 0){
 		if(typeof req.minAgeRestriction !== "number" || req.minAgeRestriction < 1 || req.minAgeRestriction > 18){
 			errorsMessagesObj.errorsMessages.push({
@@ -12,6 +24,7 @@ export function videoPutValidator(req:any):any{
 				"field": "minAgeRestriction"})
 		}
 	}
+
 	//check canBeDownloaded
 	if(req.canBeDownloaded){
 		if(typeof req.canBeDownloaded !== "boolean") {
@@ -21,6 +34,7 @@ export function videoPutValidator(req:any):any{
 		}
 	}
 
+	//check title
 	if(req.title || req.title === null){
 
 		if(req.title == null) {errorsMessagesObj.errorsMessages.push({
@@ -48,7 +62,6 @@ export function videoPutValidator(req:any):any{
 			"field": "author"})
 		}
 	}
-
 
 	//check resolutions
 	if(req.availableResolutions){
