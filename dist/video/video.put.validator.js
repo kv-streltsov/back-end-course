@@ -6,7 +6,7 @@ function videoPutValidator(req) {
     let errorsMessagesObj = {
         errorsMessages: []
     };
-    if (req.minAgeRestriction) {
+    if (req.minAgeRestriction || req.minAgeRestriction === 0) {
         if (typeof req.minAgeRestriction !== "number" || req.minAgeRestriction < 1 || req.minAgeRestriction > 18) {
             errorsMessagesObj.errorsMessages.push({
                 "message": "should be number and in the range 1-18",
