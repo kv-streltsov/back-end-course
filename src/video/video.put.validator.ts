@@ -6,21 +6,32 @@ export function videoPutValidator(req:any):any{
 		errorsMessages:[]
 	}
 
-	//check title
-	if(req.title){
+	if(req.title || req.title === null){
 
-		if(req.title.length > 40) {errorsMessagesObj.errorsMessages.push({
+		if(req.title == null) {errorsMessagesObj.errorsMessages.push({
+			"message": "undefined",
+			"field": "title"})
+
+		}
+		else if(req.title.length > 40) {errorsMessagesObj.errorsMessages.push({
 			"message": "maxLength: 40",
-			"field": "title"
-		})}
+			"field": "title"})
+		}
+
 	}
 
 	//check author
-	if(req.author){
-		if(req.author.length > 20) {errorsMessagesObj.errorsMessages.push({
+	if(req.author || req.author === null){
+		if(req.author == null) {errorsMessagesObj.errorsMessages.push({
+			"message": "undefined",
+			"field": "author"})
+
+		}
+
+		else if(req.author.length > 20) {errorsMessagesObj.errorsMessages.push({
 			"message": "maxLength: 20",
-			"field": "author"
-		})}
+			"field": "author"})
+		}
 	}
 
 
