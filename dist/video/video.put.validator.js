@@ -7,14 +7,6 @@ function videoPutValidator(req) {
         errorsMessages: []
     };
     //check publicationDate
-    if (req.publicationDate) {
-        if (typeof req.publicationDate !== "string" || !req.publicationDate.match('\\d{4}(.\\d{2}){2}(\\s|T)(\\d{2}.){2}\\d{2}')) {
-            errorsMessagesObj.errorsMessages.push({
-                "message": "should be date ISO format and string",
-                "field": "publicationDate"
-            });
-        }
-    }
     //check minAgeRestriction
     if (req.minAgeRestriction || req.minAgeRestriction === 0) {
         if (typeof req.minAgeRestriction !== "number" || req.minAgeRestriction < 1 || req.minAgeRestriction > 18) {

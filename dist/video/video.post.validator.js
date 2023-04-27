@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.videoPostValidator = void 0;
-const interface_video_1 = require("../dto/interface.video");
 function videoPostValidator(req) {
     let errorsMessagesObj = {
         errorsMessages: []
@@ -42,16 +41,6 @@ function videoPostValidator(req) {
         });
     }
     //check resolutions
-    if (req.availableResolutions) {
-        req.availableResolutions.forEach(resolution => {
-            if (interface_video_1.Resolutions[resolution] === undefined) {
-                errorsMessagesObj.errorsMessages.push({
-                    "message": "Valid values: [ P144, P240, P360, P480, P720, P1080, P1440, P2160 ]",
-                    "field": "availableResolutions"
-                });
-            }
-        });
-    }
     if (errorsMessagesObj.errorsMessages.length)
         return errorsMessagesObj;
     return true;
