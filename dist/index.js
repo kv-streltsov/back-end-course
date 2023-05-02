@@ -9,13 +9,6 @@ const video_routers_1 = require("./routes/video.routers");
 exports.app = (0, express_1.default)();
 const port = 5000;
 exports.app.use(express_1.default.json());
-exports.app.get('/', (req, res) => {
-    res.send('Hello');
-});
-exports.app.delete('/testing/all-data', (req, res) => {
-    // video_list = []
-    res.send(204);
-});
 exports.app.use('/videos', video_routers_1.videoRouters);
 if (process.env.NODE_ENV !== 'test') {
     exports.app.listen(port, () => {

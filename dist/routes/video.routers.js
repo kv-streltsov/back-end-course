@@ -12,12 +12,14 @@ exports.videoRouters.get('/', (req, res) => {
     res.status(200).send(db_1.video_list);
 });
 exports.videoRouters.get('/:id', (req, res) => {
-    console.log(typeof req.method);
     let video = db_1.video_list.find(video => video.id === +req.params.id);
-    video === undefined ?
-        res.send(404) :
-        res.status(200).send(video);
+    if (!video) {
+        res.send(404);
+        return;
+    }
+    res.status(200).send(video);
 });
+//
 exports.videoRouters.post('/', (req, res) => {
     let valid = (0, video_validator_1.videoValidator)(req.body, req.method);
     valid === true ?

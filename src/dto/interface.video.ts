@@ -1,3 +1,5 @@
+import {Response, Request} from 'express'
+
 export enum Resolutions {
 	P144= 'P144',
 	P240= 'P240',
@@ -17,5 +19,7 @@ export interface InterfaceVideo {
 	minAgeRestriction?: number | null
 	createdAt?: string
 	publicationDate?: string
-	availableResolutions?: Resolutions | null
+	availableResolutions?: Resolutions[] | null
 }
+
+export type RequserWithBody<T> = Request<{},{},T>

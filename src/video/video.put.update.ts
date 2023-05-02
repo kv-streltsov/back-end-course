@@ -1,12 +1,20 @@
 import {video_list} from "../db/db";
+import {InterfaceVideo} from "../dto/interface.video";
 
-export function videoPutUpdate(id:string, body:any):boolean {
-	let check_id: boolean = false
-	for (const video of video_list) {
-		if(video.id === +id){
-			check_id = true
-			for (const bodyElement in body) { video[bodyElement] = body[bodyElement] }
-		}
+export function videoPutUpdate(id: string, body: InterfaceVideo): boolean {
+	const videoIndex = video_list.findIndex(v => v.id === +id)
+	const video = video_list.find(v => v.id === +id)
+
+	if (videoIndex === -1) {
+		return false
 	}
-	return check_id
+
+	const newVideo = {
+		...video,
+		...body
+	}
+
+	video_list.splice(videoIndex, 1, newVideo)
+
+	return true
 }
