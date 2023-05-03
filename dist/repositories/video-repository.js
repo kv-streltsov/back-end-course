@@ -20,7 +20,7 @@ exports.videoRepository = {
     },
     postVideo(body, method) {
         let valid = (0, video_validator_1.videoValidator)(body, method);
-        if (valid)
+        if (typeof valid !== 'object')
             return (0, video_post_create_1.videoPostCreate)(body);
         else
             return 400;

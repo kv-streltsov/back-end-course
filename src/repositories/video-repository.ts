@@ -4,6 +4,7 @@ import {videoValidator} from "../video/video.validator";
 import {videoPostCreate} from "../video/video.post.create";
 import {videoPutUpdate} from "../video/video.put.update";
 import {videoDeleteDel} from "../video/video.delete.del";
+import {type} from "os";
 
 export const videoRepository =  {
 
@@ -20,7 +21,7 @@ export const videoRepository =  {
     postVideo (body: InterfaceVideo, method:string):InterfaceVideo | number{
 
         let valid = videoValidator(body, method)
-        if(valid) return videoPostCreate(body)
+        if(typeof valid !== 'object') return videoPostCreate(body)
         else return 400
     },
     putVideo(id:string,body:InterfaceVideo,method: string){
