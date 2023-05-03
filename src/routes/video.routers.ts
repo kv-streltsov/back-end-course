@@ -1,28 +1,24 @@
-import express, {Response, Request, Router} from 'express'
-import {video_list} from "../db/db";
-import {InterfaceVideo, RequserWithBody} from "../dto/interface.video";
+import  {Response, Request, Router} from 'express'
+import {ErrorInterface, InterfaceVideo, RequserWithBody} from "../dto/interface.video";
 
-import {videoValidator} from "../video/video.validator";
-import {videoPostCreate} from "../video/video.post.create";
-import {videoPutUpdate} from "../video/video.put.update";
-import {videoDeleteDel} from "../video/video.delete.del";
+
 import {videoRepository} from "../repositories/video-repository";
 
 export const videoRouters = Router({})
 videoRouters.get('/', (req: Request<{}, {}, {}, { name: string }>, res: Response<InterfaceVideo[]>) => {
-	let video = videoRepository.getAllVideo()
+	let video: InterfaceVideo[] = videoRepository.getAllVideo()
 	res.status(200).send(video)
 })
 videoRouters.get('/:id', (req: Request<{ id: string }, {}, {}, {}>, res: Response<InterfaceVideo | number>) => {
 
-	let findVideo = videoRepository.findVideoById(req.params.id)
+	let findVideo:InterfaceVideo | number = videoRepository.findVideoById(req.params.id)
 	if(findVideo === 404) res.sendStatus(404)
 	res.status(200).send(findVideo)
 
 })
 //
-videoRouters.post('/', (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>) => {
-	let newVideo = videoRepository.postVideo(req.body,req.method)
+videoRouters.post('/', (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>)=> {
+	let newVideo:any = videoRepository.postVideo(req.body,req.method)
 	if(newVideo === 400) res.sendStatus(400)
 	res.status(201).send(newVideo)
 })

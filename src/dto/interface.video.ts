@@ -1,4 +1,5 @@
 import {Response, Request} from 'express'
+import exp from "constants";
 
 export enum Resolutions {
 	P144= 'P144',
@@ -20,6 +21,13 @@ export interface InterfaceVideo {
 	createdAt?: string
 	publicationDate?: string
 	availableResolutions?: Resolutions[] | null
+}
+
+export interface ErrorInterface {
+	errorsMessages:[{
+		message: string,
+		field: string
+	}]
 }
 
 export type RequserWithBody<T> = Request<{},{},T>

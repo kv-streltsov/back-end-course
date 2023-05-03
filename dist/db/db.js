@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.video_list = void 0;
+exports.clear_db = exports.video_list = void 0;
 const interface_video_1 = require("../dto/interface.video");
 exports.video_list = [
     {
@@ -24,3 +24,7 @@ exports.video_list = [
         availableResolutions: [interface_video_1.Resolutions.P720]
     }
 ];
+function clear_db() {
+    exports.video_list = [];
+}
+exports.clear_db = clear_db;

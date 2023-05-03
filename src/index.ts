@@ -1,21 +1,13 @@
 import express, {Response, Request} from 'express'
 import {videoRouters} from "./routes/video.routers";
+import {testingRouter} from "./routes/testing.router";
 
 export const app = express()
 const port = 5000
 
 app.use(express.json())
 app.use('/videos', videoRouters)
-
-
-
-
-
-
-
-
-
-
+app.use('/testing/all-data',testingRouter)
 
 
 

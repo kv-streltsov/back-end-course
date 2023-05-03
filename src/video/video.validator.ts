@@ -1,6 +1,6 @@
 import {InterfaceVideo, Resolutions} from "../dto/interface.video";
 
-export function videoValidator(body: any, method: string): any {
+export function videoValidator(body: InterfaceVideo, method: string): any {
 
 	let errorsMessagesObj: any = {
 		errorsMessages: []
@@ -70,7 +70,7 @@ export function videoValidator(body: any, method: string): any {
 				}
 				break
 			case 'canBeDownloaded':
-				if (body.canBeDownloaded) {
+				if (body.canBeDownloaded || body.canBeDownloaded === false) {
 					if (typeof body.canBeDownloaded !== "boolean") {
 						errorsMessagesObj.errorsMessages.push({
 							"message": "should be boolean",

@@ -63,7 +63,7 @@ function videoValidator(body, method) {
                 }
                 break;
             case 'canBeDownloaded':
-                if (body.canBeDownloaded) {
+                if (body.canBeDownloaded || body.canBeDownloaded === false) {
                     if (typeof body.canBeDownloaded !== "boolean") {
                         errorsMessagesObj.errorsMessages.push({
                             "message": "should be boolean",

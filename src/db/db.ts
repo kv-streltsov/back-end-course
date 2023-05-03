@@ -1,4 +1,5 @@
 import {InterfaceVideo, Resolutions} from "../dto/interface.video";
+import exp from "constants";
 
 export let video_list: InterfaceVideo[] = [
 	{
@@ -22,3 +23,6 @@ export let video_list: InterfaceVideo[] = [
 		availableResolutions: [Resolutions.P720]
 	}
 ]
+export function clear_db():void{
+	video_list = []
+}
