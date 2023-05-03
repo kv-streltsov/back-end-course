@@ -16,8 +16,9 @@ exports.videoRouters.get('/:id', (req, res) => {
 });
 //
 exports.videoRouters.post('/', (req, res) => {
+    console.log('post');
     let newVideo = video_repository_1.videoRepository.postVideo(req.body, req.method);
-    if (newVideo.errorsMessages !== 'undefined')
+    if (newVideo.errorsMessages !== undefined)
         res.status(400).send(newVideo);
     else
         res.status(201).send(newVideo);

@@ -16,7 +16,7 @@ function videoValidator(body, method) {
                     "field": "title"
                 });
             }
-            if (body.author === null || body.author === undefined || typeof body.title !== 'string') {
+            if (body.author === null || body.author === undefined || typeof body.author !== 'string') {
                 errorsMessagesObj.errorsMessages.push({
                     "message": "undefined or not string",
                     "field": "author"
