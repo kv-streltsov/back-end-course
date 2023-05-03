@@ -1,4 +1,4 @@
-import {InterfaceVideo} from "../dto/interface.video";
+import {InterfaceError, InterfaceVideo} from "../dto/interface.video";
 import {video_list} from "../db/db";
 import {videoValidator} from "../video/video.validator";
 import {videoPostCreate} from "../video/video.post.create";
@@ -18,11 +18,14 @@ export const videoRepository =  {
         if(!findVideo){ return 404 }
         else return findVideo
     },
-    postVideo (body: InterfaceVideo, method:string):InterfaceVideo | number{
+    postVideo (body: InterfaceVideo, method:string):InterfaceVideo | number | InterfaceError{
 
         let valid = videoValidator(body, method)
-        if(typeof valid !== 'object') return videoPostCreate(body)
-        else return 400
+        if(valid.errorsMessages === undefined) return videoPostCreate(body)
+        else return  valid
+
+
+
     },
     putVideo(id:string,body:InterfaceVideo,method: string){
         let valid = videoValidator(body, method)

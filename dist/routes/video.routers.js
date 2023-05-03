@@ -17,9 +17,10 @@ exports.videoRouters.get('/:id', (req, res) => {
 //
 exports.videoRouters.post('/', (req, res) => {
     let newVideo = video_repository_1.videoRepository.postVideo(req.body, req.method);
-    if (newVideo === 400)
-        res.sendStatus(400);
-    res.status(201).send(newVideo);
+    if (newVideo.errorsMessages !== 'undefined')
+        res.status(400).send(newVideo);
+    else
+        res.status(201).send(newVideo);
 });
 exports.videoRouters.put('/:id', (req, res) => {
     let putVideo = video_repository_1.videoRepository.putVideo(req.params.id, req.body, req.method);

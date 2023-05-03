@@ -23,7 +23,7 @@ export interface InterfaceVideo {
 	availableResolutions?: Resolutions[] | null
 }
 
-export interface ErrorInterface {
+export interface InterfaceError {
 	errorsMessages:[{
 		message: string,
 		field: string

@@ -1,5 +1,5 @@
 import  {Response, Request, Router} from 'express'
-import {ErrorInterface, InterfaceVideo, RequserWithBody} from "../dto/interface.video";
+import {InterfaceError, InterfaceVideo, RequserWithBody} from "../dto/interface.video";
 
 
 import {videoRepository} from "../repositories/video-repository";
@@ -18,9 +18,10 @@ videoRouters.get('/:id', (req: Request<{ id: string }, {}, {}, {}>, res: Respons
 })
 //
 videoRouters.post('/', (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>)=> {
-	let newVideo:any = videoRepository.postVideo(req.body,req.method)
-	if(newVideo === 400) res.sendStatus(400)
-	res.status(201).send(newVideo)
+	let newVideo: any = videoRepository.postVideo(req.body,req.method)
+	if(newVideo.errorsMessages !== 'undefined') res.status(400).send(newVideo)
+	else res.status(201).send(newVideo)
+
 })
 videoRouters.put('/:id', (req: Request<{ id: string }, {}, InterfaceVideo, {}>,  res: Response<number>) => {
 	let putVideo = videoRepository.putVideo(req.params.id,req.body,req.method)

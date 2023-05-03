@@ -11,15 +11,15 @@ export function videoValidator(body: InterfaceVideo, method: string): any {
 
 		if (method === 'POST' && !checkFlag) {
 			checkFlag = true
-			if (body.title === null || body.title === undefined) {
+			if (body.title === null || body.title === undefined || typeof body.title !== 'string') {
 				errorsMessagesObj.errorsMessages.push({
-					"message": "undefined",
+					"message": "undefined or not string",
 					"field": "title"
 				})
 			}
-			if (body.author === null || body.author === undefined) {
+			if (body.author === null || body.author === undefined || typeof body.title !== 'string') {
 				errorsMessagesObj.errorsMessages.push({
-					"message": "undefined",
+					"message": "undefined or not string",
 					"field": "author"
 				})
 			}
