@@ -6,46 +6,38 @@ import {videoValidator} from "../video/video.validator";
 import {videoPostCreate} from "../video/video.post.create";
 import {videoPutUpdate} from "../video/video.put.update";
 import {videoDeleteDel} from "../video/video.delete.del";
+import {videoRepository} from "../repositories/video-repository";
 
 export const videoRouters = Router({})
-videoRouters.get('/', (req: Request<{}, {}, {}, { name: string }>,
-					   res: Response<InterfaceVideo[]>) => {
-	res.status(200).send(video_list)
-})
-videoRouters.get('/:id', (req: Request<{ id: string }, {}, {}, {}>,
-						  res: Response<InterfaceVideo | number>) => {
-	let video: InterfaceVideo | undefined = video_list.find(video => video.id === +req.params.id)
-
-	if(!video){
-		res.send(404)
-		return
-	}
-
+videoRouters.get('/', (req: Request<{}, {}, {}, { name: string }>, res: Response<InterfaceVideo[]>) => {
+	let video = videoRepository.getAllVideo()
 	res.status(200).send(video)
+})
+videoRouters.get('/:id', (req: Request<{ id: string }, {}, {}, {}>, res: Response<InterfaceVideo | number>) => {
+
+	let findVideo = videoRepository.findVideoById(req.params.id)
+	if(findVideo === 404) res.sendStatus(404)
+	res.status(200).send(findVideo)
+
 })
 //
 videoRouters.post('/', (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>) => {
-
-	let valid = videoValidator(req.body, req.method)
-	valid === true ?
-		res.status(201).send(videoPostCreate(req.body)) :
-		res.status(400).send(valid)
-
+	let newVideo = videoRepository.postVideo(req.body,req.method)
+	if(newVideo === 400) res.sendStatus(400)
+	res.status(201).send(newVideo)
 })
-videoRouters.put('/:id', (req: Request<{ id: string }, {}, InterfaceVideo, {}>,
-						  res: Response<number>) => {
+videoRouters.put('/:id', (req: Request<{ id: string }, {}, InterfaceVideo, {}>,  res: Response<number>) => {
+	let putVideo = videoRepository.putVideo(req.params.id,req.body,req.method)
 
-	let valid = videoValidator(req.body, req.method)
-
-	if (valid === true) {
-		let upDateVideo = videoPutUpdate(req.params.id, req.body)
-		if (upDateVideo) res.send(204)
-		else res.send(404)
-	} else res.status(400).send(valid)
-
+	if(putVideo === 204) res.sendStatus(204)
+	if(putVideo === 404) res.sendStatus(404)
+	else res.status(400).send(putVideo)
 
 })
 videoRouters.delete('/:id', (req: Request, res: Response) => {
-	videoDeleteDel(req.params.id) ? res.sendStatus(204) : res.sendStatus(404)
+	let delVideo = videoRepository.deleteVideo(req.params.id)
+	if(delVideo === 204) res.sendStatus(204)
+	else res.sendStatus(404)
+
 })
 
