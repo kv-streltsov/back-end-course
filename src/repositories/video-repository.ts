@@ -1,9 +1,9 @@
 import {InterfaceError, InterfaceVideo} from "../dto/interface.video";
 import {video_list} from "../db/db";
-import {videoValidator} from "../video/video.validator";
-import {videoPostCreate} from "../video/video.post.create";
-import {videoPutUpdate} from "../video/video.put.update";
-import {videoDeleteDel} from "../video/video.delete.del";
+import {videoValidator} from "../controllers/video/video.validator";
+import {videoPostCreate} from "../controllers/video/video.post.create";
+import {videoPutUpdate} from "../controllers/video/video.put.update";
+import {videoDeleteDel} from "../controllers/video/video.delete.del";
 import {type} from "os";
 
 export const videoRepository =  {

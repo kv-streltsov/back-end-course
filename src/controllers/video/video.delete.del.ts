@@ -1,4 +1,4 @@
-import {video_list} from "../db/db";
+import {video_list} from "../../db/db";
 
 export function videoDeleteDel(id:string):boolean {
 	let check_id: boolean = false

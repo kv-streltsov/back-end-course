@@ -1,5 +1,5 @@
-import {video_list} from "../db/db";
-import {InterfaceVideo} from "../dto/interface.video";
+import {video_list} from "../../db/db";
+import {InterfaceVideo} from "../../dto/interface.video";
 
 export function videoPutUpdate(id: string, body: InterfaceVideo): boolean {
 	const videoIndex = video_list.findIndex(v => v.id === +id)

@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.videoRepository = void 0;
 const db_1 = require("../db/db");
-const video_validator_1 = require("../video/video.validator");
-const video_post_create_1 = require("../video/video.post.create");
-const video_put_update_1 = require("../video/video.put.update");
-const video_delete_del_1 = require("../video/video.delete.del");
+const video_validator_1 = require("../controllers/video/video.validator");
+const video_post_create_1 = require("../controllers/video/video.post.create");
+const video_put_update_1 = require("../controllers/video/video.put.update");
+const video_delete_del_1 = require("../controllers/video/video.delete.del");
 exports.videoRepository = {
     getAllVideo() {
         return db_1.video_list;
