@@ -3,6 +3,7 @@ import {InterfaceVideo, RequserWithBody} from "../dto/interface.video";
 
 
 import {videoRepository} from "../repositories/video-repository";
+import {basic_auth} from "../middleware/basic-auth-middleware";
 
 export const videoRouters = Router({})
 videoRouters.get('/', (req: Request<{}, {}, {}, { name: string }>, res: Response<InterfaceVideo[]>) => {
@@ -17,14 +18,14 @@ videoRouters.get('/:id', (req: Request<{ id: string }, {}, {}, {}>, res: Respons
 
 })
 //
-videoRouters.post('/', (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>) => {
+videoRouters.post('/', basic_auth, (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>) => {
     console.log('post')
     let newVideo: any = videoRepository.postVideo(req.body, req.method)
     if (newVideo.errorsMessages !== undefined) res.status(400).send(newVideo)
     else res.status(201).send(newVideo)
 
 })
-videoRouters.put('/:id', (req: Request<{ id: string }, {}, InterfaceVideo, {}>, res: Response<number>) => {
+videoRouters.put('/:id', basic_auth, (req: Request<{ id: string }, {}, InterfaceVideo, {}>, res: Response<number>) => {
     let putVideo = videoRepository.putVideo(req.params.id, req.body, req.method)
 
     if (putVideo === 204) res.sendStatus(204)
@@ -32,10 +33,7 @@ videoRouters.put('/:id', (req: Request<{ id: string }, {}, InterfaceVideo, {}>, 
     else res.status(400).send(putVideo)
 
 })
-videoRouters.delete('/:id', (req: Request, res: Response) => {
-    let delVideo = videoRepository.deleteVideo(req.params.id)
-    if (delVideo === 204) res.sendStatus(204)
-    else res.sendStatus(404)
-
+videoRouters.delete('/:id', basic_auth, (req: Request, res: Response) => {
+    res.sendStatus(videoRepository.deleteVideo(req.params.id))
 })
 

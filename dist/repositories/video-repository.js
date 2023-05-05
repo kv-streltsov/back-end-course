@@ -5,7 +5,6 @@ const db_1 = require("../db/db");
 const video_validator_1 = require("../controllers/video/video.validator");
 const video_post_create_1 = require("../controllers/video/video.post.create");
 const video_put_update_1 = require("../controllers/video/video.put.update");
-const video_delete_del_1 = require("../controllers/video/video.delete.del");
 exports.videoRepository = {
     getAllVideo() {
         return db_1.video_list;
@@ -38,10 +37,11 @@ exports.videoRepository = {
             return valid;
     },
     deleteVideo(id) {
-        let delVideo = (0, video_delete_del_1.videoDeleteDel)(id);
-        if (delVideo)
-            return 204;
-        return 404;
+        let findIndexVideo = db_1.video_list.findIndex(value => value.id === +id);
+        if (findIndexVideo === -1)
+            return 404;
+        db_1.blogs_list.splice(findIndexVideo, 1);
+        return 204;
     }
 };
 //# sourceMappingURL=video-repository.js.map

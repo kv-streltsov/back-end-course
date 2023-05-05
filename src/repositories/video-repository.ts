@@ -1,14 +1,11 @@
 import {InterfaceVideo} from "../dto/interface.video";
 import {InterfaceError} from "../dto/Interface-error";
-import {video_list} from "../db/db";
+import {blogs_list, video_list} from "../db/db";
 import {videoValidator} from "../controllers/video/video.validator";
 import {videoPostCreate} from "../controllers/video/video.post.create";
 import {videoPutUpdate} from "../controllers/video/video.put.update";
-import {videoDeleteDel} from "../controllers/video/video.delete.del";
-import {type} from "os";
 
 export const videoRepository = {
-
     getAllVideo(): InterfaceVideo[] {
         return video_list
     },
@@ -39,9 +36,12 @@ export const videoRepository = {
 
     },
     deleteVideo(id: string): number {
-        let delVideo = videoDeleteDel(id)
-        if (delVideo) return 204
-        return 404
+
+        let findIndexVideo: number = video_list.findIndex(value => value.id === +id)
+        if (findIndexVideo === -1) return 404
+        blogs_list.splice(findIndexVideo, 1)
+        return 204
+
     }
 
 }
