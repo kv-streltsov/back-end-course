@@ -12,3 +12,4 @@ export const basic_auth = (req: Request, res: Response, next: NextFunction) => {
     })
     return isAuth ? next() : res.sendStatus(401)
 }
+
