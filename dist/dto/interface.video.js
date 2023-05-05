@@ -12,3 +12,4 @@ var Resolutions;
     Resolutions["P1440"] = "P1440";
     Resolutions["P2160"] = "P2160";
 })(Resolutions = exports.Resolutions || (exports.Resolutions = {}));
+//# sourceMappingURL=interface.video.js.map

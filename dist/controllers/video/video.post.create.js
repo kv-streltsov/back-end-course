@@ -19,3 +19,4 @@ function videoPostCreate(body) {
     return createVideo;
 }
 exports.videoPostCreate = videoPostCreate;
+//# sourceMappingURL=video.post.create.js.map

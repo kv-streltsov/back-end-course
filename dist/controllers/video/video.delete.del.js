@@ -13,3 +13,4 @@ function videoDeleteDel(id) {
     return check_id;
 }
 exports.videoDeleteDel = videoDeleteDel;
+//# sourceMappingURL=video.delete.del.js.map

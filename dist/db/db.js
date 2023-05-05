@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db = exports.video_list = void 0;
+exports.clear_db = exports.blogs_list = exports.video_list = void 0;
 const interface_video_1 = require("../dto/interface.video");
 exports.video_list = [
     {
@@ -24,7 +24,23 @@ exports.video_list = [
         availableResolutions: [interface_video_1.Resolutions.P720]
     }
 ];
+exports.blogs_list = [
+    {
+        id: '1',
+        name: 'test name',
+        description: 'test desc',
+        websiteUrl: 'http'
+    },
+    {
+        id: '2',
+        name: 'test name',
+        description: 'test desc',
+        websiteUrl: 'http'
+    }
+];
 function clear_db() {
     exports.video_list = [];
+    exports.blogs_list = [];
 }
 exports.clear_db = clear_db;
+//# sourceMappingURL=db.js.map

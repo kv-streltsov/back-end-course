@@ -23,11 +23,6 @@ export interface InterfaceVideo {
 	availableResolutions?: Resolutions[] | null
 }
 
-export interface InterfaceError {
-	errorsMessages:[{
-		message: string,
-		field: string
-	}]
-}
+
 
 export type RequserWithBody<T> = Request<{},{},T>

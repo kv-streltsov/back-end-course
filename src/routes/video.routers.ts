@@ -1,5 +1,5 @@
 import {Response, Request, Router} from 'express'
-import {InterfaceError, InterfaceVideo, RequserWithBody} from "../dto/interface.video";
+import {InterfaceVideo, RequserWithBody} from "../dto/interface.video";
 
 
 import {videoRepository} from "../repositories/video-repository";

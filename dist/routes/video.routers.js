@@ -39,3 +39,4 @@ exports.videoRouters.delete('/:id', (req, res) => {
     else
         res.sendStatus(404);
 });
+//# sourceMappingURL=video.routers.js.map

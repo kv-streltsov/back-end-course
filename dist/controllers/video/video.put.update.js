@@ -13,3 +13,4 @@ function videoPutUpdate(id, body) {
     return true;
 }
 exports.videoPutUpdate = videoPutUpdate;
+//# sourceMappingURL=video.put.update.js.map

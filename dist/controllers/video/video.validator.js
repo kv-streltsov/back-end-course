@@ -111,3 +111,4 @@ function videoValidator(body, method) {
     return true;
 }
 exports.videoValidator = videoValidator;
+//# sourceMappingURL=video.validator.js.map
