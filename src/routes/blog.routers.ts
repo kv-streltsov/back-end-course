@@ -1,9 +1,8 @@
 import {Request, Response, Router} from "express";
 import {blogsRepository} from "../repositories/blogs-repository";
-import {body, validationResult} from 'express-validator'
-import {inputValidationMiddleware} from "../middleware/input-validation-middleware";
 import {basic_auth} from "../middleware/basic-auth-middleware";
 import {InterfaceBlog} from "../dto/interface.blog";
+import {createBlogValidation} from "../middleware/validation/blogs-validations";
 
 export const blogRouters = Router({})
 
@@ -18,10 +17,11 @@ blogRouters.get('/:id', (req: Request, res: Response) => {
     } else res.sendStatus(404)
 
 })
-blogRouters.post('/', basic_auth, inputValidationMiddleware, (req: Request, res: Response) => {
-    res.status(201).send(blogsRepository.postBlog(req.body))
+blogRouters.post('/', basic_auth, createBlogValidation, (req: Request, res: Response) => {
+    const newBlog = blogsRepository.postBlog(req.body)
+    res.status(201).send(newBlog)
 })
-blogRouters.put('/:id', basic_auth, (req: Request, res: Response) => {
+blogRouters.put('/:id', basic_auth, createBlogValidation, (req: Request, res: Response) => {
     res.sendStatus(blogsRepository.putBlog(req.body, req.params.id))
 })
 blogRouters.delete('/:id', basic_auth, (req: Request, res: Response) => {
