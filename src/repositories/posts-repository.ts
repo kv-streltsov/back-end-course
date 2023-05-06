@@ -29,7 +29,7 @@ export const postsRepository = {
         let findIndexPost: number = posts_list.findIndex(value => value.id === id)
         if (findIndexPost === -1) return 404
 
-        const updatePost: InterfacePostInput = {
+        const updatePost: InterPostViewModel = {
             ...posts_list[findIndexPost],
             ...body
         }

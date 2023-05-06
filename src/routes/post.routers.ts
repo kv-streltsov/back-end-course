@@ -26,6 +26,8 @@ postRouters.post('/', basic_auth,createPostValidation,  (req: Request, res: Resp
 })
 postRouters.put('/:id', basic_auth, updatePostValidation, (req: Request, res: Response) => {
 
+    res.sendStatus(postsRepository.putPost(req.body,req.params.id))
+
 })
 postRouters.delete('/:id', basic_auth, (req: Request, res: Response) => {
 })
