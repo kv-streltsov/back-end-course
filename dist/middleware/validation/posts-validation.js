@@ -10,11 +10,10 @@ const contentValidation = (0, express_validator_1.body)('content').isString().tr
 const blogIdValidation = (0, express_validator_1.body)('blogId').isString().trim().notEmpty()
     .custom(blogId => {
     const findBlogId = db_1.posts_list.findIndex(value => value.blogId === blogId);
-    db_1.blogs_list[findBlogId].name;
     if (findBlogId !== -1) {
         throw new Error('blogId already in use');
     }
-    return true;
+    // return true
 });
 exports.createPostValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
 exports.updatePostValidation = [titleValidation, shortDescriptionValidation, contentValidation, input_validation_middleware_1.inputValidationMiddleware];
