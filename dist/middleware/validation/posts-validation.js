@@ -14,13 +14,6 @@ const blogIdValidation = (0, express_validator_1.body)('blogId').isString().trim
     }
     return true;
 });
-// .custom(blogId => {
-//
-//     const findPostId: number = posts_list.findIndex(value => value.blogId === blogId)
-//     if (findPostId !== -1) {throw new Error('blogId already in use')}
-//     return true
-//
-// })
 exports.createPostValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
-exports.updatePostValidation = [titleValidation, shortDescriptionValidation, contentValidation, input_validation_middleware_1.inputValidationMiddleware];
+exports.updatePostValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
 //# sourceMappingURL=posts-validation.js.map
