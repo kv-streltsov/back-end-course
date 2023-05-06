@@ -19,4 +19,4 @@ const blogIdValidation = body('blogId').isString().trim().notEmpty()
 export const createPostValidation =
     [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware]
 export const updatePostValidation =
-    [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware]
+    [titleValidation, shortDescriptionValidation, contentValidation, inputValidationMiddleware]

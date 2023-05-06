@@ -16,5 +16,5 @@ const blogIdValidation = (0, express_validator_1.body)('blogId').isString().trim
     return true;
 });
 exports.createPostValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
-exports.updatePostValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
+exports.updatePostValidation = [titleValidation, shortDescriptionValidation, contentValidation, input_validation_middleware_1.inputValidationMiddleware];
 //# sourceMappingURL=posts-validation.js.map
