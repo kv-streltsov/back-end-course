@@ -1,58 +1,3 @@
-
-    Tested endpoint: blogs
-
-    Tested method: POST
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"nam":"somename","websiteUrl":"invalid-url","description":"description"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "websiteUrl" }, { message: Any<String>, field: "name" }] }
-
-    Received data: {"errorsMessages":[{"message":"Invalid value","field":"name"}]}
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-validation-describe.ts:37:7)
-
-  > Homework 2  Blogs api  Blog body validation  PUT -> "/blogs/:id": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs;
-
-
-
-    Tested endpoint: blogs/6
-
-    Tested method: PUT
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"nam":"somename","websiteUrl":"invalid-url","description":"description"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "websiteUrl" }, { message: Any<String>, field: "name" }] }
-
-    Received data: {"errorsMessages":[{"message":"Invalid value","field":"name"}]}
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-validation-describe.ts:60:7)
-
   > Homework 2  Posts api  POST -> "/posts": should create new post for an existing blog; status 201; content: created post;  used additional methods: POST -> /blogs, GET -> /posts/:id;
 
 
@@ -78,6 +23,7 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/describes/posts/posts-describe.ts:98:41
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:95:64)
 
   > Homework 2  Posts api  GET -> "/posts/:id": should return status 200; content: post by id;  used additional methods: POST -> /blogs, POST -> /posts;
@@ -105,6 +51,7 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/describes/posts/posts-describe.ts:130:41
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:127:37)
 
   > Homework 2  Posts api  GET -> "/posts": should return status 200; content: posts array;  used additional methods: POST -> /blogs, POST -> /posts;
@@ -132,6 +79,7 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/describes/posts/posts-describe.ts:68:75
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:68:7)
 
   > Homework 2  Posts api  PUT -> "/posts/:id": should update post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
@@ -159,6 +107,7 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/describes/posts/posts-describe.ts:161:41
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:158:37)
 
   > Homework 2  Posts api  DELETE -> "/posts/:id": should delete post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
@@ -186,6 +135,7 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/describes/posts/posts-describe.ts:201:41
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:198:37)
 
   > Homework 2  Posts api  PUT, POST, DELETE -> "/posts": should return error if auth credentials is incorrect; status 401;  used additional methods: POST -> /blogs;
@@ -213,6 +163,7 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:189:38
+          at runMicrotasks (<anonymous>)
       at performAuthTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:184:46)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:247:7)
 
@@ -243,6 +194,7 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:83:7)
 
   > Homework 2  Posts api  Post body validation  PUT -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
@@ -270,4 +222,5 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/describes/posts/posts-validation-describe.ts:115:41
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:109:37)

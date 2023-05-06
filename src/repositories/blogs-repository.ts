@@ -1,5 +1,5 @@
 import {InterfaceBlog} from "../dto/interface.blog";
-import {blogs_list, video_list} from "../db/db";
+import {blogs_list} from "../db/db";
 
 
 export const blogsRepository = {

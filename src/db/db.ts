@@ -1,6 +1,6 @@
 import {InterfaceVideo, Resolutions} from "../dto/interface.video";
-import exp from "constants";
 import {InterfaceBlog} from "../dto/interface.blog";
+import {InterfacePost} from "../dto/interface.post";
 
 export let video_list: InterfaceVideo[] = [
 	{
@@ -38,7 +38,20 @@ export let blogs_list:InterfaceBlog[] = [
 		websiteUrl:'http'
 	}
 ]
+export let posts_list:InterfacePost[] = [
+	{
+		id:'1',
+		title: 'title post',
+		shortDescription: 'shortDescription post',
+		content: 'content post',
+		blogId: 'blogId post',
+		blogName: 'blogName post'
+	},
+
+]
+
 export function clear_db():void{
 	video_list = []
 	blogs_list = []
+	posts_list = []
 }
