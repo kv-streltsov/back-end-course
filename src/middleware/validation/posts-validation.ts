@@ -8,11 +8,12 @@ const contentValidation = body('content').isString().trim().notEmpty().isLength(
 
 const blogIdValidation = body('blogId').isString().trim().notEmpty()
     .custom(blogId => {
-    const findBlogId: number = posts_list.findIndex(value => value.blogId === blogId)
-    if (findBlogId !== -1) {throw new Error('blogId already in use')}
-    return true
-})
-
+        const findBlogId: number = posts_list.findIndex(value => value.blogId === blogId)
+        if (findBlogId !== -1) {
+            throw new Error('blogId already in use')
+        }
+        return true
+    })
 
 
 export const createPostValidation =
