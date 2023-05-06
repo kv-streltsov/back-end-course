@@ -9,7 +9,7 @@ const shortDescriptionValidation = (0, express_validator_1.body)('shortDescripti
 const contentValidation = (0, express_validator_1.body)('content').isString().trim().notEmpty().isLength({ max: 1000 });
 const blogIdValidation = (0, express_validator_1.body)('blogId').isString().trim().notEmpty().custom(blogId => {
     const checkBlogId = db_1.blogs_list.findIndex(value => value.id === blogId);
-    if (checkBlogId) {
+    if (checkBlogId === -1) {
         throw new Error('id not found in blog');
     }
     return true;
