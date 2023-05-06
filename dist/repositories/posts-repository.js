@@ -16,6 +16,9 @@ exports.postsRepository = {
     postPost: (body) => {
         const newId = db_1.posts_list.length + 1;
         body.id = newId.toString();
+        let findBlogId = db_1.blogs_list.findIndex(value => value.id === body.blogId);
+        body.blogName = db_1.blogs_list[findBlogId].name;
+        console.log(body);
         db_1.posts_list.push(body);
         return body;
     },

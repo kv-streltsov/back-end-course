@@ -1,171 +1,137 @@
   > Homework 2  Posts api  POST -> "/posts": should create new post for an existing blog; status 201; content: created post;  used additional methods: POST -> /blogs, GET -> /posts/:id;
 
+    expect(received).toEqual(expected) // deep equality
 
+    - Expected  - 1
+    + Received  + 0
 
-    Expected: success response
+      Object {
+        "blogId": Any<String>,
+    -   "blogName": Any<String>,
+        "content": Any<String>,
+        "id": Any<String>,
+        "shortDescription": Any<String>,
+        "title": Any<String>,
+      }
 
-    Received: Request failed with status code 404
+      63 |   expectedStatus = 201,
+      64 | }: IPerformCreateTestFlowPayload<T>) => {
+    > 65 |   expect(createEntityResponseData).toEqual(entitySchema);
+         |                                    ^
+      66 |   expect(createEntityResponseStatus).toBe(expectedStatus);
+      67 |
+      68 |   const { data: getByIdResponseData } = await axiosInstance
 
-    Config:
-     url: posts
-     method: post
-     response status: 404
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"7"}
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:98:41
+      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:65:36)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:100:32)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:95:64)
 
   > Homework 2  Posts api  GET -> "/posts/:id": should return status 200; content: post by id;  used additional methods: POST -> /blogs, POST -> /posts;
 
+    expect(received).toEqual(expected) // deep equality
 
+    - Expected  - 1
+    + Received  + 0
 
-    Expected: success response
+      Object {
+        "blogId": Any<String>,
+    -   "blogName": Any<String>,
+        "content": Any<String>,
+        "id": Any<String>,
+        "shortDescription": Any<String>,
+        "title": Any<String>,
+      }
 
-    Received: Request failed with status code 404
+      84 |
+      85 |   expect(getByIdResponseStatus).toBe(200);
+    > 86 |   expect(getByIdResponseData).toEqual(entitySchema);
+         |                               ^
+      87 |   expect(getByIdResponseData).toStrictEqual(createEntityResponseData);
+      88 | };
+      89 |
 
-    Config:
-     url: posts
-     method: post
-     response status: 404
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"8"}
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:130:41
+      at performGETByIdTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:86:31)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:127:37)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:132:7)
 
   > Homework 2  Posts api  GET -> "/posts": should return status 200; content: posts array;  used additional methods: POST -> /blogs, POST -> /posts;
 
 
 
-    Expected: success response
+    Expected: ArrayContaining [{"blogId": Any<String>, "blogName": Any<String>, "content": Any<String>, "id": Any<String>, "shortDescription": Any<String>, "title": Any<String>}]
 
-    Received: Request failed with status code 404
+    Received: [{"content":"new post content","shortDescription":"description","title":"post title","blogId":"7","id":"1"},{"content":"new post content","shortDescription":"description","title":"post title","blogId":"8","id":"2"},{"content":"new post content","shortDescription":"description","title":"post title","blogId":"9","id":"3"}]
 
-    Config:
-     url: posts
-     method: post
-     response status: 404
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"9"}
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
+    Wrong entity: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"7","id":"1"}
 
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
+      146 |     await axiosInstance.get<T>(getAllEntitiesEndpoint).catch((error) => handleTestError(error));
+      147 |
+    > 148 |   expect(getAllEntitiesResponseData).toBeStrictObjectsArray(entitySchema);
+          |                                      ^
+      149 |   expect(getAllEntitiesResponseStatus).toBe(200);
+      150 | };
+      151 |
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:68:75
+      at performGETTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:148:38)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:68:7)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:70:7)
 
   > Homework 2  Posts api  PUT -> "/posts/:id": should update post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
 
+    request timeout of 6000ms exceeded
 
-
-    Expected: success response
-
-    Received: Request failed with status code 404
-
-    Config:
-     url: posts
-     method: post
-     response status: 404
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"10"}
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
       25 |   }
       26 |
-      27 |   throw new Error(error.message);
+    > 27 |   throw new Error(error.message);
+         |         ^
+      28 | };
+      29 |
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:161:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:158:37)
+      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:27:9)
+      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:103:38
+      at performPUTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:98:50)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:170:7)
 
   > Homework 2  Posts api  DELETE -> "/posts/:id": should delete post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
 
+    request timeout of 6000ms exceeded
 
-
-    Expected: success response
-
-    Received: Request failed with status code 404
-
-    Config:
-     url: posts
-     method: post
-     response status: 404
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"11"}
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
       25 |   }
       26 |
-      27 |   throw new Error(error.message);
+    > 27 |   throw new Error(error.message);
+         |         ^
+      28 | };
+      29 |
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:201:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:198:37)
+      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:27:9)
+      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:126:38
+      at performDELETETestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:121:50)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:203:7)
 
-  > Homework 2  Posts api  PUT, POST, DELETE -> "/posts": should return error if auth credentials is incorrect; status 401;  used additional methods: POST -> /blogs;
+  > Homework 2  Posts api  PUT, DELETE, GET -> "/posts/:id": should return error if :id from uri param not found; status 404;  used additional methods: POST -> /blogs;
 
 
 
-    Expected: success response
+    Tested case params:
+     endpoint: posts/602afe92-7d97-4395-b1b9-6cf98b351bbe,
+     method: DELETE,
+     headers: {"Authorization":"Basic YWRtaW46cXdlcnR5"},
 
-    Received: Request failed with status code 404
+    Expected status: 404
 
-    Config:
-     url: posts
-     method: post
-     response status: 404
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"13"}
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
+    Received status: undefined
 
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
+      49 |       }
+      50 |
+    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
+         |                      ^
+      52 |         headers,
+      53 |         endpoint,
+      54 |         method,
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:189:38
-          at runMicrotasks (<anonymous>)
-      at performAuthTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:184:46)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:247:7)
+      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
+      at performNotFoundTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:175:3)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:225:7)
 
   > Homework 2  Posts api  Post body validation  POST -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs;
 
@@ -177,13 +143,13 @@
 
     Expected status: 400
 
-    Received status: 404
+    Received status: 400
 
-    Passed body: {"title":"length_31-DrmM8lHeNjSykwSzQ7Her","content":"valid","blogId":"14"}
+    Passed body: {"title":"valid","content":"valid","blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe","shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
 
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "title" }] }
+    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
 
-    Received data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
+    Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}
 
       40 |     }
       41 |
@@ -194,33 +160,33 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:83:7)
 
   > Homework 2  Posts api  Post body validation  PUT -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
 
 
 
-    Expected: success response
+    Tested endpoint: posts/3
 
-    Received: Request failed with status code 404
+    Tested method: PUT
 
-    Config:
-     url: posts
-     method: post
-     response status: 404
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"15"}
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /posts</pre>\n</body>\n</html>\n"
+    Expected status: 400
 
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
+    Received status: 400
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-validation-describe.ts:115:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:109:37)
+    Passed body: {"title":"valid","content":"valid","blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe","shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
+
+    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
+
+    Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}
+
+      40 |     }
+      41 |
+    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
+         |                      ^
+      43 |       endpoint: url,
+      44 |       method,
+      45 |     });
+
+      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:117:7)

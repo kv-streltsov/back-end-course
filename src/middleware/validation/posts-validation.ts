@@ -8,17 +8,3 @@ const blogId = body('blogId').isString().trim().notEmpty()
 
 export const createPostValidation = [titleValidation, shortDescriptionValidation, content, blogId, inputValidationMiddleware]
 export const updatePostValidation = [titleValidation, shortDescriptionValidation, content, blogId, inputValidationMiddleware]
-
-
-// h02.db.PostInputModel{
-//     title*	string
-//     maxLength: 30
-
-//     shortDescription*	string
-//     maxLength: 100
-
-//     content*	string
-//     maxLength: 1000
-
-//     blogId*	string
-// }

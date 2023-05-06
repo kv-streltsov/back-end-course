@@ -9,13 +9,4 @@ const content = (0, express_validator_1.body)('content').isString().trim().notEm
 const blogId = (0, express_validator_1.body)('blogId').isString().trim().notEmpty();
 exports.createPostValidation = [titleValidation, shortDescriptionValidation, content, blogId, input_validation_middleware_1.inputValidationMiddleware];
 exports.updatePostValidation = [titleValidation, shortDescriptionValidation, content, blogId, input_validation_middleware_1.inputValidationMiddleware];
-// h02.db.PostInputModel{
-//     title*	string
-//     maxLength: 30
-//     shortDescription*	string
-//     maxLength: 100
-//     content*	string
-//     maxLength: 1000
-//     blogId*	string
-// }
 //# sourceMappingURL=posts-validation.js.map

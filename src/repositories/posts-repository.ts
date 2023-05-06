@@ -1,6 +1,6 @@
 import {blogs_list, posts_list} from "../db/db";
 import {body} from "express-validator";
-import {InterfacePost} from "../dto/interface.post";
+import {InterfacePostInput, InterPostViewModel} from "../dto/interface.post";
 import {InterfaceBlog} from "../dto/interface.blog";
 
 
@@ -14,18 +14,22 @@ export const postsRepository = {
         if (posts_list[findPost] !== undefined) return posts_list[findPost]
         else return 404
     },
-    postPost: (body: InterfacePost) => {
+    postPost: (body: InterPostViewModel) => {
         const newId: number = posts_list.length + 1
         body.id = newId.toString()
+
+        let findBlogId = blogs_list.findIndex(value => value.id === body.blogId)
+        body.blogName = blogs_list[findBlogId].name
+        console.log(body)
         posts_list.push(body)
         return body
     },
-    putPost: (body: InterfacePost, id: string) => {
+    putPost: (body: InterfacePostInput, id: string) => {
 
         let findIndexPost: number = posts_list.findIndex(value => value.id === id)
         if (findIndexPost === -1) return 404
 
-        const updatePost: InterfacePost = {
+        const updatePost: InterfacePostInput = {
             ...posts_list[findIndexPost],
             ...body
         }

@@ -41,10 +41,10 @@ exports.blogs_list = [
 exports.posts_list = [
     {
         id: '1',
+        blogId: '1',
         title: 'title post',
         shortDescription: 'shortDescription post',
         content: 'content post',
-        blogId: 'blogId post',
         blogName: 'blogName post'
     },
 ];
