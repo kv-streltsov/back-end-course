@@ -21,7 +21,8 @@ export const postsRepository = {
         body.id = newId.toString()
 
         let findBlogId: number = blogs_list.findIndex(value => value.id === body.blogId)
-        body.blogName = blogs_list[findBlogId].name
+        // body.blogName = blogs_list[findBlogId].name
+        body.blogName = 'srewrew'
         posts_list.push(body)
         return body
     },

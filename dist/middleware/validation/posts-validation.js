@@ -9,7 +9,9 @@ const shortDescriptionValidation = (0, express_validator_1.body)('shortDescripti
 const contentValidation = (0, express_validator_1.body)('content').isString().trim().notEmpty().isLength({ max: 1000 });
 const blogIdValidation = (0, express_validator_1.body)('blogId').isString().trim().notEmpty()
     .custom(blogId => {
+    console.log(blogId);
     const findBlogId = db_1.posts_list.findIndex(value => value.blogId === blogId);
+    console.log(findBlogId);
     if (findBlogId !== -1) {
         throw new Error('blogId already in use');
     }
