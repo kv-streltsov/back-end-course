@@ -30,7 +30,7 @@ exports.postsRepository = {
         db_1.posts_list.splice(findIndexPost, 1, updatePost);
         return 204;
     },
-    deleteBlog: (id) => {
+    deletePost: (id) => {
         let findIndexPost = db_1.posts_list.findIndex(value => value.id === id);
         if (findIndexPost === -1)
             return 404;

@@ -25,5 +25,6 @@ exports.postRouters.put('/:id', basic_auth_middleware_1.basic_auth, posts_valida
     res.sendStatus(posts_repository_1.postsRepository.putPost(req.body, req.params.id));
 });
 exports.postRouters.delete('/:id', basic_auth_middleware_1.basic_auth, (req, res) => {
+    res.sendStatus(posts_repository_1.postsRepository.deletePost(req.params.id));
 });
 //# sourceMappingURL=post.routers.js.map

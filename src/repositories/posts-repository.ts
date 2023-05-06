@@ -37,7 +37,7 @@ export const postsRepository = {
         posts_list.splice(findIndexPost, 1, updatePost)
         return 204
     },
-    deleteBlog: (id: string) => {
+    deletePost: (id: string) => {
 
         let findIndexPost: number = posts_list.findIndex(value => value.id === id)
         if (findIndexPost === -1) return 404
