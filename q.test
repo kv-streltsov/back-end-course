@@ -1,57 +1,9 @@
-  > Homework 2  Posts api  Post body validation  POST -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs;
+Passed body:
+{"title":"valid",
+"content":"valid",
+"blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe",
+"shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
 
+Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
 
-
-    Tested endpoint: posts
-
-    Tested method: POST
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"title":"valid","content":"valid","blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe","shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
-
-    Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:83:7)
-
-  > Homework 2  Posts api  Post body validation  PUT -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
-
-
-
-    Tested endpoint: posts/6
-
-    Tested method: PUT
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"title":"valid","content":"valid","blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe","shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
-
-    Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:117:7)
+Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}

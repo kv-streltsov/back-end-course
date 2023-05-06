@@ -1,6 +1,6 @@
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "./input-validation-middleware";
-import {posts_list} from "../../db/db";
+import {blogs_list, posts_list} from "../../db/db";
 
 const titleValidation = body('title').isString().trim().notEmpty().isLength({max: 30})
 const shortDescriptionValidation = body('shortDescription').isString().trim().notEmpty().isLength({max: 100})
@@ -8,9 +8,9 @@ const contentValidation = body('content').isString().trim().notEmpty().isLength(
 
 const blogIdValidation = body('blogId').isString().trim().notEmpty()
     .custom(blogId => {
-        console.log(blogId)
+
         const findBlogId: number = posts_list.findIndex(value => value.blogId === blogId)
-        console.log(findBlogId)
+        blogs_list[findBlogId].name
         if (findBlogId !== -1) {throw new Error('blogId already in use')}
 
         return true
