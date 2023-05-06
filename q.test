@@ -1,114 +1,24 @@
-  > Homework 2  Posts api  PUT -> "/posts/:id": should update post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
+Homework 2 > Posts api > Post body validation
+POST -> "/posts": should return error if passed body is incorrect; status 400; used additional methods: POST -> /blogs;
+failed
+0.511s
+Error: 
 
-    request timeout of 6000ms exceeded
+Tested endpoint: posts
 
-      25 |   }
-      26 |
-    > 27 |   throw new Error(error.message);
-         |         ^
-      28 | };
-      29 |
+Tested method: POST
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:27:9)
-      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:103:38
-      at performPUTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:98:50)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:170:7)
+Expected status: 400
 
-  > Homework 2  Posts api  DELETE -> "/posts/:id": should delete post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
+Received status: 400
 
-    request timeout of 6000ms exceeded
+Passed body: {"title":"valid","content":"valid","blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe","shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
 
-      25 |   }
-      26 |
-    > 27 |   throw new Error(error.message);
-         |         ^
-      28 | };
-      29 |
+Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:27:9)
-      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:126:38
-      at performDELETETestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:121:50)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:203:7)
+Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}
 
-  > Homework 2  Posts api  PUT, DELETE, GET -> "/posts/:id": should return error if :id from uri param not found; status 404;  used additional methods: POST -> /blogs;
-
-
-
-    Tested case params:
-     endpoint: posts/602afe92-7d97-4395-b1b9-6cf98b351bbe,
-     method: DELETE,
-     headers: {"Authorization":"Basic YWRtaW46cXdlcnR5"},
-
-    Expected status: 404
-
-    Received status: undefined
-
-      49 |       }
-      50 |
-    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
-         |                      ^
-      52 |         headers,
-      53 |         endpoint,
-      54 |         method,
-
-      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
-      at performNotFoundTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:175:3)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:225:7)
-
-  > Homework 2  Posts api  Post body validation  POST -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs;
-
-
-
-    Tested endpoint: posts
-
-    Tested method: POST
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"title":"valid","content":"valid","blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe","shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
-
-    Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:83:7)
-
-  > Homework 2  Posts api  Post body validation  PUT -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
-
-
-
-    Tested endpoint: posts/3
-
-    Tested method: PUT
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"title":"valid","content":"valid","blogId":"602afe92-7d97-4395-b1b9-6cf98b351bbe","shortDescription":"length_101-DnZlTI1khUHpqOqCzftIYiSHCV8fKjYFQOoCIwmUczzW9V5K8cqY3aPKo3XKwbfrmeWOJyQgGnlX5sP3aW3RlaRSQx"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "blogId" }] }
-
-    Received data: {"errorsMessages":[{"message":"Invalid value","field":"shortDescription"}]}
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:117:7)
+    at performTestsWithIncorrectBody (/home/node/dist/auto-test-checker/src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at Object.<anonymous> (/home/node/dist/auto-test-checker/src/tests/jest/back/describes/posts/posts-validation-describe.ts:83:7)

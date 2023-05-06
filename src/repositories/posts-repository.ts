@@ -15,12 +15,12 @@ export const postsRepository = {
         else return 404
     },
     postPost: (body: InterPostViewModel) => {
+
         const newId: number = posts_list.length + 1
         body.id = newId.toString()
 
-        let findBlogId = blogs_list.findIndex(value => value.id === body.blogId)
+        let findBlogId:number = blogs_list.findIndex(value => value.id === body.blogId)
         body.blogName = blogs_list[findBlogId].name
-        console.log(body)
         posts_list.push(body)
         return body
     },
