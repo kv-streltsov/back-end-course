@@ -18,7 +18,7 @@ blogRouters.get('/:id', (req: Request, res: Response) => {
 
 })
 blogRouters.post('/', basic_auth, createBlogValidation, (req: Request, res: Response) => {
-    const newBlog:InterfaceBlog = blogsRepository.postBlog(req.body)
+    const newBlog: InterfaceBlog = blogsRepository.postBlog(req.body)
     res.status(201).send(newBlog)
 })
 blogRouters.put('/:id', basic_auth, createBlogValidation, (req: Request, res: Response) => {

@@ -11,11 +11,9 @@ videoRouters.get('/', (req: Request<{}, {}, {}, { name: string }>, res: Response
     res.status(200).send(video)
 })
 videoRouters.get('/:id', (req: Request<{ id: string }, {}, {}, {}>, res: Response<InterfaceVideo | number>) => {
-
     let findVideo: InterfaceVideo | number = videoRepository.findVideoById(req.params.id)
     if (findVideo === 404) res.sendStatus(404)
     res.status(200).send(findVideo)
-
 })
 //
 videoRouters.post('/', basic_auth, (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>) => {
@@ -23,7 +21,6 @@ videoRouters.post('/', basic_auth, (req: RequserWithBody<InterfaceVideo>, res: R
     let newVideo: any = videoRepository.postVideo(req.body, req.method)
     if (newVideo.errorsMessages !== undefined) res.status(400).send(newVideo)
     else res.status(201).send(newVideo)
-
 })
 videoRouters.put('/:id', basic_auth, (req: Request<{ id: string }, {}, InterfaceVideo, {}>, res: Response<number>) => {
     let putVideo = videoRepository.putVideo(req.params.id, req.body, req.method)
