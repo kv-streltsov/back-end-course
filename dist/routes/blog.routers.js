@@ -21,7 +21,7 @@ exports.blogRouters.post('/', basic_auth_middleware_1.basic_auth, blogs_validati
     const newBlog = blogs_repository_1.blogsRepository.postBlog(req.body);
     res.status(201).send(newBlog);
 });
-exports.blogRouters.put('/:id', basic_auth_middleware_1.basic_auth, blogs_validations_1.createBlogValidation, (req, res) => {
+exports.blogRouters.put('/:id', basic_auth_middleware_1.basic_auth, blogs_validations_1.updateBlogValidation, (req, res) => {
     res.sendStatus(blogs_repository_1.blogsRepository.putBlog(req.body, req.params.id));
 });
 exports.blogRouters.delete('/:id', basic_auth_middleware_1.basic_auth, (req, res) => {

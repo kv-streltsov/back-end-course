@@ -7,5 +7,5 @@ const nameValidation = (0, express_validator_1.body)('name').isString().trim().n
 const descriptionValidation = (0, express_validator_1.body)('description').isString().trim().notEmpty().isLength({ max: 500 });
 const websiteUrlValidation = (0, express_validator_1.body)('websiteUrl').isString().trim().notEmpty().isURL();
 exports.createBlogValidation = [nameValidation, descriptionValidation, websiteUrlValidation, input_validation_middleware_1.inputValidationMiddleware];
-exports.updateBlogValidation = [nameValidation, descriptionValidation, input_validation_middleware_1.inputValidationMiddleware];
+exports.updateBlogValidation = [nameValidation, descriptionValidation, websiteUrlValidation, input_validation_middleware_1.inputValidationMiddleware];
 //# sourceMappingURL=blogs-validations.js.map

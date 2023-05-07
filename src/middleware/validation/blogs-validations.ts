@@ -6,4 +6,4 @@ const descriptionValidation = body('description').isString().trim().notEmpty().i
 const websiteUrlValidation = body('websiteUrl').isString().trim().notEmpty().isURL()
 
 export const createBlogValidation = [nameValidation, descriptionValidation, websiteUrlValidation, inputValidationMiddleware]
-export const updateBlogValidation = [nameValidation, descriptionValidation, inputValidationMiddleware]
+export const updateBlogValidation = [nameValidation, descriptionValidation, websiteUrlValidation, inputValidationMiddleware]
