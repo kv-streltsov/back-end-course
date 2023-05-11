@@ -1,6 +1,6 @@
 import {InterfaceVideo, Resolutions} from "../dto/interface.video";
 import {InterfaceBlog} from "../dto/interface.blog";
-import {InterPostViewModel, InterfacePostInput} from "../dto/interface.post";
+import {InterPostViewModel} from "../dto/interface.post";
 
 export let video_list: InterfaceVideo[] = [
 	{
@@ -49,6 +49,9 @@ export let posts_list:InterPostViewModel[] = [
 	},
 
 ]
+
+
+
 
 export function clear_db():void{
 	video_list = []

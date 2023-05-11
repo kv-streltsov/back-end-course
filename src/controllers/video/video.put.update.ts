@@ -1,4 +1,4 @@
-import {video_list} from "../../db/db";
+import {video_list} from "../../db/db_local";
 import {InterfaceVideo} from "../../dto/interface.video";
 
 export function videoPutUpdate(id: string, body: InterfaceVideo): boolean {

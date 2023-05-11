@@ -1,6 +1,6 @@
 import {InterfaceVideo} from "../dto/interface.video";
 import {InterfaceError} from "../dto/Interface-error";
-import {blogs_list, video_list} from "../db/db";
+import {blogs_list, video_list} from "../db/db_local";
 import {videoValidator} from "../controllers/video/video.validator";
 import {videoPostCreate} from "../controllers/video/video.post.create";
 import {videoPutUpdate} from "../controllers/video/video.put.update";

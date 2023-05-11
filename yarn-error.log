@@ -1,30 +1,30 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\cron\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add bodyParser
+  C:\Program Files\nodejs\node.exe C:\Users\kvstr\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add typescript 4.9.5
 
 PATH: 
-  C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Git\cmd;C:\Program Files\PuTTY\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\nodejs\;C:\Users\cron\AppData\Local\Microsoft\WindowsApps;;C:\Users\cron\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\cron\AppData\Roaming\npm;C:\other\project\back-end course\node_modules\.bin
+  C:\Windows\System32\HWAudioDriverLibs;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Windows\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\kvstr\AppData\Local\Microsoft\WindowsApps;;C:\Users\kvstr\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\kvstr\AppData\Roaming\npm;C:\Program Files\JetBrains\WebStorm 2023.1\bin;;D:\project\back-end-course\node_modules\.bin
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  18.15.0
+  16.17.1
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/bodyParser: Not found
-      at params.callback [as _callback] (C:\Users\cron\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66145:18)
-      at self.callback (C:\Users\cron\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140890:22)
+  Error: https://registry.yarnpkg.com/4.9.5: Not found
+      at Request.params.callback [as _callback] (C:\Users\kvstr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66145:18)
+      at Request.self.callback (C:\Users\kvstr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140890:22)
       at Request.emit (node:events:513:28)
-      at Request.<anonymous> (C:\Users\cron\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141862:10)
+      at Request.<anonymous> (C:\Users\kvstr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141862:10)
       at Request.emit (node:events:513:28)
-      at IncomingMessage.<anonymous> (C:\Users\cron\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141784:12)
+      at IncomingMessage.<anonymous> (C:\Users\kvstr\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141784:12)
       at Object.onceWrapper (node:events:627:28)
       at IncomingMessage.emit (node:events:525:35)
-      at endReadableNT (node:internal/streams/readable:1359:12)
-      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+      at endReadableNT (node:internal/streams/readable:1358:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
 npm manifest: 
   {
@@ -38,18 +38,18 @@ npm manifest:
       "jest": "jest"
     },
     "dependencies": {
-      "@types/jest": "^29.5.1",
-      "@types/supertest": "^2.0.12",
       "express": "^4.18.2",
-      "jest": "^29.5.0",
-      "supertest": "^6.3.3",
-      "ts-jest": "^29.1.0"
+      "express-validator": "^7.0.1"
     },
     "devDependencies": {
       "@types/express": "^4.17.17",
+      "@types/jest": "^29.5.1",
       "@types/node": "^18.16.0",
-      "ts-node": "^10.9.1",
-      "typescript": "^5.0.4"
+      "@types/supertest": "^2.0.12",
+      "jest": "^29.5.0",
+      "supertest": "^6.3.3",
+      "ts-jest": "^29.1.0",
+      "ts-node": "^10.9.1"
     }
   }
 
@@ -1375,6 +1375,14 @@ Lockfile:
       jest-message-util "^29.5.0"
       jest-util "^29.5.0"
   
+  express-validator@^7.0.1:
+    version "7.0.1"
+    resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-7.0.1.tgz#435fac6b5fa838763f78eca05d2206317b92106e"
+    integrity sha512-oB+z9QOzQIE8FnlINqyIFA8eIckahC6qc8KtqLdLJcU3/phVyuhXH3bA4qzcrhme+1RYaCSwrq+TlZ/kAKIARA==
+    dependencies:
+      lodash "^4.17.21"
+      validator "^13.9.0"
+  
   express@^4.18.2:
     version "4.18.2"
     resolved "https://registry.yarnpkg.com/express/-/express-4.18.2.tgz#3fabe08296e930c796c19e3c516979386ba9fd59"
@@ -2133,6 +2141,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
     integrity sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==
   
+  lodash@^4.17.21:
+    version "4.17.21"
+    resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+    integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+  
   lru-cache@^5.1.1:
     version "5.1.1"
     resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-5.1.1.tgz#1da27e6710271947695daf6848e847f01d84b920"
@@ -2777,11 +2790,6 @@ Lockfile:
       media-typer "0.3.0"
       mime-types "~2.1.24"
   
-  typescript@^5.0.4:
-    version "5.0.4"
-    resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
-    integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
-  
   unpipe@1.0.0, unpipe@~1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
@@ -2813,6 +2821,11 @@ Lockfile:
       "@jridgewell/trace-mapping" "^0.3.12"
       "@types/istanbul-lib-coverage" "^2.0.1"
       convert-source-map "^1.6.0"
+  
+  validator@^13.9.0:
+    version "13.9.0"
+    resolved "https://registry.yarnpkg.com/validator/-/validator-13.9.0.tgz#33e7b85b604f3bbce9bb1a05d5c3e22e1c2ff855"
+    integrity sha512-B+dGG8U3fdtM0/aNK4/X8CXq/EcxU2WPrPEkJGslb47qyHsxmbggTWK0yEA4qnYVNF+nxNlN88o14hIcPmSIEA==
   
   vary@~1.1.2:
     version "1.1.2"

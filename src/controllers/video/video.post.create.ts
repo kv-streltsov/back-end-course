@@ -1,5 +1,5 @@
 import {InterfaceVideo} from "../../dto/interface.video";
-import {video_list} from "../../db/db";
+import {video_list} from "../../db/db_local";
 
 export function videoPostCreate(body:InterfaceVideo){
 

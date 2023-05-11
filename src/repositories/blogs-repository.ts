@@ -1,5 +1,5 @@
 import {InterfaceBlog} from "../dto/interface.blog";
-import {blogs_list} from "../db/db";
+import {blogs_list} from "../db/db_local";
 
 
 export const blogsRepository = {
@@ -23,7 +23,7 @@ export const blogsRepository = {
         return body
 
     },
-    putBlog: (body: InterfaceBlog, id: string): any => {
+    putBlog: (body: InterfaceBlog, id: string): number => {
 
         let findIndexBlog: number = blogs_list.findIndex(value => value.id === id)
         if (findIndexBlog === -1) return 404

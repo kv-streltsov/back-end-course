@@ -1,5 +1,5 @@
 import  {Response, Request, Router} from 'express'
-import {clear_db} from "../db/db";
+import {clear_db} from "../db/db_local";
 
 export const testingRouter =  Router({})
 

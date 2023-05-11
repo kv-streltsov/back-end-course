@@ -1,4 +1,4 @@
-import {blogs_list, posts_list} from "../db/db";
+import {blogs_list, posts_list} from "../db/db_local";
 import {body} from "express-validator";
 import {InterfacePostInput, InterPostViewModel} from "../dto/interface.post";
 import {InterfaceBlog} from "../dto/interface.blog";

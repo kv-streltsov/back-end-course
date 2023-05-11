@@ -1,6 +1,6 @@
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "./input-validation-middleware";
-import {blogs_list} from "../../db/db";
+import {blogs_list} from "../../db/db_local";
 
 const titleValidation = body('title').isString().trim().notEmpty().isLength({max: 30})
 const shortDescriptionValidation = body('shortDescription').isString().trim().notEmpty().isLength({max: 100})

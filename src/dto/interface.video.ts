@@ -19,7 +19,7 @@ export interface InterfaceVideo {
 	canBeDownloaded?: boolean
 	minAgeRestriction?: number | null
 	createdAt?: string
-	publicationDate?: string
+	publicationDate: string
 	availableResolutions?: Resolutions[] | null
 }
 
