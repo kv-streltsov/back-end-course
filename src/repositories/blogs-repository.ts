@@ -1,48 +1,54 @@
-import {InterfaceBlog} from "../dto/interface.blog";
+import {InterfaceBlog, InterfaceBlogInput, InterfaceBlogView} from "../dto/interface.blog";
 import {blogs_list} from "../db/db_local";
+import {clientMongo, collectionBlogs} from "../db/db_mongo";
 
 
 export const blogsRepository = {
-    getAllBlogs: (): InterfaceBlog[] => {
-
-        return blogs_list
-
+    getAllBlogs: async () => {
+        return await collectionBlogs.find().toArray()
     },
-    findBlogById: (id: string): InterfaceBlog | number => {
-
-        let findBlog: number = blogs_list.findIndex(value => value.id === id)
-        if (blogs_list[findBlog] !== undefined) return blogs_list[findBlog]
-        else return 404
-
+    findBlogById: async (id: string) => {
+        return await collectionBlogs.findOne({id: id})
     },
-    postBlog: (body: InterfaceBlog): InterfaceBlog => {
+    postBlog: async (body: InterfaceBlogInput) => {
 
-        const newId: number = blogs_list.length + 1
-        body.id = newId.toString()
-        blogs_list.push(body)
-        return body
-
-    },
-    putBlog: (body: InterfaceBlog, id: string): number => {
-
-        let findIndexBlog: number = blogs_list.findIndex(value => value.id === id)
-        if (findIndexBlog === -1) return 404
-
-        const updateBlog: InterfaceBlog = {
-            ...blogs_list[findIndexBlog],
+        const createData = {
+            id: new Date().getTime().toString(),
+            createdAt: new Date().toISOString(),
+            isMembership: false
+        }
+        const newBlog: InterfaceBlogView = {
+            ...createData,
             ...body
         }
 
-        blogs_list.splice(findIndexBlog, 1, updateBlog)
-        return 204
+        await collectionBlogs.insertOne(newBlog)
+        return newBlog
 
     },
-    deleteBlog: (id: string): number => {
+    putBlog: async (body: InterfaceBlog, id: string) => {
 
-        let findIndexBlog: number = blogs_list.findIndex(value => value.id === id)
-        if (findIndexBlog === -1) return 404
-        blogs_list.splice(findIndexBlog, 1)
-        return 204
+        const findBlog = await collectionBlogs.findOne({id: id})
+        if (findBlog === null) return null
+
+        // а если сервер не ответит?
+        await collectionBlogs.updateOne({id: id}, {
+            $set: {
+                name: body.name,
+                description: body.description,
+                websiteUrl: body.websiteUrl
+            }
+        })
+
+        return true
+
+    },
+    deleteBlog: async (id: string) => {
+
+        const deleteBlog = await collectionBlogs.deleteOne({id: id})
+        if (deleteBlog.deletedCount) {
+            return true
+        } else return null
     }
 
 }

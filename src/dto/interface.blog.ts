@@ -13,9 +13,11 @@ export interface InterfaceBlogInput {
 
 export interface InterfaceBlogView{
     id:string
+
     name:string
     description: string
     websiteUrl:string
+
     createdAt:string     //($date-time)
     isMembership:boolean // default false
 }

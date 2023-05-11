@@ -1,29 +1,39 @@
 import {Request, Response, Router} from "express";
 import {blogsRepository} from "../repositories/blogs-repository";
 import {basic_auth} from "../middleware/basic-auth-middleware";
-import {InterfaceBlog} from "../dto/interface.blog";
+import {InterfaceBlog, InterfaceBlogView} from "../dto/interface.blog";
 import {createBlogValidation, updateBlogValidation} from "../middleware/validation/blogs-validations";
+import {HttpStatusCode} from "../dto/interface.html-code";
 
 export const blogRouters = Router({})
 
 
-blogRouters.get('/', (req: Request, res: Response) => {
-    res.status(200).send(blogsRepository.getAllBlogs())
+blogRouters.get('/', async (req: Request, res: Response) => {
+    res.status(200).send(await blogsRepository.getAllBlogs())
 })
-blogRouters.get('/:id', (req: Request, res: Response) => {
-    const findBlog: number | InterfaceBlog = blogsRepository.findBlogById(req.params.id)
-    if (typeof findBlog !== "number") {
+blogRouters.get('/:id', async (req: Request, res: Response) => {
+    const findBlog = await blogsRepository.findBlogById(req.params.id)
+    if (findBlog !== null) {
         res.status(200).send(findBlog)
-    } else res.sendStatus(404)
+    } else  res.sendStatus(404)
 
 })
-blogRouters.post('/', basic_auth, createBlogValidation, (req: Request, res: Response) => {
-    const newBlog: InterfaceBlog = blogsRepository.postBlog(req.body)
-    res.status(201).send(newBlog)
+blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
+
+    const createdBlog: InterfaceBlogView = await blogsRepository.postBlog(req.body)
+    res.status(201).send(createdBlog)
+
 })
-blogRouters.put('/:id', basic_auth, updateBlogValidation, (req: Request, res: Response) => {
-    res.sendStatus(blogsRepository.putBlog(req.body, req.params.id))
+blogRouters.put('/:id', basic_auth, updateBlogValidation, async (req: Request, res: Response) => {
+    const postBlog = await blogsRepository.putBlog(req.body, req.params.id)
+    if (postBlog !== null) {
+        res.sendStatus(204)
+    } else res.sendStatus(404)
 })
-blogRouters.delete('/:id', basic_auth, (req: Request, res: Response) => {
-    res.sendStatus(blogsRepository.deleteBlog(req.params.id))
+blogRouters.delete('/:id', basic_auth, async (req: Request, res: Response) => {
+    const deleteBlog = await blogsRepository.deleteBlog(req.params.id)
+    if (deleteBlog !== null) {
+        res.sendStatus(204)
+    } else res.sendStatus(404)
+
 })

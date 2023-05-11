@@ -17,7 +17,6 @@ videoRouters.get('/:id', (req: Request<{ id: string }, {}, {}, {}>, res: Respons
 })
 //
 videoRouters.post('/', basic_auth, (req: RequserWithBody<InterfaceVideo>, res: Response<InterfaceVideo>) => {
-    console.log('post')
     let newVideo: any = videoRepository.postVideo(req.body, req.method)
     if (newVideo.errorsMessages !== undefined) res.status(400).send(newVideo)
     else res.status(201).send(newVideo)
