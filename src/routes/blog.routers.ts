@@ -1,7 +1,6 @@
 import {Request, Response, Router} from "express";
 import {blogsRepository} from "../repositories/blogs-repository";
 import {basic_auth} from "../middleware/basic-auth-middleware";
-import {InterfaceBlog, InterfaceBlogView} from "../dto/interface.blog";
 import {createBlogValidation, updateBlogValidation} from "../middleware/validation/blogs-validations";
 
 export const blogRouters = Router({})
@@ -19,7 +18,8 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
 })
 blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 
-    const createdBlog: InterfaceBlogView = await blogsRepository.postBlog(req.body)
+    const createdBlog = await blogsRepository.postBlog(req.body)
+    delete createdBlog._id
     res.status(201).send(createdBlog)
 
 })

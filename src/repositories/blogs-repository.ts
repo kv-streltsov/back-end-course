@@ -20,7 +20,6 @@ export const blogsRepository = {
             ...createData,
             ...body
         }
-
         await collectionBlogs.insertOne(newBlog)
         return newBlog
 
