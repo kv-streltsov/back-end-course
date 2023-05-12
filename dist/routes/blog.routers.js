@@ -28,7 +28,6 @@ exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 exports.blogRouters.post('/', basic_auth_middleware_1.basic_auth, blogs_validations_1.createBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdBlog = yield blogs_repository_1.blogsRepository.postBlog(req.body);
-    delete createdBlog._id;
     res.status(201).send(createdBlog);
 }));
 exports.blogRouters.put('/:id', basic_auth_middleware_1.basic_auth, blogs_validations_1.updateBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

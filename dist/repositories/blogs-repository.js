@@ -26,7 +26,7 @@ exports.blogsRepository = {
         };
         const newBlog = Object.assign(Object.assign({}, createData), body);
         yield db_mongo_1.collectionBlogs.insertOne(newBlog);
-        return newBlog;
+        return Object.assign(Object.assign({}, createData), body);
     }),
     putBlog: (body, id) => __awaiter(void 0, void 0, void 0, function* () {
         const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: id });

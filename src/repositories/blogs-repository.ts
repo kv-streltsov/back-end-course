@@ -21,7 +21,10 @@ export const blogsRepository = {
             ...body
         }
         await collectionBlogs.insertOne(newBlog)
-        return newBlog
+        return  {
+            ...createData,
+            ...body
+        }
 
     },
     putBlog: async (body: InterfaceBlog, id: string): Promise<boolean | null> => {

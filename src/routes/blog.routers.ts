@@ -19,7 +19,6 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
 blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 
     const createdBlog = await blogsRepository.postBlog(req.body)
-    delete createdBlog._id
     res.status(201).send(createdBlog)
 
 })
