@@ -7,6 +7,7 @@ import {MongoClient} from 'mongodb'
 const URL: string = "mongodb+srv://kvstreltsov:ksdSrQnLnkqsLiwF@cluster0.34z5sen.mongodb.net/back-end-course?retryWrites=true&w=majority"
 export const clientMongo = new MongoClient(URL)
 export const collectionBlogs = clientMongo.db('back-end-course').collection('Blogs')
+export const collectionPosts = clientMongo.db('back-end-course').collection('Posts')
 
 export async function runMongo() {
     try {
@@ -19,7 +20,7 @@ export async function runMongo() {
         console.log('connect error to mongo server')
     }
 }
-export function clear_db_mongo(){
-    collectionBlogs.deleteMany({})
+export async function clear_db_mongo() {
+    await collectionBlogs.deleteMany({})
 }
 

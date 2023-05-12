@@ -1,4 +1,4 @@
-export interface InterPostViewModel {
+export interface InterfacePostView {
     id: string
     title: string
     shortDescription: string

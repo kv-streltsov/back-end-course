@@ -4,13 +4,13 @@ import {clientMongo, collectionBlogs} from "../db/db_mongo";
 
 
 export const blogsRepository = {
-    getAllBlogs: async () => {
+    getAllBlogs: async ():Promise<InterfaceBlogView[]> => {
         return await collectionBlogs.find().toArray()
     },
-    findBlogById: async (id: string) => {
+    findBlogById: async (id: string):Promise<InterfaceBlogView> => {
         return await collectionBlogs.findOne({id: id})
     },
-    postBlog: async (body: InterfaceBlogInput) => {
+    postBlog: async (body: InterfaceBlogInput): Promise<InterfaceBlogView> => {
 
         const createData = {
             id: new Date().getTime().toString(),
@@ -26,7 +26,7 @@ export const blogsRepository = {
         return newBlog
 
     },
-    putBlog: async (body: InterfaceBlog, id: string) => {
+    putBlog: async (body: InterfaceBlog, id: string): Promise<boolean | null> => {
 
         const findBlog = await collectionBlogs.findOne({id: id})
         if (findBlog === null) return null
@@ -43,7 +43,7 @@ export const blogsRepository = {
         return true
 
     },
-    deleteBlog: async (id: string) => {
+    deleteBlog: async (id: string): Promise<boolean | null> => {
 
         const deleteBlog = await collectionBlogs.deleteOne({id: id})
         if (deleteBlog.deletedCount) {

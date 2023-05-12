@@ -9,13 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db_mongo = exports.runMongo = exports.collectionBlogs = exports.clientMongo = void 0;
+exports.clear_db_mongo = exports.runMongo = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = void 0;
 const mongodb_1 = require("mongodb");
 // Replace the uri string with your MongoDB deployment's connection string.
 // @ts-ignore
 const URL = "mongodb+srv://kvstreltsov:ksdSrQnLnkqsLiwF@cluster0.34z5sen.mongodb.net/back-end-course?retryWrites=true&w=majority";
 exports.clientMongo = new mongodb_1.MongoClient(URL);
 exports.collectionBlogs = exports.clientMongo.db('back-end-course').collection('Blogs');
+exports.collectionPosts = exports.clientMongo.db('back-end-course').collection('Posts');
 function runMongo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -31,7 +32,9 @@ function runMongo() {
 }
 exports.runMongo = runMongo;
 function clear_db_mongo() {
-    exports.collectionBlogs.deleteMany({});
+    return __awaiter(this, void 0, void 0, function* () {
+        yield exports.collectionBlogs.deleteMany({});
+    });
 }
 exports.clear_db_mongo = clear_db_mongo;
 //# sourceMappingURL=db_mongo.js.map

@@ -1,52 +1,61 @@
 import {blogs_list, posts_list} from "../db/db_local";
 import {body} from "express-validator";
-import {InterfacePostInput, InterPostViewModel} from "../dto/interface.post";
-import {InterfaceBlog} from "../dto/interface.blog";
+import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
+import {InterfaceBlog, InterfaceBlogView} from "../dto/interface.blog";
+import {collectionBlogs, collectionPosts} from "../db/db_mongo";
 
 
 export const postsRepository = {
 
-    getAllPosts: (): InterPostViewModel[] => {
-        return posts_list
+    getAllPosts: async () => {
+        return await collectionPosts.find().toArray()
     },
-    getPostById: (id: string): InterPostViewModel | number => {
-
-        let findPost: number = posts_list.findIndex(value => value.id === id)
-        if (posts_list[findPost] !== undefined) return posts_list[findPost]
-        else return 404
+    getPostById: async (id: string) => {
+        return await collectionPosts.findOne({id: id})
     },
-    postPost: (body: InterPostViewModel): InterPostViewModel => {
+    postPost: async (body: InterfacePostInput): Promise<InterfacePostView> => {
 
-        const newId: number = posts_list.length + 1
-        body.id = newId.toString()
+        const findBlogName = await collectionBlogs.findOne({id: body.blogId})
 
+        if (findBlogName) {
+            const createData = {
+                id: new Date().getTime().toString(),
+                createdAt: new Date().toISOString(),
+                blogName: findBlogName.name
+            }
 
-        let findBlogId: number = blogs_list.findIndex(value => value.id === body.blogId)
-        body.blogName = blogs_list[findBlogId].name
-        posts_list.push(body)
-        return body
-    },
-    putPost: (body: InterfacePostInput, id: string): number => {
-
-        let findIndexPost: number = posts_list.findIndex(value => value.id === id)
-        if (findIndexPost === -1) return 404
-
-        const updatePost: InterPostViewModel = {
-            ...posts_list[findIndexPost],
-            ...body
+            const newPost: InterfacePostView = {
+                ...createData,
+                ...body
+            }
+            await collectionPosts.insertOne(newPost)
+            return newPost
         }
 
-        posts_list.splice(findIndexPost, 1, updatePost)
-        return 204
+
     },
-    deletePost: (id: string): number => {
+    putPost: async (body: InterfacePostInput, id: string): Promise<boolean | null> => {
 
-        let findIndexPost: number = posts_list.findIndex(value => value.id === id)
-        if (findIndexPost === -1) return 404
-        posts_list.splice(findIndexPost, 1)
-        return 204
+        const findPost = await collectionPosts.findOne({id: id})
+        if (findPost === null) return null
 
+        await collectionPosts.updateOne({id: id}, {
+            $set: {
+                title: body.title,
+                shortDescription: body.shortDescription,
+                content: body.content,
+                blogId: body.blogId,
+            }
+        })
+        return true
+    },
+    deletePost: async (id: string): Promise<boolean | null> => {
+        const deletePost = await collectionPosts.deleteOne({id: id})
+        if (deletePost.deletedCount) {
+            return true
+        } else return null
     }
 
 
 }
+
