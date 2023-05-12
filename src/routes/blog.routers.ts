@@ -3,7 +3,6 @@ import {blogsRepository} from "../repositories/blogs-repository";
 import {basic_auth} from "../middleware/basic-auth-middleware";
 import {InterfaceBlog, InterfaceBlogView} from "../dto/interface.blog";
 import {createBlogValidation, updateBlogValidation} from "../middleware/validation/blogs-validations";
-import {HttpStatusCode} from "../dto/interface.html-code";
 
 export const blogRouters = Router({})
 

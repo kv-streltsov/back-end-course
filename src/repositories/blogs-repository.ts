@@ -1,13 +1,12 @@
 import {InterfaceBlog, InterfaceBlogInput, InterfaceBlogView} from "../dto/interface.blog";
-import {blogs_list} from "../db/db_local";
-import {clientMongo, collectionBlogs} from "../db/db_mongo";
+import { collectionBlogs } from "../db/db_mongo";
 
 
 export const blogsRepository = {
-    getAllBlogs: async ():Promise<InterfaceBlogView[]> => {
+    getAllBlogs: async () => {
         return await collectionBlogs.find().toArray()
     },
-    findBlogById: async (id: string):Promise<InterfaceBlogView> => {
+    findBlogById: async (id: string) => {
         return await collectionBlogs.findOne({id: id})
     },
     postBlog: async (body: InterfaceBlogInput): Promise<InterfaceBlogView> => {

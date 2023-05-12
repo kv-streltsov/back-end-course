@@ -26,20 +26,6 @@ describe('/blogs', () => {
             .expect(401)
     });
 
-    it('should return 204 and remove all data', async () => {
-        await request(app)
-            .delete('/testing/all-data')
-            .expect(204)
-    });
-
-    it('should create new video; status 201;', async () => {
-        await request(app)
-            .post('/blogs')
-            .auth("admin","qwerty")
-            .send(validInputBlog)
-            .expect(201)
-    });
-
     it('should return status 400;', async () => {
         await request(app)
             .post('/blogs')
@@ -47,6 +33,24 @@ describe('/blogs', () => {
             .send(unvalidInputBlog)
             .expect(400)
     });
+
+
+    it('should return 204 and remove all data', async () => {
+        await request(app)
+            .delete('/testing/all-data')
+            .expect(204)
+    });
+
+    it('should create new video; status 201;', async () => {
+        const a = await request(app)
+            .post('/blogs')
+            .auth("admin","qwerty")
+            .send(validInputBlog)
+            .expect(201)
+
+        console.log(a)
+    });
+
 
 
 

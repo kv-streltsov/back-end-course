@@ -1,7 +1,4 @@
-import {blogs_list, posts_list} from "../db/db_local";
-import {body} from "express-validator";
 import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
-import {InterfaceBlog, InterfaceBlogView} from "../dto/interface.blog";
 import {collectionBlogs, collectionPosts} from "../db/db_mongo";
 
 
@@ -13,7 +10,7 @@ export const postsRepository = {
     getPostById: async (id: string) => {
         return await collectionPosts.findOne({id: id})
     },
-    postPost: async (body: InterfacePostInput): Promise<InterfacePostView> => {
+    postPost: async (body: InterfacePostInput): Promise<InterfacePostView | undefined> => {
 
         const findBlogName = await collectionBlogs.findOne({id: body.blogId})
 
@@ -31,6 +28,7 @@ export const postsRepository = {
             await collectionPosts.insertOne(newPost)
             return newPost
         }
+        return undefined
 
 
     },

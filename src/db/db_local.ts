@@ -1,6 +1,6 @@
 import {InterfaceVideo, Resolutions} from "../dto/interface.video";
 import {InterfaceBlog} from "../dto/interface.blog";
-import {InterPostViewModel} from "../dto/interface.post";
+import {InterfacePostView} from "../dto/interface.post";
 
 export let video_list: InterfaceVideo[] = [
 	{
@@ -38,7 +38,7 @@ export let blogs_list:InterfaceBlog[] = [
 		websiteUrl:'http'
 	}
 ]
-export let posts_list:InterPostViewModel[] = [
+export let posts_list:InterfacePostView[] = [
 	{
 		id: '1',
 		blogId:'1',

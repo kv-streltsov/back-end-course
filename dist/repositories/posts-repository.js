@@ -30,6 +30,7 @@ exports.postsRepository = {
             yield db_mongo_1.collectionPosts.insertOne(newPost);
             return newPost;
         }
+        return undefined;
     }),
     putPost: (body, id) => __awaiter(void 0, void 0, void 0, function* () {
         const findPost = yield db_mongo_1.collectionPosts.findOne({ id: id });
