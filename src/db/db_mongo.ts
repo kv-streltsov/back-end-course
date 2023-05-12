@@ -19,5 +19,7 @@ export async function runMongo() {
         console.log('connect error to mongo server')
     }
 }
-
+export function clear_db_mongo(){
+    collectionBlogs.deleteMany({})
+}
 

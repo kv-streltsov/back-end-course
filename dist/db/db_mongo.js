@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runMongo = exports.collectionBlogs = exports.clientMongo = void 0;
+exports.clear_db_mongo = exports.runMongo = exports.collectionBlogs = exports.clientMongo = void 0;
 const mongodb_1 = require("mongodb");
 // Replace the uri string with your MongoDB deployment's connection string.
 // @ts-ignore
@@ -30,4 +30,8 @@ function runMongo() {
     });
 }
 exports.runMongo = runMongo;
+function clear_db_mongo() {
+    exports.collectionBlogs.deleteMany({});
+}
+exports.clear_db_mongo = clear_db_mongo;
 //# sourceMappingURL=db_mongo.js.map
