@@ -14,6 +14,7 @@ postRouters.get('/', async (req: Request, res: Response) => {
 postRouters.get('/:id', async (req: Request, res: Response) => {
     const findPost = await postsRepository.getPostById(req.params.id)
     if (findPost !== null) {
+        delete findPost._id
         res.status(200).send(findPost)
     } else res.sendStatus(404)
 })
