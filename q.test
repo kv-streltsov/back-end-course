@@ -7,24 +7,23 @@
 
     @@ -1,6 +1,7 @@
       Object {
-    +   "_id": "645cbe137ec5e9027afedc1b",
+    +   "_id": "645ddeab492c6ecd5505208c",
         "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
         "description": Any<String>,
         "id": Any<String>,
         "isMembership": false,
         "name": Any<String>,
 
-      63 |   expectedStatus = 201,
-      64 | }: IPerformCreateTestFlowPayload<T>) => {
-    > 65 |   expect(createEntityResponseData).toEqual(entitySchema);
-         |                                    ^
-      66 |   expect(createEntityResponseStatus).toBe(expectedStatus);
-      67 |
-      68 |   const { data: getByIdResponseData } = await axiosInstance
+      70 |     .catch((error) => handleTestError(error));
+      71 |
+    > 72 |   expect(getByIdResponseData).toEqual(entitySchema);
+         |                               ^
+      73 |   expect(createEntityResponseData).toStrictEqual(getByIdResponseData);
+      74 | };
+      75 |
 
-      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:65:36)
-      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-describe.ts:149:32)
-          at runMicrotasks (<anonymous>)
+      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:72:31)
+      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-describe.ts:149:7)
 
   > Homework 3  Blogs api  GET -> "blogs/:id": should return status 200; content: blog by id;  used additional methods: POST -> /blogs;
 
@@ -35,7 +34,7 @@
 
     @@ -1,6 +1,7 @@
       Object {
-    +   "_id": "645cbe147ec5e9027afedc1c",
+    +   "_id": "645ddeab492c6ecd5505208d",
         "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
         "description": Any<String>,
         "id": Any<String>,
@@ -51,7 +50,6 @@
       89 |
 
       at performGETByIdTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:86:31)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-describe.ts:49:7)
 
   > Homework 3  Blogs api  GET -> "/blogs": should return status 200; content: blogs array;  used additional methods: POST -> /blogs;
@@ -60,9 +58,9 @@
 
     Expected: ArrayContaining [{"createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "description": Any<String>, "id": Any<String>, "isMembership": false, "name": Any<String>, "websiteUrl": Any<String>}]
 
-    Received: [{"_id":"645cbe137ec5e9027afedc1a","id":"1683799571501","createdAt":"2023-05-11T10:06:11.501Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"},{"_id":"645cbe137ec5e9027afedc1b","id":"1683799571974","createdAt":"2023-05-11T10:06:11.974Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"},{"_id":"645cbe147ec5e9027afedc1c","id":"1683799572212","createdAt":"2023-05-11T10:06:12.212Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"},{"_id":"645cbe147ec5e9027afedc1d","id":"1683799572534","createdAt":"2023-05-11T10:06:12.534Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"}]
+    Received: [{"_id":"645ddeab492c6ecd5505208c","id":"1683873451457","createdAt":"2023-05-12T06:37:31.457Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"},{"_id":"645ddeab492c6ecd5505208d","id":"1683873451740","createdAt":"2023-05-12T06:37:31.740Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"},{"_id":"645ddeac492c6ecd5505208e","id":"1683873452015","createdAt":"2023-05-12T06:37:32.015Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"}]
 
-    Wrong entity: {"_id":"645cbe137ec5e9027afedc1a","id":"1683799571501","createdAt":"2023-05-11T10:06:11.501Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"}
+    Wrong entity: {"_id":"645ddeab492c6ecd5505208c","id":"1683873451457","createdAt":"2023-05-12T06:37:31.457Z","isMembership":false,"name":"new blog","websiteUrl":"https://someurl.com","description":"description"}
 
       146 |     await axiosInstance.get<T>(getAllEntitiesEndpoint).catch((error) => handleTestError(error));
       147 |
@@ -73,36 +71,61 @@
       151 |
 
       at performGETTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:148:38)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-describe.ts:127:7)
+
+  > Homework 3  Blogs api  PUT -> "/blogs/:id": should update blog by id; status 204;  used additional methods: POST -> /blogs, GET -> /blogs/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+    @@ -1,6 +1,7 @@
+      Object {
+    +   "_id": "645ddeac492c6ecd5505208f",
+        "createdAt": "2023-05-12T06:37:32.299Z",
+        "description": "description",
+        "id": "1683873452299",
+        "isMembership": false,
+        "name": "new name",
+
+      110 |
+      111 |   expect(uodateEntityResponseStatus).toBe(204);
+    > 112 |   expect(getByIdResponseData).toStrictEqual(updatedEntity);
+          |                               ^
+      113 | };
+      114 |
+      115 | export const performDELETETestFlow = async <T>({
+
+      at performPUTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:112:31)
+      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-describe.ts:80:7)
 
   > Homework 3  Posts api  POST -> "/posts": should create new post for an existing blog; status 201; content: created post;  used additional methods: POST -> /blogs, GET -> /posts/:id;
 
+    expect(received).toEqual(expected) // deep equality
 
+    - Expected  - 0
+    + Received  + 1
 
-    Expected: success response
+    @@ -1,6 +1,7 @@
+      Object {
+    +   "_id": "645ddeb0492c6ecd55052094",
+        "blogId": Any<String>,
+        "blogName": Any<String>,
+        "content": Any<String>,
+        "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+        "id": Any<String>,
 
-    Received: Request failed with status code 400
+      63 |   expectedStatus = 201,
+      64 | }: IPerformCreateTestFlowPayload<T>) => {
+    > 65 |   expect(createEntityResponseData).toEqual(entitySchema);
+         |                                    ^
+      66 |   expect(createEntityResponseStatus).toBe(expectedStatus);
+      67 |
+      68 |   const { data: getByIdResponseData } = await axiosInstance
 
-    Config:
-     url: posts
-     method: post
-     response status: 400
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799576991"}
-     response data: {"errorsMessages":[{"message":"id not found in blog","field":"blogId"}]}
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:98:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:95:64)
+      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:65:36)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:100:32)
 
   > Homework 3  Posts api  GET -> "/posts/:id": should return status 200; content: post by id;  used additional methods: POST -> /blogs, POST -> /posts;
 
@@ -110,14 +133,14 @@
 
     Expected: success response
 
-    Received: Request failed with status code 400
+    Received: Request failed with status code 404
 
     Config:
-     url: posts
-     method: post
-     response status: 400
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799577298"}
-     response data: {"errorsMessages":[{"message":"id not found in blog","field":"blogId"}]}
+     url: posts/1683873456598
+     method: get
+     response status: 404
+     request body: undefined
+     response data: "Not Found"
 
       22 |     };
       23 |
@@ -128,37 +151,30 @@
       27 |   throw new Error(error.message);
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:130:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:127:37)
+      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:83:38
+      at performGETByIdTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:81:72)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:132:7)
 
   > Homework 3  Posts api  GET -> "/posts": should return status 200; content: posts array;  used additional methods: POST -> /blogs, POST -> /posts;
 
 
 
-    Expected: success response
+    Expected: ArrayContaining [{"blogId": Any<String>, "blogName": Any<String>, "content": Any<String>, "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "id": Any<String>, "shortDescription": Any<String>, "title": Any<String>}]
 
-    Received: Request failed with status code 400
+    Received: [{"_id":"645ddd99492c6ecd5505202c","id":"1683873177646","createdAt":"2023-05-12T06:32:57.646Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873177392"},{"_id":"645ddd9a492c6ecd5505202e","id":"1683873178094","createdAt":"2023-05-12T06:32:58.094Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873177953"},{"_id":"645ddd9a492c6ecd55052030","id":"1683873178528","createdAt":"2023-05-12T06:32:58.528Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873178392"},{"_id":"645ddd9a492c6ecd55052032","id":"1683873178940","createdAt":"2023-05-12T06:32:58.940Z","blogName":"new blog","content":"content after update","shortDescription":"shortDescription after update","title":"title updated","blogId":"1683873178797"},{"_id":"645ddd9d492c6ecd55052037","id":"1683873181474","createdAt":"2023-05-12T06:33:01.474Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873181280"},{"_id":"645ddd9f492c6ecd5505203a","id":"1683873183980","createdAt":"2023-05-12T06:33:03.980Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873183772"},{"_id":"645dddb6492c6ecd55052044","id":"1683873206996","createdAt":"2023-05-12T06:33:26.996Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873206860"},{"_id":"645dddb7492c6ecd55052046","id":"1683873207278","createdAt":"2023-05-12T06:33:27.278Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873207130"},{"_id":"645dddb7492c6ecd55052048","id":"1683873207703","createdAt":"2023-05-12T06:33:27.703Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873207557"},{"_id":"645dddb8492c6ecd5505204a","id":"1683873208180","createdAt":"2023-05-12T06:33:28.180Z","blogName":"new blog","content":"content after update","shortDescription":"shortDescription after update","title":"title updated","blogId":"1683873208046"},{"_id":"645dddba492c6ecd5505204f","id":"1683873210062","createdAt":"2023-05-12T06:33:30.062Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873209929"},{"_id":"645dddbc492c6ecd55052052","id":"1683873212742","createdAt":"2023-05-12T06:33:32.742Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873212608"},{"_id":"645dddf2492c6ecd5505205f","id":"1683873266200","createdAt":"2023-05-12T06:34:26.200Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873266066"},{"_id":"645dddf2492c6ecd55052061","id":"1683873266471","createdAt":"2023-05-12T06:34:26.471Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873266339"},{"_id":"645dddf2492c6ecd55052063","id":"1683873266872","createdAt":"2023-05-12T06:34:26.872Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873266728"},{"_id":"645dddf3492c6ecd55052065","id":"1683873267376","createdAt":"2023-05-12T06:34:27.376Z","blogName":"new blog","content":"content after update","shortDescription":"shortDescription after update","title":"title updated","blogId":"1683873267171"},{"_id":"645dddf6492c6ecd5505206a","id":"1683873270149","createdAt":"2023-05-12T06:34:30.149Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873269980"},{"_id":"645dddf8492c6ecd5505206d","id":"1683873272742","createdAt":"2023-05-12T06:34:32.742Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873272609"},{"_id":"645dde05492c6ecd55052077","id":"1683873285716","createdAt":"2023-05-12T06:34:45.716Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873285518"},{"_id":"645dde06492c6ecd55052079","id":"1683873286337","createdAt":"2023-05-12T06:34:46.337Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873286119"},{"_id":"645dde06492c6ecd5505207b","id":"1683873286750","createdAt":"2023-05-12T06:34:46.750Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873286604"},{"_id":"645dde07492c6ecd5505207d","id":"1683873287460","createdAt":"2023-05-12T06:34:47.460Z","blogName":"new blog","content":"content after update","shortDescription":"shortDescription after update","title":"title updated","blogId":"1683873287018"},{"_id":"645dde09492c6ecd55052082","id":"1683873289687","createdAt":"2023-05-12T06:34:49.687Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873289524"},{"_id":"645dde0c492c6ecd55052085","id":"1683873292497","createdAt":"2023-05-12T06:34:52.497Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873292365"},{"_id":"645ddeb0492c6ecd55052094","id":"1683873456322","createdAt":"2023-05-12T06:37:36.322Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873456170"},{"_id":"645ddeb0492c6ecd55052096","id":"1683873456598","createdAt":"2023-05-12T06:37:36.598Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873456465"},{"_id":"645ddeb1492c6ecd55052098","id":"1683873457002","createdAt":"2023-05-12T06:37:37.002Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873456867"}]
 
-    Config:
-     url: posts
-     method: post
-     response status: 400
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799577642"}
-     response data: {"errorsMessages":[{"message":"id not found in blog","field":"blogId"}]}
+    Wrong entity: {"_id":"645ddd99492c6ecd5505202c","id":"1683873177646","createdAt":"2023-05-12T06:32:57.646Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1683873177392"}
 
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
+      146 |     await axiosInstance.get<T>(getAllEntitiesEndpoint).catch((error) => handleTestError(error));
+      147 |
+    > 148 |   expect(getAllEntitiesResponseData).toBeStrictObjectsArray(entitySchema);
+          |                                      ^
+      149 |   expect(getAllEntitiesResponseStatus).toBe(200);
+      150 | };
+      151 |
 
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:68:75
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:68:7)
+      at performGETTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:148:38)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:70:7)
 
   > Homework 3  Posts api  PUT -> "/posts/:id": should update post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
 
@@ -166,14 +182,14 @@
 
     Expected: success response
 
-    Received: Request failed with status code 400
+    Received: Request failed with status code 404
 
     Config:
-     url: posts
-     method: post
-     response status: 400
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799577907"}
-     response data: {"errorsMessages":[{"message":"id not found in blog","field":"blogId"}]}
+     url: posts/1683873457408
+     method: get
+     response status: 404
+     request body: undefined
+     response data: "Not Found"
 
       22 |     };
       23 |
@@ -184,148 +200,6 @@
       27 |   throw new Error(error.message);
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:161:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:158:37)
-
-  > Homework 3  Posts api  DELETE -> "/posts/:id": should delete post by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /posts/:id;
-
-
-
-    Expected: success response
-
-    Received: Request failed with status code 400
-
-    Config:
-     url: posts
-     method: post
-     response status: 400
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799578191"}
-     response data: {"errorsMessages":[{"message":"id not found in blog","field":"blogId"}]}
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-describe.ts:201:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:198:37)
-
-  > Homework 3  Posts api  PUT, DELETE, GET -> "/posts/:id": should return error if :id from uri param not found; status 404;  used additional methods: POST -> /blogs;
-
-
-
-    Tested case params:
-     endpoint: posts/602afe92-7d97-4395-b1b9-6cf98b351bbe,
-     method: PUT,
-     headers: {"Authorization":"Basic YWRtaW46cXdlcnR5"},
-    body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799578465"}
-
-    Expected status: 404
-
-    Received status: 400
-
-      49 |       }
-      50 |
-    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
-         |                      ^
-      52 |         headers,
-      53 |         endpoint,
-      54 |         method,
-
-      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
-          at runMicrotasks (<anonymous>)
-      at performNotFoundTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:175:3)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:225:7)
-
-  > Homework 3  Posts api  PUT, POST, DELETE -> "/posts": should return error if auth credentials is incorrect; status 401;  used additional methods: POST -> /blogs;
-
-
-
-    Expected: success response
-
-    Received: Request failed with status code 400
-
-    Config:
-     url: posts
-     method: post
-     response status: 400
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799578984"}
-     response data: {"errorsMessages":[{"message":"id not found in blog","field":"blogId"}]}
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:189:38
-          at runMicrotasks (<anonymous>)
-      at performAuthTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:184:46)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:247:7)
-
-  > Homework 3  Posts api  Post body validation  POST -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs;
-
-
-
-    Tested endpoint: posts
-
-    Tested method: POST
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"title":"length_31-DrmM8lHeNjSykwSzQ7Her","content":"valid","blogId":"1683799579515"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "shortDescription" }, { message: Any<String>, field: "title" }] }
-
-    Received data: {"errorsMessages":[{"message":"Invalid value","field":"title"},{"message":"Invalid value","field":"shortDescription"},{"message":"id not found in blog","field":"blogId"}]}
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:83:7)
-
-  > Homework 3  Posts api  Post body validation  PUT -> "/posts": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
-
-
-
-    Expected: success response
-
-    Received: Request failed with status code 400
-
-    Config:
-     url: posts
-     method: post
-     response status: 400
-     request body: {"content":"new post content","shortDescription":"description","title":"post title","blogId":"1683799579824"}
-     response data: {"errorsMessages":[{"message":"id not found in blog","field":"blogId"}]}
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/posts/posts-validation-describe.ts:115:41
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-validation-describe.ts:109:37)
+      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:109:38
+      at performPUTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:107:41)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:170:7)

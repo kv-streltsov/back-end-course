@@ -12,6 +12,7 @@ blogRouters.get('/', async (req: Request, res: Response) => {
 blogRouters.get('/:id', async (req: Request, res: Response) => {
     const findBlog = await blogsRepository.findBlogById(req.params.id)
     if (findBlog !== null) {
+        delete findBlog._id
         res.status(200).send(findBlog)
     } else  res.sendStatus(404)
 

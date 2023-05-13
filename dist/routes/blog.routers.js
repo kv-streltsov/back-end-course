@@ -21,6 +21,7 @@ exports.blogRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const findBlog = yield blogs_repository_1.blogsRepository.findBlogById(req.params.id);
     if (findBlog !== null) {
+        delete findBlog._id;
         res.status(200).send(findBlog);
     }
     else

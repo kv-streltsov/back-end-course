@@ -1,5 +1,5 @@
 import {InterfaceBlog, InterfaceBlogInput, InterfaceBlogView} from "../dto/interface.blog";
-import { collectionBlogs } from "../db/db_mongo";
+import {collectionBlogs} from "../db/db_mongo";
 
 
 export const blogsRepository = {
@@ -7,7 +7,7 @@ export const blogsRepository = {
         return await collectionBlogs.find().toArray()
     },
     findBlogById: async (id: string) => {
-        return await collectionBlogs.findOne({id: id})
+        return await collectionBlogs.findOne({id: id});
     },
     postBlog: async (body: InterfaceBlogInput): Promise<InterfaceBlogView> => {
 
@@ -21,7 +21,7 @@ export const blogsRepository = {
             ...body
         }
         await collectionBlogs.insertOne(newBlog)
-        return  {
+        return {
             ...createData,
             ...body
         }
