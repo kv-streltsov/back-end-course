@@ -19,7 +19,7 @@ exports.blogRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
     res.status(200).send(yield blogs_repository_1.blogsRepository.getAllBlogs());
 }));
 exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const findBlog = yield blogs_repository_1.blogsRepository.findBlogById(req.params.id);
+    const findBlog = yield blogs_repository_1.blogsRepository.getBlogById(req.params.id);
     if (findBlog !== null) {
         res.status(200).send(findBlog);
     }

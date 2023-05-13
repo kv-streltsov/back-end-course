@@ -8,7 +8,7 @@ export const blogsRepository = {
             projection: { _id: 0},
         }).toArray()
     },
-    findBlogById: async (id: string) => {
+    getBlogById: async (id: string) => {
         return await collectionBlogs.findOne( {id: id},{
             projection: { _id: 0},
         });

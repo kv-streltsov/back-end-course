@@ -10,7 +10,7 @@ blogRouters.get('/', async (req: Request, res: Response) => {
     res.status(200).send(await blogsRepository.getAllBlogs())
 })
 blogRouters.get('/:id', async (req: Request, res: Response) => {
-    const findBlog = await blogsRepository.findBlogById(req.params.id)
+    const findBlog = await blogsRepository.getBlogById(req.params.id)
     if (findBlog !== null) {
         res.status(200).send(findBlog)
     } else  res.sendStatus(404)

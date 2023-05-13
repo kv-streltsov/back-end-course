@@ -17,7 +17,7 @@ exports.blogsRepository = {
             projection: { _id: 0 },
         }).toArray();
     }),
-    findBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
+    getBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionBlogs.findOne({ id: id }, {
             projection: { _id: 0 },
         });

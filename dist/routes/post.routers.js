@@ -14,13 +14,12 @@ const express_1 = require("express");
 const basic_auth_middleware_1 = require("../middleware/basic-auth-middleware");
 const posts_repository_1 = require("../repositories/posts-repository");
 const posts_validation_1 = require("../middleware/validation/posts-validation");
-const blogs_repository_1 = require("../repositories/blogs-repository");
 exports.postRouters = (0, express_1.Router)({});
 exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).send(yield posts_repository_1.postsRepository.getAllPosts());
 }));
 exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const findPost = yield blogs_repository_1.blogsRepository.findBlogById(req.params.id);
+    const findPost = yield posts_repository_1.postsRepository.getPostById(req.params.id);
     if (findPost !== null) {
         res.status(200).send(findPost);
     }
