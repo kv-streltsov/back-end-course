@@ -30,7 +30,10 @@ export const postsRepository = {
                 ...body
             }
             await collectionPosts.insertOne(newPost)
-            return newPost
+            return {
+                ...createData,
+                ...body
+            }
         }
         return undefined
 

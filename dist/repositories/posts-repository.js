@@ -32,7 +32,7 @@ exports.postsRepository = {
             };
             const newPost = Object.assign(Object.assign({}, createData), body);
             yield db_mongo_1.collectionPosts.insertOne(newPost);
-            return newPost;
+            return Object.assign(Object.assign({}, createData), body);
         }
         return undefined;
     }),

@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import {blogsRepository} from "../repositories/blogs-repository";
 import {basic_auth} from "../middleware/basic-auth-middleware";
 import {createBlogValidation, updateBlogValidation} from "../middleware/validation/blogs-validations";
+import {InterfaceBlogView} from "../dto/interface.blog";
 
 export const blogRouters = Router({})
 
@@ -18,7 +19,7 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
 })
 blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 
-    const createdBlog = await blogsRepository.postBlog(req.body)
+    const createdBlog:InterfaceBlogView = await blogsRepository.postBlog(req.body)
     res.status(201).send(createdBlog)
 
 })

@@ -21,15 +21,14 @@ exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const findPost = yield posts_repository_1.postsRepository.getPostById(req.params.id);
     if (findPost !== null) {
-        delete findPost._id;
         res.status(200).send(findPost);
     }
     else
         res.sendStatus(404);
 }));
 exports.postRouters.post('/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newPost = yield posts_repository_1.postsRepository.postPost(req.body);
-    res.status(201).send(newPost);
+    const createdPost = yield posts_repository_1.postsRepository.postPost(req.body);
+    res.status(201).send(createdPost);
 }));
 exports.postRouters.put('/:id', basic_auth_middleware_1.basic_auth, posts_validation_1.updatePostValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const postPost = yield posts_repository_1.postsRepository.putPost(req.body, req.params.id);
