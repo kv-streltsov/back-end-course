@@ -13,10 +13,14 @@ exports.blogsRepository = void 0;
 const db_mongo_1 = require("../db/db_mongo");
 exports.blogsRepository = {
     getAllBlogs: () => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionBlogs.find().toArray();
+        return yield db_mongo_1.collectionBlogs.find({}, {
+            projection: { _id: 0 },
+        }).toArray();
     }),
     findBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionBlogs.findOne({ id: id });
+        return yield db_mongo_1.collectionBlogs.findOne({ id: id }, {
+            projection: { _id: 0 },
+        });
     }),
     postBlog: (body) => __awaiter(void 0, void 0, void 0, function* () {
         const createData = {

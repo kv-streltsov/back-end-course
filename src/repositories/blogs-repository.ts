@@ -4,10 +4,14 @@ import {collectionBlogs} from "../db/db_mongo";
 
 export const blogsRepository = {
     getAllBlogs: async () => {
-        return await collectionBlogs.find().toArray()
+        return await collectionBlogs.find({},{
+            projection: { _id: 0},
+        }).toArray()
     },
     findBlogById: async (id: string) => {
-        return await collectionBlogs.findOne({id: id});
+        return await collectionBlogs.findOne( {id: id},{
+            projection: { _id: 0},
+        });
     },
     postBlog: async (body: InterfaceBlogInput): Promise<InterfaceBlogView> => {
 
