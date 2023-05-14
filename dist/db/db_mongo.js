@@ -34,6 +34,8 @@ exports.runMongo = runMongo;
 function clear_db_mongo() {
     return __awaiter(this, void 0, void 0, function* () {
         yield exports.collectionBlogs.deleteMany({});
+        yield exports.collectionPosts.deleteMany({});
+        return true;
     });
 }
 exports.clear_db_mongo = clear_db_mongo;

@@ -20,7 +20,9 @@ export async function runMongo() {
         console.log('connect error to mongo server')
     }
 }
-export async function clear_db_mongo() {
+export async function clear_db_mongo():Promise<boolean> {
     await collectionBlogs.deleteMany({})
+    await collectionPosts.deleteMany({})
+    return true
 }
 
