@@ -14,6 +14,9 @@ export const postsRepository = {
             projection: {_id: 0},
         })
     },
+
+
+
     postPost: async (body: InterfacePostInput): Promise<InterfacePostView | undefined> => {
 
         const findBlogName = await collectionBlogs.findOne({id: body.blogId})

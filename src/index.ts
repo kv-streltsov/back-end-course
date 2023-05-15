@@ -4,7 +4,7 @@ import {videoRouters} from "./routes/video.routers";
 import {testingRouter} from "./routes/testing.router";
 import {blogRouters} from "./routes/blog.routers";
 import {postRouters} from "./routes/post.routers";
-import { runMongo} from "./db/db_mongo";
+import {runMongo} from "./db/db_mongo";
 
 dotenv.config()
 export const app = express()
@@ -20,7 +20,7 @@ app.use('/posts', postRouters)
 app.use('/testing/all-data', testingRouter)
 
 
-const startApp = async ()=>{
+const startApp = async () => {
     await runMongo()
     if (process.env.NODE_ENV !== 'test') {
         app.listen(port, () => {

@@ -12,16 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
 const db_mongo_1 = require("../db/db_mongo");
 exports.blogsRepository = {
-    getAllBlogs: () => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionBlogs.find({}, {
-            projection: { _id: 0 },
-        }).toArray();
-    }),
-    getBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionBlogs.findOne({ id: id }, {
-            projection: { _id: 0 },
-        });
-    }),
     postBlog: (body) => __awaiter(void 0, void 0, void 0, function* () {
         const createData = {
             id: new Date().getTime().toString(),
