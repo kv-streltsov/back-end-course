@@ -1,15 +1,18 @@
 import {NextFunction, Request, Response} from "express";
+import  * as dotenv from 'dotenv'
+dotenv.config()
 
+const BASIC_PASS = process.env.BASIC_AUTH
 export const basic_auth = (req: Request, res: Response, next: NextFunction) => {
-    let header_list: string[] = req.rawHeaders
-    let isAuth = false
-    header_list.forEach(header => {
-        if (header.includes('Basic')) {
-            if (header.split(' ')[1] === 'YWRtaW46cXdlcnR5') {
-                isAuth = true
-            }
-        }
-    })
-    return isAuth ? next() : res.sendStatus(401)
+
+    if(req.headers.authorization === undefined){
+        res.sendStatus(401)
+    }
+    else if(req.headers.authorization.split(' ')[1] === BASIC_PASS){
+        next()
+    }
+    else if(req.headers.authorization.split(' ')[1] !== BASIC_PASS){
+        res.sendStatus(401)
+    }
 }
 

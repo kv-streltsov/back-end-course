@@ -1,11 +1,14 @@
 import {MongoClient} from 'mongodb'
+import * as dotenv from 'dotenv'
 
 
-// Replace the uri string with your MongoDB deployment's connection string.
+dotenv.config()
+export const MONGO_URL:string | undefined = process.env.MONGO_URL
 
-// @ts-ignore
-const URL: string = "mongodb+srv://kvstreltsov:ksdSrQnLnkqsLiwF@cluster0.34z5sen.mongodb.net/back-end-course?retryWrites=true&w=majority"
-export const clientMongo = new MongoClient(URL)
+if (!MONGO_URL) {
+    throw new Error('!!! Bad URL')
+}
+export const clientMongo = new MongoClient(MONGO_URL)
 export const collectionBlogs = clientMongo.db('back-end-course').collection('Blogs')
 export const collectionPosts = clientMongo.db('back-end-course').collection('Posts')
 
@@ -20,7 +23,8 @@ export async function runMongo() {
         console.log('connect error to mongo server')
     }
 }
-export async function clear_db_mongo():Promise<boolean> {
+
+export async function clear_db_mongo(): Promise<boolean> {
     await collectionBlogs.deleteMany({})
     await collectionPosts.deleteMany({})
     return true

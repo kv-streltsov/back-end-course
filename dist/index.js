@@ -45,6 +45,7 @@ const post_routers_1 = require("./routes/post.routers");
 const db_mongo_1 = require("./db/db_mongo");
 dotenv.config();
 exports.app = (0, express_1.default)();
+// export const MONGO_URL:string | undefined = process.env.MONGO_URL
 const port = process.env.DEV_PORT || 5001;
 exports.app.use(express_1.default.json());
 exports.app.use('/videos', video_routers_1.videoRouters);

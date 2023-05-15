@@ -4,12 +4,13 @@ import {videoRouters} from "./routes/video.routers";
 import {testingRouter} from "./routes/testing.router";
 import {blogRouters} from "./routes/blog.routers";
 import {postRouters} from "./routes/post.routers";
-import {clientMongo, runMongo} from "./db/db_mongo";
+import { runMongo} from "./db/db_mongo";
 
 dotenv.config()
 export const app = express()
-const port = process.env.DEV_PORT || 5001
+// export const MONGO_URL:string | undefined = process.env.MONGO_URL
 
+const port = process.env.DEV_PORT || 5001
 
 app.use(express.json())
 
