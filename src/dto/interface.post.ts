@@ -8,16 +8,16 @@ export interface InterfacePostView {
     blogId: string
     blogName: string
 }
-export interface InterfacePostCreate {
-    id: string
-    _id?: string | null
-    createdAt: string
-    title: string
-    shortDescription: string
-    content: string
-    blogId: string
-    blogName: string
-}
+// export interface InterfacePostCreate {
+//     id: string
+//     _id?: string | null
+//     createdAt: string
+//     title: string
+//     shortDescription: string
+//     content: string
+//     blogId: string
+//     blogName: string
+// }
 
 
 export interface InterfacePostInput {

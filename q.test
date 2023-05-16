@@ -4,21 +4,27 @@
 
 
 
-    Expected: ArrayContaining [{"blogId": Any<String>, "blogName": Any<String>, "content": Any<String>, "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "id": Any<String>, "shortDescription": Any<String>, "title": Any<String>}]
+    Expected: ArrayContaining
+    [
+    {"blogId": Any<String>, +
+     "blogName": Any<String>, +
+      "content": Any<String>, +
+       "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,  +
+       "id": Any<String>, +
+       "shortDescription": Any<String>,+
+       "title": Any<String>}]+
 
     Received:
-    [{"id":"1684210985504","createdAt":"2023-05-16T04:23:05.504Z",
-    "blogName":"new blog",
-    "blogId":"1684210985187",
-    "title":"5401post title",
-    "shortDescription":"description",
-    "content":"new post content",
-    "_id":"64630529658c76735a0c40dc"},
-    {"id":"1684210985945","createdAt":"2023-05-16T04:23:05.945Z",
-    "blogName":"new blog","blogId":"1684210985187",
-    "title":"5402post title",
-    "shortDescription":"description",
-    "content":"new post content","_id":"64630529658c76735a0c40dd"},{"id":"1684210986112","createdAt":"2023-05-16T04:23:06.112Z","blogName":"new blog","blogId":"1684210985187","title":"5403post title","shortDescription":"description","content":"new post content","_id":"6463052a658c76735a0c40de"},{"id":"1684210986536","createdAt":"2023-05-16T04:23:06.536Z","blogName":"new blog","blogId":"1684210985187","title":"5404post title","shortDescription":"description","content":"new post content","_id":"6463052a658c76735a0c40df"},{"id":"1684210986713","createdAt":"2023-05-16T04:23:06.713Z","blogName":"new blog","blogId":"1684210985187","title":"5405post title","shortDescription":"description","content":"new post content","_id":"6463052a658c76735a0c40e0"},{"id":"1684210986863","createdAt":"2023-05-16T04:23:06.863Z","blogName":"new blog","blogId":"1684210985187","title":"5406post title","shortDescription":"description","content":"new post content","_id":"6463052a658c76735a0c40e1"},{"id":"1684210987037","createdAt":"2023-05-16T04:23:07.037Z","blogName":"new blog","blogId":"1684210985187","title":"5407post title","shortDescription":"description","content":"new post content","_id":"6463052b658c76735a0c40e2"},{"id":"1684210987179","createdAt":"2023-05-16T04:23:07.179Z","blogName":"new blog","blogId":"1684210985187","title":"5408post title","shortDescription":"description","content":"new post content","_id":"6463052b658c76735a0c40e3"},{"id":"1684210987322","createdAt":"2023-05-16T04:23:07.322Z","blogName":"new blog","blogId":"1684210985187","title":"5409post title","shortDescription":"description","content":"new post content","_id":"6463052b658c76735a0c40e4"},{"id":"1684210987619","createdAt":"2023-05-16T04:23:07.619Z","blogName":"new blog","blogId":"1684210985187","title":"5410post title","shortDescription":"description","content":"new post content","_id":"6463052b658c76735a0c40e5"},{"id":"1684210987841","createdAt":"2023-05-16T04:23:07.841Z","blogName":"new blog","blogId":"1684210985187","title":"5411post title","shortDescription":"description","content":"new post content","_id":"6463052b658c76735a0c40e6"},{"id":"1684210987977","createdAt":"2023-05-16T04:23:07.977Z","blogName":"new blog","blogId":"1684210985187","title":"5412post title","shortDescription":"description","content":"new post content","_id":"6463052b658c76735a0c40e7"}]
+    [
+        {"id":"1684210985504",
+        "createdAt":"2023-05-16T04:23:05.504Z",
+        "blogName":"new blog",
+        "blogId":"1684210985187",
+        "title":"5401post title",
+        "shortDescription":"description",
+        "content":"new post content",
+        "_id":"64630529658c76735a0c40dc"},
+   ]
 
     Wrong entity: {"id":"1684210985504","createdAt":"2023-05-16T04:23:05.504Z","blogName":"new blog","blogId":"1684210985187","title":"5401post title","shortDescription":"description","content":"new post content","_id":"64630529658c76735a0c40dc"}
 

@@ -29,14 +29,11 @@ exports.blogsRepository = {
                 id: new Date().getTime().toString(),
                 createdAt: new Date().toISOString(),
                 blogName: findBlogName.name,
-                blogId: id,
-                title: body.title,
-                shortDescription: body.shortDescription,
-                content: body.content
+                blogId: id
             };
-            yield db_mongo_1.collectionPosts.insertOne(createData);
-            delete createData._id;
-            return createData;
+            const newPost = Object.assign(Object.assign({}, createData), body);
+            yield db_mongo_1.collectionPosts.insertOne(newPost);
+            return Object.assign(Object.assign({}, createData), body);
         }
         return undefined;
     }),
