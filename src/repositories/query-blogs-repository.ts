@@ -43,14 +43,13 @@ export const queryBlogsRepository = {
             pageSize: query.pageSize || '10'
         }
 
-
-
+        const totalCount:number =  await collectionPosts.countDocuments({name: query.searchNameTerm}) -1
 
         return {
-            "pagesCount": Number(searchParams.pageNumber),
+            "pagesCount": Math.ceil(totalCount/Number(searchParams.pageSize)),
             "page": Number(searchParams.pageNumber),
             "pageSize": Number(searchParams.pageSize),
-            "totalCount": await collectionPosts.countDocuments({name: query.searchNameTerm}),
+            "totalCount": totalCount,
             "items": await collectionPosts
                 .find({name: query.searchNameTerm}, {projection: {_id: 0},})
                 .skip((Number(searchParams.pageNumber) - 1) * Number(searchParams.pageSize))

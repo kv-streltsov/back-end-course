@@ -50,11 +50,12 @@ exports.queryBlogsRepository = {
             pageNumber: query.pageNumber || '1',
             pageSize: query.pageSize || '10'
         };
+        const totalCount = (yield db_mongo_1.collectionPosts.countDocuments({ name: query.searchNameTerm })) - 1;
         return {
-            "pagesCount": Number(searchParams.pageNumber),
+            "pagesCount": Math.ceil(totalCount / Number(searchParams.pageSize)),
             "page": Number(searchParams.pageNumber),
             "pageSize": Number(searchParams.pageSize),
-            "totalCount": yield db_mongo_1.collectionPosts.countDocuments({ name: query.searchNameTerm }),
+            "totalCount": totalCount,
             "items": yield db_mongo_1.collectionPosts
                 .find({ name: query.searchNameTerm }, { projection: { _id: 0 }, })
                 .skip((Number(searchParams.pageNumber) - 1) * Number(searchParams.pageSize))
