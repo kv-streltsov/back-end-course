@@ -1,6 +1,6 @@
 import {InterfaceBlog, InterfaceBlogInput, InterfaceBlogView} from "../dto/interface.blog";
 import {collectionBlogs, collectionPosts} from "../db/db_mongo";
-import {InterfacePostInBlog, InterfacePostView} from "../dto/interface.post";
+import {InterfacePostCreate, InterfacePostInBlog, InterfacePostView} from "../dto/interface.post";
 
 
 export const blogsRepository = {
@@ -27,7 +27,7 @@ export const blogsRepository = {
         const findBlogName = await collectionBlogs.findOne({id: id})
 
         if (findBlogName) {
-            const createData = {
+            const createData: InterfacePostCreate = {
                 id: new Date().getTime().toString(),
                 createdAt: new Date().toISOString(),
                 blogName: findBlogName.name,
@@ -35,12 +35,10 @@ export const blogsRepository = {
                 title: body.title,
                 shortDescription: body.shortDescription,
                 content: body.content
-
             }
 
             await collectionPosts.insertOne(createData)
-            console.log(123)
-            console.log(createData)
+            delete createData._id
             return createData
         }
         return undefined

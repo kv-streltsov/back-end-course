@@ -23,14 +23,7 @@ const blogIdValidation = (0, express_validator_1.body)('blogId').isString().trim
     }
     return true;
 }));
-const PostInBlogIdValidation = (0, express_validator_1.param)("id").isString().trim().notEmpty().custom((blogId) => __awaiter(void 0, void 0, void 0, function* () {
-    const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: blogId });
-    if (!findBlog) {
-        throw new Error('id not found in blog');
-    }
-    return true;
-}));
 exports.createPostValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
-exports.createPostInBlogValidation = [titleValidation, shortDescriptionValidation, contentValidation, PostInBlogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
+exports.createPostInBlogValidation = [titleValidation, shortDescriptionValidation, contentValidation, input_validation_middleware_1.inputValidationMiddleware];
 exports.updatePostValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, input_validation_middleware_1.inputValidationMiddleware];
 //# sourceMappingURL=posts-validation.js.map

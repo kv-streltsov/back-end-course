@@ -43,7 +43,12 @@ exports.blogRouters.post('/', basic_auth_middleware_1.basic_auth, blogs_validati
 }));
 exports.blogRouters.post('/:id/posts/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostInBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdBlog = yield blog_service_1.blogsService.postPostInBlog(req.params.id, req.body);
-    res.status(interface_html_code_1.HttpStatusCode.CREATED).send(createdBlog);
+    if (createdBlog === undefined) {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+    }
+    else {
+        res.status(interface_html_code_1.HttpStatusCode.CREATED).send(createdBlog);
+    }
 }));
 exports.blogRouters.put('/:id', basic_auth_middleware_1.basic_auth, blogs_validations_1.updateBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const postBlog = yield blog_service_1.blogsService.putBlog(req.body, req.params.id);

@@ -27,8 +27,8 @@ blogRouters.get('/:id/posts/', async (req: Request, res: Response) => {
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 
 })
-blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 
+blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 
     const createdBlog: InterfaceBlogView = await blogsService.postBlog(req.body)
     res.status(HttpStatusCode.CREATED).send(createdBlog)
@@ -37,7 +37,11 @@ blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res
 blogRouters.post('/:id/posts/', basic_auth, createPostInBlogValidation, async (req: Request, res: Response) => {
 
     const createdBlog = await blogsService.postPostInBlog(req.params.id, req.body)
-    res.status(HttpStatusCode.CREATED).send(createdBlog)
+    if (createdBlog === undefined) {
+        res.sendStatus(HttpStatusCode.NOT_FOUND)
+    } else {
+        res.status(HttpStatusCode.CREATED).send(createdBlog)
+    }
 
 });
 blogRouters.put('/:id', basic_auth, updateBlogValidation, async (req: Request, res: Response) => {

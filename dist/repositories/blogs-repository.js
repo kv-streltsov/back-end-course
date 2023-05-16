@@ -35,8 +35,7 @@ exports.blogsRepository = {
                 content: body.content
             };
             yield db_mongo_1.collectionPosts.insertOne(createData);
-            console.log(123);
-            console.log(createData);
+            delete createData._id;
             return createData;
         }
         return undefined;
