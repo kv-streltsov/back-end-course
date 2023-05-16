@@ -15,36 +15,37 @@ const basic_auth_middleware_1 = require("../middleware/basic-auth-middleware");
 const posts_validation_1 = require("../middleware/validation/posts-validation");
 const post_service_1 = require("../domain/post-service");
 const query_posts_repository_1 = require("../repositories/query-posts-repository");
+const interface_html_code_1 = require("../dto/interface.html-code");
 exports.postRouters = (0, express_1.Router)({});
 exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).send(yield query_posts_repository_1.queryPostsRepository.getAllPosts());
+    res.status(interface_html_code_1.HttpStatusCode.OK).send(yield query_posts_repository_1.queryPostsRepository.getAllPosts());
 }));
 exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const findPost = yield query_posts_repository_1.queryPostsRepository.getPostById(req.params.id);
     if (findPost !== null) {
-        res.status(200).send(findPost);
+        res.status(interface_html_code_1.HttpStatusCode.OK).send(findPost);
     }
     else
-        res.sendStatus(404);
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
 }));
 exports.postRouters.post('/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdPost = yield post_service_1.postsService.postPost(req.body);
-    res.status(201).send(createdPost);
+    res.status(interface_html_code_1.HttpStatusCode.CREATED).send(createdPost);
 }));
 exports.postRouters.put('/:id', basic_auth_middleware_1.basic_auth, posts_validation_1.updatePostValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const postPost = yield post_service_1.postsService.putPost(req.body, req.params.id);
     if (postPost !== null) {
-        res.sendStatus(204);
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
     }
     else
-        res.sendStatus(404);
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
 }));
 exports.postRouters.delete('/:id', basic_auth_middleware_1.basic_auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const deletePost = yield post_service_1.postsService.deletePost(req.params.id);
     if (deletePost !== null) {
-        res.sendStatus(204);
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
     }
     else
-        res.sendStatus(404);
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
 }));
 //# sourceMappingURL=post.routers.js.map

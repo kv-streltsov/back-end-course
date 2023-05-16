@@ -21,3 +21,4 @@ export interface InterfaceBlogView{
     createdAt:string     //($date-time)
     isMembership:boolean // default false
 }
+
