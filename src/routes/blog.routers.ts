@@ -5,6 +5,7 @@ import {InterfaceBlogView} from "../dto/interface.blog";
 import {queryBlogsRepository} from "../repositories/query-blogs-repository";
 import {blogsService} from "../domain/blog-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
+import {createPostInBlogValidation, createPostValidation} from "../middleware/validation/posts-validation";
 
 export const blogRouters = Router({})
 
@@ -16,20 +17,26 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
     const findBlog = await queryBlogsRepository.getBlogById(req.params.id)
     if (findBlog !== null) {
         res.status(HttpStatusCode.OK).send(findBlog)
-    } else  res.sendStatus(HttpStatusCode.NOT_FOUND)
+    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 
 })
 blogRouters.get('/:id/posts/', async (req: Request, res: Response) => {
-    const findBlog = await queryBlogsRepository.getBlogById(req.params.id)
+    const findBlog = await queryBlogsRepository.getPostsInBlog(req.params.id, req.query)
     if (findBlog !== null) {
         res.status(HttpStatusCode.OK).send(findBlog)
-    } else  res.sendStatus(HttpStatusCode.NOT_FOUND)
+    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 
 })
 blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 
 
     const createdBlog: InterfaceBlogView = await blogsService.postBlog(req.body)
+    res.status(HttpStatusCode.CREATED).send(createdBlog)
+
+});
+blogRouters.post('/:id/posts/', basic_auth, createPostInBlogValidation, async (req: Request, res: Response) => {
+
+    const createdBlog = await blogsService.postPostInBlog(req.params.id, req.body)
     res.status(HttpStatusCode.CREATED).send(createdBlog)
 
 });

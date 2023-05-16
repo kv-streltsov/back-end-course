@@ -16,6 +16,7 @@ const blogs_validations_1 = require("../middleware/validation/blogs-validations"
 const query_blogs_repository_1 = require("../repositories/query-blogs-repository");
 const blog_service_1 = require("../domain/blog-service");
 const interface_html_code_1 = require("../dto/interface.html-code");
+const posts_validation_1 = require("../middleware/validation/posts-validation");
 exports.blogRouters = (0, express_1.Router)({});
 exports.blogRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(interface_html_code_1.HttpStatusCode.OK).send(yield query_blogs_repository_1.queryBlogsRepository.getAllBlogs(req.query));
@@ -29,7 +30,7 @@ exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
         res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
 }));
 exports.blogRouters.get('/:id/posts/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const findBlog = yield query_blogs_repository_1.queryBlogsRepository.getBlogById(req.params.id);
+    const findBlog = yield query_blogs_repository_1.queryBlogsRepository.getPostsInBlog(req.params.id, req.query);
     if (findBlog !== null) {
         res.status(interface_html_code_1.HttpStatusCode.OK).send(findBlog);
     }
@@ -38,6 +39,10 @@ exports.blogRouters.get('/:id/posts/', (req, res) => __awaiter(void 0, void 0, v
 }));
 exports.blogRouters.post('/', basic_auth_middleware_1.basic_auth, blogs_validations_1.createBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdBlog = yield blog_service_1.blogsService.postBlog(req.body);
+    res.status(interface_html_code_1.HttpStatusCode.CREATED).send(createdBlog);
+}));
+exports.blogRouters.post('/:id/posts/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostInBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const createdBlog = yield blog_service_1.blogsService.postPostInBlog(req.params.id, req.body);
     res.status(interface_html_code_1.HttpStatusCode.CREATED).send(createdBlog);
 }));
 exports.blogRouters.put('/:id', basic_auth_middleware_1.basic_auth, blogs_validations_1.updateBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

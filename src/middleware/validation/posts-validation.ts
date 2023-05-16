@@ -1,4 +1,4 @@
-import {body} from "express-validator";
+import {body, param} from "express-validator";
 import {inputValidationMiddleware} from "./input-validation-middleware";
 import {collectionBlogs} from "../../db/db_mongo";
 
@@ -14,9 +14,23 @@ const blogIdValidation = body('blogId').isString().trim().notEmpty().custom(asyn
     return true
 
 })
+const PostInBlogIdValidation = param("id").isString().trim().notEmpty().custom(async blogId => {
+    const findBlog = await collectionBlogs.findOne({id: blogId})
+    if (!findBlog) {
+        throw new Error('id not found in blog')
+    }
+    return true
+
+})
+
+
+
 
 
 export const createPostValidation =
     [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware]
+
+export const createPostInBlogValidation =
+    [titleValidation, shortDescriptionValidation, contentValidation, PostInBlogIdValidation, inputValidationMiddleware]
 export const updatePostValidation =
     [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware]

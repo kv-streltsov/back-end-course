@@ -15,6 +15,9 @@ exports.blogsService = {
     postBlog: (body) => __awaiter(void 0, void 0, void 0, function* () {
         return blogs_repository_1.blogsRepository.postBlog(body);
     }),
+    postPostInBlog: (id, body) => __awaiter(void 0, void 0, void 0, function* () {
+        return blogs_repository_1.blogsRepository.postPostInBlog(id, body);
+    }),
     putBlog: (body, id) => __awaiter(void 0, void 0, void 0, function* () {
         return blogs_repository_1.blogsRepository.putBlog(body, id);
     }),

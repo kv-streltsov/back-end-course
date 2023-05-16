@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export interface InterfacePostView {
     id: string
     title: string
@@ -14,4 +16,10 @@ export interface InterfacePostInput {
     shortDescription: string
     content: string
     blogId: string
+}
+
+export interface InterfacePostInBlog {
+    title: string
+    shortDescription: string
+    content: string
 }

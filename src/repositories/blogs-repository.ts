@@ -1,5 +1,6 @@
 import {InterfaceBlog, InterfaceBlogInput, InterfaceBlogView} from "../dto/interface.blog";
-import {collectionBlogs} from "../db/db_mongo";
+import {collectionBlogs, collectionPosts} from "../db/db_mongo";
+import {InterfacePostInBlog, InterfacePostView} from "../dto/interface.post";
 
 
 export const blogsRepository = {
@@ -20,6 +21,29 @@ export const blogsRepository = {
             ...createData,
             ...body
         }
+
+    },
+    postPostInBlog: async (id: string, body: InterfacePostInBlog) => {
+        const findBlogName = await collectionBlogs.findOne({id: id})
+
+        if (findBlogName) {
+            const createData = {
+                id: new Date().getTime().toString(),
+                createdAt: new Date().toISOString(),
+                blogName: findBlogName.name,
+                blogId: id,
+                title: body.title,
+                shortDescription: body.shortDescription,
+                content: body.content
+
+            }
+
+            await collectionPosts.insertOne(createData)
+            console.log(123)
+            console.log(createData)
+            return createData
+        }
+        return undefined
 
     },
     putBlog: async (body: InterfaceBlog, id: string): Promise<boolean | null> => {
