@@ -54,7 +54,7 @@ exports.queryBlogsRepository = {
             "pagesCount": Number(searchParams.pageNumber),
             "page": Number(searchParams.pageNumber),
             "pageSize": Number(searchParams.pageSize),
-            "totalCount": Number(searchParams.pageNumber),
+            "totalCount": yield db_mongo_1.collectionPosts.countDocuments({ name: query.searchNameTerm }),
             "items": yield db_mongo_1.collectionPosts
                 .find({ name: query.searchNameTerm }, { projection: { _id: 0 }, })
                 .skip((Number(searchParams.pageNumber) - 1) * Number(searchParams.pageSize))
