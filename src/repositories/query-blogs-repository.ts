@@ -31,7 +31,10 @@ export const queryBlogsRepository = {
         });
     },
     getPostsInBlog: async (id: string, query: InterfaceQuery) => {
-
+        const findBlog = await collectionBlogs.findOne({id: id})
+        if(findBlog === null){
+            return null
+        }
         const searchParams = {
             searchNameTerm: query.searchNameTerm || {},
             sortBy: query.sortBy || 'createdAt',

@@ -1,49 +1,53 @@
+  > Homework 4  Blogs with pagination  POST, GET -> "/blogs/:blogId/posts": should return error if :id from uri param not found; status 404;
+
+    Tested case params:
+     endpoint: blogs/602afe92-7d97-4395-b1b9-6cf98b351bbe/posts,
+     method: GET,
+     headers: {"Authorization":"Basic YWRtaW46cXdlcnR5"},
+
+    Expected status: 404
+
+    Received status: 200
+
+      49 |       }
+      50 |
+    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
+         |                      ^
+      52 |         headers,
+      53 |         endpoint,
+      54 |         method,
+
+      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
+      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-with-pagination-describe.ts:134:7)
+
+
+
 
 
   > Homework 4  Blogs with pagination  GET -> "/blogs/:blogId/posts": should return status 200; content: posts for specific blog with pagination;  used additional methods: POST -> /blogs, POST -> /posts;
 
+    Passed queryParams: ""
 
+    Expected: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1684213238371","createdAt":"2023-05-16T05:00:38.371Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6108post title"},{"id":"1684213238235","createdAt":"2023-05-16T05:00:38.235Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6107post title"},{"id":"1684213238078","createdAt":"2023-05-16T05:00:38.078Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6106post title"},{"id":"1684213237890","createdAt":"2023-05-16T05:00:37.890Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6105post title"},{"id":"1684213237747","createdAt":"2023-05-16T05:00:37.747Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6104post title"},{"id":"1684213237083","createdAt":"2023-05-16T05:00:37.083Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6103post title"},{"id":"1684213236906","createdAt":"2023-05-16T05:00:36.906Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6102post title"},{"id":"1684213236756","createdAt":"2023-05-16T05:00:36.756Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6101post title"},{"id":"1684213236597","createdAt":"2023-05-16T05:00:36.597Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6100post title"},{"id":"1684213236446","createdAt":"2023-05-16T05:00:36.446Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6099post title"}]}
 
-    Expected: ArrayContaining
-    [
-    {"blogId": Any<String>, +
-     "blogName": Any<String>, +
-      "content": Any<String>, +
-       "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,  +
-       "id": Any<String>, +
-       "shortDescription": Any<String>,+
-       "title": Any<String>}]+
+    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":1,"items":[{"id":"1684213238371","createdAt":"2023-05-16T05:00:38.371Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6108post title"},{"id":"1684213238235","createdAt":"2023-05-16T05:00:38.235Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6107post title"},{"id":"1684213238078","createdAt":"2023-05-16T05:00:38.078Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6106post title"},{"id":"1684213237890","createdAt":"2023-05-16T05:00:37.890Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6105post title"},{"id":"1684213237747","createdAt":"2023-05-16T05:00:37.747Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6104post title"},{"id":"1684213237083","createdAt":"2023-05-16T05:00:37.083Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6103post title"},{"id":"1684213236906","createdAt":"2023-05-16T05:00:36.906Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6102post title"},{"id":"1684213236756","createdAt":"2023-05-16T05:00:36.756Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6101post title"},{"id":"1684213236597","createdAt":"2023-05-16T05:00:36.597Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6100post title"},{"id":"1684213236446","createdAt":"2023-05-16T05:00:36.446Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6099post title"},{"id":"1684213236309","createdAt":"2023-05-16T05:00:36.309Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6098post title"},{"id":"1684213236180","createdAt":"2023-05-16T05:00:36.180Z","blogName":"new blog","blogId":"1684213236034","content":"new post content","shortDescription":"description","title":"6097post title"},{"id":"1684213235390","createdAt":"2023-05-16T05:00:35.390Z","blogName":"new blog","blogId":"1684213234967","content":"new post content","shortDescription":"description","title":"post title"}]}
 
-    Received:
-    [
-        {"id":"1684210985504",
-        "createdAt":"2023-05-16T04:23:05.504Z",
-        "blogName":"new blog",
-        "blogId":"1684210985187",
-        "title":"5401post title",
-        "shortDescription":"description",
-        "content":"new post content",
-        "_id":"64630529658c76735a0c40dc"},
-   ]
+      105 |
+      106 |     if (expectedData) {
+    > 107 |       expect(data).toBeEqualWithQueryParams(expectedData, queryParams, withDiffPrint);
+          |                    ^
+      108 |     }
+      109 |   }
+      110 | };
 
-    Wrong entity: {"id":"1684210985504","createdAt":"2023-05-16T04:23:05.504Z","blogName":"new blog","blogId":"1684210985187","title":"5401post title","shortDescription":"description","content":"new post content","_id":"64630529658c76735a0c40dc"}
-
-      198 |       }).catch((error) => handleTestError(error));
-      199 |
-    > 200 |       expect(createSeveralPostsResult).toBeStrictObjectsArray(postSchema);
-          |                                        ^
-      201 |
-      202 |       await performQueryParamsChecker({
-      203 |         endpoint: `${BlogsEndpoint.BasePath}/${createdBlog.id}/${PostsEndpoint.BasePath}`,
-
-      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-with-pagination-describe.ts:200:40)
-          at runMicrotasks (<anonymous>)
+      at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
+      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-with-pagination-describe.ts:202:7)
 
   > Homework 4  Blogs with pagination  GET -> "blogs": should return status 200; content: blog array with pagination;  used additional methods: POST -> /blogs, GET -> /blogs;
 
     Passed queryParams: ""
 
-    Expected: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1684210990558","createdAt":"2023-05-16T04:23:10.558Z","isMembership":false,"name":"Timma","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210990412","createdAt":"2023-05-16T04:23:10.412Z","isMembership":false,"name":"Tima","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210989802","createdAt":"2023-05-16T04:23:09.802Z","isMembership":false,"name":"Alex","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210989668","createdAt":"2023-05-16T04:23:09.668Z","isMembership":false,"name":"Alexey","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210989449","createdAt":"2023-05-16T04:23:09.449Z","isMembership":false,"name":"Andrey","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210989069","createdAt":"2023-05-16T04:23:09.069Z","isMembership":false,"name":"Don","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210988938","createdAt":"2023-05-16T04:23:08.938Z","isMembership":false,"name":"John","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210988805","createdAt":"2023-05-16T04:23:08.805Z","isMembership":false,"name":"Gggrrttt","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210988661","createdAt":"2023-05-16T04:23:08.661Z","isMembership":false,"name":"Mima","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684210988524","createdAt":"2023-05-16T04:23:08.524Z","isMembership":false,"name":"Dima","websiteUrl":"https://someurl.com","description":"description"}]}
+    Expected: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1684213240749","createdAt":"2023-05-16T05:00:40.749Z","isMembership":false,"name":"Timma","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213240611","createdAt":"2023-05-16T05:00:40.611Z","isMembership":false,"name":"Tima","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213240391","createdAt":"2023-05-16T05:00:40.391Z","isMembership":false,"name":"Alex","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213239862","createdAt":"2023-05-16T05:00:39.862Z","isMembership":false,"name":"Alexey","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213239728","createdAt":"2023-05-16T05:00:39.728Z","isMembership":false,"name":"Andrey","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213239587","createdAt":"2023-05-16T05:00:39.587Z","isMembership":false,"name":"Don","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213239459","createdAt":"2023-05-16T05:00:39.459Z","isMembership":false,"name":"John","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213239328","createdAt":"2023-05-16T05:00:39.328Z","isMembership":false,"name":"Gggrrttt","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213239194","createdAt":"2023-05-16T05:00:39.194Z","isMembership":false,"name":"Mima","websiteUrl":"https://someurl.com","description":"description"},{"id":"1684213239062","createdAt":"2023-05-16T05:00:39.062Z","isMembership":false,"name":"Dima","websiteUrl":"https://someurl.com","description":"description"}]}
 
     Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":1,"items":[]}
 
@@ -56,16 +60,15 @@
       110 | };
 
       at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-with-pagination-describe.ts:158:7)
 
   > Homework 4  Posts with pagination  GET -> "/posts": should return status 200; content: posts array with pagination;  used additional methods: POST -> /blogs, POST -> /posts;
 
     Passed queryParams: ""
 
-    Expected: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1684211005967","createdAt":"2023-05-16T04:23:25.967Z","blogName":"new blog11","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211005479"},{"id":"1684211005348","createdAt":"2023-05-16T04:23:25.348Z","blogName":"new blog10","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211005217"},{"id":"1684211005086","createdAt":"2023-05-16T04:23:25.086Z","blogName":"new blog9","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211004941"},{"id":"1684211004761","createdAt":"2023-05-16T04:23:24.761Z","blogName":"new blog8","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211004320"},{"id":"1684211004190","createdAt":"2023-05-16T04:23:24.190Z","blogName":"new blog7","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211004042"},{"id":"1684211003911","createdAt":"2023-05-16T04:23:23.911Z","blogName":"new blog6","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211003646"},{"id":"1684211003071","createdAt":"2023-05-16T04:23:23.071Z","blogName":"new blog5","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002938"},{"id":"1684211002804","createdAt":"2023-05-16T04:23:22.804Z","blogName":"new blog4","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002668"},{"id":"1684211002534","createdAt":"2023-05-16T04:23:22.534Z","blogName":"new blog3","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002379"},{"id":"1684211002244","createdAt":"2023-05-16T04:23:22.244Z","blogName":"new blog2","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002084"}]}
+    Expected: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1684213255261","createdAt":"2023-05-16T05:00:55.261Z","blogName":"new blog11","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213255121"},{"id":"1684213254993","createdAt":"2023-05-16T05:00:54.993Z","blogName":"new blog10","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213254787"},{"id":"1684213254481","createdAt":"2023-05-16T05:00:54.481Z","blogName":"new blog9","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213254324"},{"id":"1684213254189","createdAt":"2023-05-16T05:00:54.189Z","blogName":"new blog8","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213254055"},{"id":"1684213253921","createdAt":"2023-05-16T05:00:53.921Z","blogName":"new blog7","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213253779"},{"id":"1684213253644","createdAt":"2023-05-16T05:00:53.644Z","blogName":"new blog6","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213253487"},{"id":"1684213253351","createdAt":"2023-05-16T05:00:53.351Z","blogName":"new blog5","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213253215"},{"id":"1684213253085","createdAt":"2023-05-16T05:00:53.085Z","blogName":"new blog4","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213252867"},{"id":"1684213252360","createdAt":"2023-05-16T05:00:52.360Z","blogName":"new blog3","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213252209"},{"id":"1684213252082","createdAt":"2023-05-16T05:00:52.082Z","blogName":"new blog2","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213251941"}]}
 
-    Received: [{"id":"1684211001675","createdAt":"2023-05-16T04:23:21.675Z","blogName":"new blog0","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211001527"},{"id":"1684211001951","createdAt":"2023-05-16T04:23:21.951Z","blogName":"new blog1","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211001808"},{"id":"1684211002244","createdAt":"2023-05-16T04:23:22.244Z","blogName":"new blog2","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002084"},{"id":"1684211002534","createdAt":"2023-05-16T04:23:22.534Z","blogName":"new blog3","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002379"},{"id":"1684211002804","createdAt":"2023-05-16T04:23:22.804Z","blogName":"new blog4","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002668"},{"id":"1684211003071","createdAt":"2023-05-16T04:23:23.071Z","blogName":"new blog5","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211002938"},{"id":"1684211003911","createdAt":"2023-05-16T04:23:23.911Z","blogName":"new blog6","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211003646"},{"id":"1684211004190","createdAt":"2023-05-16T04:23:24.190Z","blogName":"new blog7","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211004042"},{"id":"1684211004761","createdAt":"2023-05-16T04:23:24.761Z","blogName":"new blog8","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211004320"},{"id":"1684211005086","createdAt":"2023-05-16T04:23:25.086Z","blogName":"new blog9","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211004941"},{"id":"1684211005348","createdAt":"2023-05-16T04:23:25.348Z","blogName":"new blog10","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211005217"},{"id":"1684211005967","createdAt":"2023-05-16T04:23:25.967Z","blogName":"new blog11","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684211005479"}]
+    Received: [{"id":"1684213251488","createdAt":"2023-05-16T05:00:51.488Z","blogName":"new blog0","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213251324"},{"id":"1684213251809","createdAt":"2023-05-16T05:00:51.809Z","blogName":"new blog1","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213251618"},{"id":"1684213252082","createdAt":"2023-05-16T05:00:52.082Z","blogName":"new blog2","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213251941"},{"id":"1684213252360","createdAt":"2023-05-16T05:00:52.360Z","blogName":"new blog3","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213252209"},{"id":"1684213253085","createdAt":"2023-05-16T05:00:53.085Z","blogName":"new blog4","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213252867"},{"id":"1684213253351","createdAt":"2023-05-16T05:00:53.351Z","blogName":"new blog5","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213253215"},{"id":"1684213253644","createdAt":"2023-05-16T05:00:53.644Z","blogName":"new blog6","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213253487"},{"id":"1684213253921","createdAt":"2023-05-16T05:00:53.921Z","blogName":"new blog7","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213253779"},{"id":"1684213254189","createdAt":"2023-05-16T05:00:54.189Z","blogName":"new blog8","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213254055"},{"id":"1684213254481","createdAt":"2023-05-16T05:00:54.481Z","blogName":"new blog9","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213254324"},{"id":"1684213254993","createdAt":"2023-05-16T05:00:54.993Z","blogName":"new blog10","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213254787"},{"id":"1684213255261","createdAt":"2023-05-16T05:00:55.261Z","blogName":"new blog11","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684213255121"}]
 
       105 |
       106 |     if (expectedData) {
@@ -76,5 +79,4 @@
       110 | };
 
       at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/posts/postsWithPagination-describe.ts:66:7)

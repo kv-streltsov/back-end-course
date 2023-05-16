@@ -37,7 +37,7 @@ blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res
 blogRouters.post('/:id/posts/', basic_auth, createPostInBlogValidation, async (req: Request, res: Response) => {
 
     const createdBlog = await blogsService.postPostInBlog(req.params.id, req.body)
-    if (createdBlog === undefined) {
+    if (createdBlog === undefined || createdBlog === null) {
         res.sendStatus(HttpStatusCode.NOT_FOUND)
     } else {
         res.status(HttpStatusCode.CREATED).send(createdBlog)

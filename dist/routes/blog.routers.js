@@ -43,7 +43,7 @@ exports.blogRouters.post('/', basic_auth_middleware_1.basic_auth, blogs_validati
 }));
 exports.blogRouters.post('/:id/posts/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostInBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdBlog = yield blog_service_1.blogsService.postPostInBlog(req.params.id, req.body);
-    if (createdBlog === undefined) {
+    if (createdBlog === undefined || createdBlog === null) {
         res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
     }
     else {
