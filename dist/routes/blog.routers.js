@@ -18,8 +18,15 @@ const blog_service_1 = require("../domain/blog-service");
 const interface_html_code_1 = require("../dto/interface.html-code");
 const posts_validation_1 = require("../middleware/validation/posts-validation");
 exports.blogRouters = (0, express_1.Router)({});
+var SortType;
+(function (SortType) {
+    SortType[SortType["ask"] = 1] = "ask";
+    SortType[SortType["desc"] = -1] = "desc";
+})(SortType || (SortType = {}));
 exports.blogRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(interface_html_code_1.HttpStatusCode.OK).send(yield query_blogs_repository_1.queryBlogsRepository.getAllBlogs(req.query));
+    var _a, _b, _c, _d, _e;
+    const blogs = yield query_blogs_repository_1.queryBlogsRepository.getAllBlogs(((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirectioen) === 'ask' ? SortType.ask : SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy, ((_e = req.query) === null || _e === void 0 ? void 0 : _e.searchNameTerm) && req.query.searchNameTerm);
+    res.status(interface_html_code_1.HttpStatusCode.OK).send(blogs);
 }));
 exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const findBlog = yield query_blogs_repository_1.queryBlogsRepository.getBlogById(req.params.id);

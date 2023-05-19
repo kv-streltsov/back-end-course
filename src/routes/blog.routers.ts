@@ -9,9 +9,31 @@ import {createPostInBlogValidation, createPostValidation} from "../middleware/va
 
 export const blogRouters = Router({})
 
+export type PaginationQueryParamsType = {
+    pageNumber?: number,
+    pageSize?: number,
+    sortDirectioen?: string,
+    sortBy?: string,
+    searchNameTerm?: string
 
-blogRouters.get('/', async (req: Request, res: Response) => {
-    res.status(HttpStatusCode.OK).send(await queryBlogsRepository.getAllBlogs(req.query))
+}
+
+enum SortType {
+    ask = 1,
+    desc = -1
+}
+
+blogRouters.get('/', async (req: Request<any, any, any, PaginationQueryParamsType>, res: Response) => {
+    const blogs = await queryBlogsRepository.getAllBlogs(
+        req.query?.pageNumber && Number(req.query.pageNumber),
+        req.query?.pageSize && Number(req.query.pageSize),
+        req.query?.sortDirectioen === 'ask'  ?  SortType.ask : SortType.desc,
+        req.query?.sortBy && req.query.sortBy,
+        req.query?.searchNameTerm && req.query.searchNameTerm,
+
+    )
+
+    res.status(HttpStatusCode.OK).send(blogs)
 })
 blogRouters.get('/:id', async (req: Request, res: Response) => {
     const findBlog = await queryBlogsRepository.getBlogById(req.params.id)
