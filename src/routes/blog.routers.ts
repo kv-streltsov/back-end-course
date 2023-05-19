@@ -27,11 +27,9 @@ blogRouters.get('/', async (req: Request<any, any, any, PaginationQueryParamsTyp
     const blogs = await queryBlogsRepository.getAllBlogs(
         req.query?.pageNumber && Number(req.query.pageNumber),
         req.query?.pageSize && Number(req.query.pageSize),
-        req.query?.sortDirectioen === 'ask'  ?  SortType.ask : SortType.desc,
+        req.query?.sortDirectioen === 'ask' ? SortType.ask : SortType.desc,
         req.query?.sortBy && req.query.sortBy,
-        req.query?.searchNameTerm && req.query.searchNameTerm,
-
-    )
+        req.query?.searchNameTerm && req.query.searchNameTerm)
 
     res.status(HttpStatusCode.OK).send(blogs)
 })
@@ -42,13 +40,23 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 
 })
-blogRouters.get('/:id/posts/', async (req: Request, res: Response) => {
-    const findBlog = await queryBlogsRepository.getPostsInBlog(req.params.id, req.query)
-    if (findBlog !== null) {
-        res.status(HttpStatusCode.OK).send(findBlog)
-    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
-
+blogRouters.get('/:id/posts/', async (req: Request<any, any, any, PaginationQueryParamsType>, res: Response) => {
+    const post = await queryBlogsRepository.getPostsInBlog
+    (
+        req.query?.pageNumber && Number(req.query.pageNumber),
+        req.query?.pageSize && Number(req.query.pageSize),
+        req.query?.sortDirectioen === 'ask' ? SortType.ask : SortType.desc,
+        req.query?.sortBy && req.query.sortBy,
+        req.params.id.toString()
+    )
 })
+// blogRouters.get('/:id/posts/', async (req: Request, res: Response) => {
+//     const findBlog = await queryBlogsRepository.getPostsInBlog(req.params.id, req.query)
+//     if (findBlog !== null) {
+//         res.status(HttpStatusCode.OK).send(findBlog)
+//     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
+//
+// })
 
 blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 

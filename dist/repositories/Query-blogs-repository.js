@@ -24,7 +24,6 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
 exports.paginationHandler = paginationHandler;
 exports.queryBlogsRepository = {
     getAllBlogs: (pageNumber = 1, pageSize = 10, sortDirectioen, sortBy = DEFAULT_SORT_FIELD, searchNameTerm = null) => __awaiter(void 0, void 0, void 0, function* () {
-        // const query1 = {$text: {$search: "va"}};
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirectioen);
         const findNameTerm = searchNameTerm ? { name: { $regex: searchNameTerm, $options: 'i' } } : {};
         const count = yield db_mongo_1.collectionBlogs.countDocuments(findNameTerm);
@@ -40,48 +39,30 @@ exports.queryBlogsRepository = {
             totalCount: count,
             items: blogs
         };
-        // return {
-        //     "pagesCount": pageNumber,
-        //     "page": pageNumber,
-        //     "pageSize": pageSize,
-        //     "totalCount": pageNumber,
-        //     "items": await collectionBlogs
-        //         .find(query1, )
-        //         .skip((pageNumber - 1) * pageSize)
-        //         .limit(pageSize)
-        //         .sort(sortBy, sortDirection)
-        //         .toArray()
-        // }
     }),
     getBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionBlogs.findOne({ id: id }, {
             projection: { _id: 0 },
         });
     }),
-    getPostsInBlog: (id, query) => __awaiter(void 0, void 0, void 0, function* () {
+    getPostsInBlog: (pageNumber = 1, pageSize = 10, sortDirectioen, sortBy = DEFAULT_SORT_FIELD, id) => __awaiter(void 0, void 0, void 0, function* () {
         const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: id });
         if (findBlog === null) {
             return null;
         }
-        const searchParams = {
-            searchNameTerm: query.searchNameTerm || {},
-            sortBy: query.sortBy || 'createdAt',
-            sortDirection: query.sortDirection || 'desc',
-            pageNumber: query.pageNumber || '1',
-            pageSize: query.pageSize || '10'
-        };
-        const totalCount = (yield db_mongo_1.collectionPosts.countDocuments({ name: query.searchNameTerm })) - 1;
+        const count = yield db_mongo_1.collectionBlogs.countDocuments({ id: id });
+        const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirectioen);
+        const posts = yield db_mongo_1.collectionPosts.find({ id: id }, { projection: { _id: 0 } })
+            .sort(sortField)
+            .skip(countItems)
+            .limit(pageSize)
+            .toArray();
         return {
-            "pagesCount": Math.ceil(totalCount / Number(searchParams.pageSize)),
-            "page": Number(searchParams.pageNumber),
-            "pageSize": Number(searchParams.pageSize),
-            "totalCount": totalCount,
-            "items": yield db_mongo_1.collectionPosts
-                .find({}, { projection: { _id: 0 }, })
-                .skip((Number(searchParams.pageNumber) - 1) * Number(searchParams.pageSize))
-                .limit(Number(query.pageSize))
-                .sort(searchParams.sortBy, searchParams.sortDirection)
-                .toArray()
+            pagesCount: Math.ceil(count / pageSize),
+            page: pageNumber,
+            pageSize,
+            totalCount: count,
+            items: posts
         };
     }),
 };
