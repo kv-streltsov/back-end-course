@@ -47,6 +47,7 @@ exports.queryBlogsRepository = {
     }),
     getPostsInBlog: (pageNumber = 1, pageSize = 10, sortDirectioen, sortBy = DEFAULT_SORT_FIELD, id) => __awaiter(void 0, void 0, void 0, function* () {
         const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: id });
+        console.log(findBlog);
         if (findBlog === null) {
             return null;
         }

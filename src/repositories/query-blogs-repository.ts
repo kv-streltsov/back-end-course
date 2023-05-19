@@ -48,6 +48,7 @@ export const queryBlogsRepository = {
     getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirectioen: number, sortBy: string = DEFAULT_SORT_FIELD, id: string) => {
 
         const findBlog = await collectionBlogs.findOne({id: id})
+        console.log(findBlog)
         if (findBlog === null) {
             return null
         }

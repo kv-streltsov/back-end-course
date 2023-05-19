@@ -41,7 +41,7 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
 
 })
 blogRouters.get('/:id/posts/', async (req: Request<any, any, any, PaginationQueryParamsType>, res: Response) => {
-    const post = await queryBlogsRepository.getPostsInBlog
+    const posts = await queryBlogsRepository.getPostsInBlog
     (
         req.query?.pageNumber && Number(req.query.pageNumber),
         req.query?.pageSize && Number(req.query.pageSize),
@@ -49,14 +49,11 @@ blogRouters.get('/:id/posts/', async (req: Request<any, any, any, PaginationQuer
         req.query?.sortBy && req.query.sortBy,
         req.params.id.toString()
     )
+    if (posts !== null) {
+        res.status(HttpStatusCode.OK).send(posts)
+    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 })
-// blogRouters.get('/:id/posts/', async (req: Request, res: Response) => {
-//     const findBlog = await queryBlogsRepository.getPostsInBlog(req.params.id, req.query)
-//     if (findBlog !== null) {
-//         res.status(HttpStatusCode.OK).send(findBlog)
-//     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
-//
-// })
+
 
 blogRouters.post('/', basic_auth, createBlogValidation, async (req: Request, res: Response) => {
 

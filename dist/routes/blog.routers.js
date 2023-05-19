@@ -38,15 +38,13 @@ exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 exports.blogRouters.get('/:id/posts/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f, _g, _h, _j;
-    const post = yield query_blogs_repository_1.queryBlogsRepository.getPostsInBlog(((_f = req.query) === null || _f === void 0 ? void 0 : _f.pageNumber) && Number(req.query.pageNumber), ((_g = req.query) === null || _g === void 0 ? void 0 : _g.pageSize) && Number(req.query.pageSize), ((_h = req.query) === null || _h === void 0 ? void 0 : _h.sortDirectioen) === 'ask' ? SortType.ask : SortType.desc, ((_j = req.query) === null || _j === void 0 ? void 0 : _j.sortBy) && req.query.sortBy, req.params.id.toString());
+    const posts = yield query_blogs_repository_1.queryBlogsRepository.getPostsInBlog(((_f = req.query) === null || _f === void 0 ? void 0 : _f.pageNumber) && Number(req.query.pageNumber), ((_g = req.query) === null || _g === void 0 ? void 0 : _g.pageSize) && Number(req.query.pageSize), ((_h = req.query) === null || _h === void 0 ? void 0 : _h.sortDirectioen) === 'ask' ? SortType.ask : SortType.desc, ((_j = req.query) === null || _j === void 0 ? void 0 : _j.sortBy) && req.query.sortBy, req.params.id.toString());
+    if (posts !== null) {
+        res.status(interface_html_code_1.HttpStatusCode.OK).send(posts);
+    }
+    else
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
 }));
-// blogRouters.get('/:id/posts/', async (req: Request, res: Response) => {
-//     const findBlog = await queryBlogsRepository.getPostsInBlog(req.params.id, req.query)
-//     if (findBlog !== null) {
-//         res.status(HttpStatusCode.OK).send(findBlog)
-//     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
-//
-// })
 exports.blogRouters.post('/', basic_auth_middleware_1.basic_auth, blogs_validations_1.createBlogValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdBlog = yield blog_service_1.blogsService.postBlog(req.body);
     res.status(interface_html_code_1.HttpStatusCode.CREATED).send(createdBlog);
