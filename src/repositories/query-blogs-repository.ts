@@ -16,7 +16,13 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
 }
 export const queryBlogsRepository = {
 
-    getAllBlogs: async (pageNumber: number = 1, pageSize: number = 10, sortDirectioen: number, sortBy: string = DEFAULT_SORT_FIELD, searchNameTerm: string | null = null) => {
+    getAllBlogs: async (
+        pageNumber: number = 1,
+        pageSize: number = 10,
+        sortDirectioen: number,
+        sortBy: string = DEFAULT_SORT_FIELD,
+        searchNameTerm: string | null = null
+    ) => {
 
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirectioen)
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}

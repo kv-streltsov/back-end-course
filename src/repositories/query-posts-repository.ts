@@ -2,7 +2,10 @@ import {collectionPosts} from "../db/db_mongo";
 
 export const queryPostsRepository = {
 
-    getAllPosts: async (pageNumber: number = 1, pageSize: number = 11, sortBy: string = 'createAt', sortDirection: string = 'desc') => {
+    getAllPosts: async (pageNumber: number = 1,
+                        pageSize: number = 10,
+                        sortBy: string = 'createAt',
+                        sortDirection: string = 'desc') => {
 
         const count = await collectionPosts.countDocuments({})
         const posts = await collectionPosts.find({}, {projection: {_id: 0}})
@@ -10,7 +13,7 @@ export const queryPostsRepository = {
             .sort(sortDirection)
             .limit(pageSize)
             .toArray()
-
+        console.log(pageNumber)
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,
