@@ -10,7 +10,8 @@ export const postRouters = Router({})
 
 
 postRouters.get('/', async (req: Request, res: Response) => {
-    res.status(HttpStatusCode.OK).send(await queryPostsRepository.getAllPosts())
+    const posts = await queryPostsRepository.getAllPosts(Number(req.query.pageNumber), Number(req.query.pageSize), req.query.sortBy, req.query.sortDirection)
+    res.status(HttpStatusCode.OK).send(posts)
 })
 postRouters.get('/:id', async (req: Request, res: Response) => {
     const findPost = await queryPostsRepository.getPostById(req.params.id)

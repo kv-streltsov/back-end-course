@@ -12,10 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.queryPostsRepository = void 0;
 const db_mongo_1 = require("../db/db_mongo");
 exports.queryPostsRepository = {
-    getAllPosts: () => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionPosts.find({}, {
-            projection: { _id: 0 },
-        }).toArray();
+    getAllPosts: (pageNumber = 1, pageSize = 10, sortBy = 'createAt', sortDirection = 'desc') => __awaiter(void 0, void 0, void 0, function* () {
+        const count = yield db_mongo_1.collectionPosts.countDocuments({});
+        const posts = yield db_mongo_1.collectionPosts.find({}, { projection: { _id: 0 } })
+            .skip((pageNumber - 1) * pageSize)
+            .sort(sortDirection)
+            .limit(pageSize)
+            .toArray();
+        return {
+            pagesCount: Math.ceil(count / pageSize),
+            page: pageNumber,
+            pageSize,
+            totalCount: count,
+            items: posts
+        };
     }),
     getPostById: (id) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionPosts.findOne({ id: id }, {

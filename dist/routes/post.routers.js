@@ -18,7 +18,8 @@ const query_posts_repository_1 = require("../repositories/query-posts-repository
 const interface_html_code_1 = require("../dto/interface.html-code");
 exports.postRouters = (0, express_1.Router)({});
 exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(interface_html_code_1.HttpStatusCode.OK).send(yield query_posts_repository_1.queryPostsRepository.getAllPosts());
+    const posts = yield query_posts_repository_1.queryPostsRepository.getAllPosts(Number(req.query.pageNumber), Number(req.query.pageSize), req.query.sortBy, req.query.sortDirection);
+    res.status(interface_html_code_1.HttpStatusCode.OK).send(posts);
 }));
 exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const findPost = yield query_posts_repository_1.queryPostsRepository.getPostById(req.params.id);
