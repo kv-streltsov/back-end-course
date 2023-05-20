@@ -55,7 +55,7 @@ export const queryBlogsRepository = {
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirectioen)
 
         const posts = await collectionPosts.find({blogId: id}, {projection: {_id: 0}})
-            .sort(sortBy)
+            .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
             .toArray()
