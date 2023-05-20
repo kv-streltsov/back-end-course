@@ -11,7 +11,9 @@ export const postRouters = Router({})
 
 postRouters.get('/', async (req: Request, res: Response) => {
     const posts = await queryPostsRepository.getAllPosts(Number(req.query.pageNumber), Number(req.query.pageSize), req.query.sortBy, req.query.sortDirection)
-    res.status(HttpStatusCode.OK).send(posts)
+    if (posts !== null) {
+        res.status(HttpStatusCode.OK).send(posts)
+    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 })
 postRouters.get('/:id', async (req: Request, res: Response) => {
     const findPost = await queryPostsRepository.getPostById(req.params.id)
@@ -19,6 +21,8 @@ postRouters.get('/:id', async (req: Request, res: Response) => {
         res.status(HttpStatusCode.OK).send(findPost)
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 })
+
+
 postRouters.post('/', basic_auth, createPostValidation, async (req: Request, res: Response) => {
     const createdPost: InterfacePostView | undefined = await postsService.postPost(req.body)
     res.status(HttpStatusCode.CREATED).send(createdPost)

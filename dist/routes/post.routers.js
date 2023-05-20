@@ -19,7 +19,11 @@ const interface_html_code_1 = require("../dto/interface.html-code");
 exports.postRouters = (0, express_1.Router)({});
 exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const posts = yield query_posts_repository_1.queryPostsRepository.getAllPosts(Number(req.query.pageNumber), Number(req.query.pageSize), req.query.sortBy, req.query.sortDirection);
-    res.status(interface_html_code_1.HttpStatusCode.OK).send(posts);
+    if (posts !== null) {
+        res.status(interface_html_code_1.HttpStatusCode.OK).send(posts);
+    }
+    else
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
 }));
 exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const findPost = yield query_posts_repository_1.queryPostsRepository.getPostById(req.params.id);
