@@ -45,7 +45,7 @@ export const queryBlogsRepository = {
             projection: {_id: 0},
         });
     },
-    getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirectioen: number, sortBy: string = DEFAULT_SORT_FIELD, id: string) => {
+    getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirectioen: number, sortBy: string = 'desc', id: string) => {
 
         const findBlog = await collectionBlogs.findOne({id: id})
         if (findBlog === null) {
