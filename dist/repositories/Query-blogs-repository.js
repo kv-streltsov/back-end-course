@@ -27,6 +27,7 @@ exports.queryBlogsRepository = {
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
         const findNameTerm = searchNameTerm ? { name: { $regex: searchNameTerm, $options: 'i' } } : {};
         const count = yield db_mongo_1.collectionBlogs.countDocuments(findNameTerm);
+        console.log(sortField);
         const blogs = yield db_mongo_1.collectionBlogs.find(findNameTerm, { projection: { _id: 0 } })
             .sort(sortField)
             .skip(countItems)

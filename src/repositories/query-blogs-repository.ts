@@ -27,8 +27,8 @@ export const queryBlogsRepository = {
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
 
 
-        const count = await collectionBlogs.countDocuments(findNameTerm)
-
+        const count: number = await collectionBlogs.countDocuments(findNameTerm)
+        console.log(sortField)
         const blogs = await collectionBlogs.find(findNameTerm, {projection: {_id: 0}})
             .sort(sortField)
             .skip(countItems)
