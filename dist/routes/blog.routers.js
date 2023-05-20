@@ -25,7 +25,7 @@ var SortType;
 })(SortType || (SortType = {}));
 exports.blogRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
-    const blogs = yield query_blogs_repository_1.queryBlogsRepository.getAllBlogs(((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirection) === 'ask' ? SortType.asc : SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy, ((_e = req.query) === null || _e === void 0 ? void 0 : _e.searchNameTerm) && req.query.searchNameTerm);
+    const blogs = yield query_blogs_repository_1.queryBlogsRepository.getAllBlogs(((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirection) === 'asc' ? SortType.asc : SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy, ((_e = req.query) === null || _e === void 0 ? void 0 : _e.searchNameTerm) && req.query.searchNameTerm);
     res.status(interface_html_code_1.HttpStatusCode.OK).send(blogs);
 }));
 exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,7 +38,7 @@ exports.blogRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 exports.blogRouters.get('/:id/posts/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f, _g, _h, _j;
-    const posts = yield query_blogs_repository_1.queryBlogsRepository.getPostsInBlog(((_f = req.query) === null || _f === void 0 ? void 0 : _f.pageNumber) && Number(req.query.pageNumber), ((_g = req.query) === null || _g === void 0 ? void 0 : _g.pageSize) && Number(req.query.pageSize), ((_h = req.query) === null || _h === void 0 ? void 0 : _h.sortDirection) === 'ask' ? SortType.asc : SortType.desc, ((_j = req.query) === null || _j === void 0 ? void 0 : _j.sortBy) && req.query.sortBy, req.params.id.toString());
+    const posts = yield query_blogs_repository_1.queryBlogsRepository.getPostsInBlog(((_f = req.query) === null || _f === void 0 ? void 0 : _f.pageNumber) && Number(req.query.pageNumber), ((_g = req.query) === null || _g === void 0 ? void 0 : _g.pageSize) && Number(req.query.pageSize), ((_h = req.query) === null || _h === void 0 ? void 0 : _h.sortDirection) === 'asc' ? SortType.asc : SortType.desc, ((_j = req.query) === null || _j === void 0 ? void 0 : _j.sortBy) && req.query.sortBy, req.params.id.toString());
     if (posts !== null) {
         res.status(interface_html_code_1.HttpStatusCode.OK).send(posts);
     }
