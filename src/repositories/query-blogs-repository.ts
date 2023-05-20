@@ -3,10 +3,11 @@ import {collectionBlogs, collectionPosts} from "../db/db_mongo";
 const DEFAULT_SORT_FIELD = 'createdAt'
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
+
     const countItems = (pageNumber - 1) * pageSize;
     let sortField: any = {}
-    console.log('q', sortDirection)
     sortField[sortBy] = sortDirection
+
     return {
         countItems,
         sortField
@@ -42,20 +43,19 @@ export const queryBlogsRepository = {
 
 
     },
+
     getBlogById: async (id: string) => {
         return await collectionBlogs.findOne({id: id}, {
             projection: {_id: 0},
         });
     },
     getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string) => {
-        console.log(sortDirection, 123123)
         const findBlog = await collectionBlogs.findOne({id: id})
         if (findBlog === null) {
             return null
         }
         const count: number = await collectionPosts.countDocuments({blogId: id})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        console.log(sortField)
         const posts = await collectionPosts.find({blogId: id}, {projection: {_id: 0}})
             .sort(sortField)
             .skip(countItems)

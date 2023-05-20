@@ -9,17 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.queryPostsRepository = void 0;
+exports.queryPostsRepository = exports.paginationHandler = void 0;
 const db_mongo_1 = require("../db/db_mongo");
+const DEFAULT_SORT_FIELD = 'createdAt';
+const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
+    const countItems = (pageNumber - 1) * pageSize;
+    let sortField = {};
+    sortField[sortBy] = sortDirection;
+    return {
+        countItems,
+        sortField
+    };
+};
+exports.paginationHandler = paginationHandler;
 exports.queryPostsRepository = {
-    getAllPosts: (pageNumber = 1, pageSize = 10, sortBy = 'createAt', sortDirection = 'desc') => __awaiter(void 0, void 0, void 0, function* () {
+    getAllPosts: (pageNumber = 1, pageSize = 10, sortBy = DEFAULT_SORT_FIELD, sortDirection) => __awaiter(void 0, void 0, void 0, function* () {
         const count = yield db_mongo_1.collectionPosts.countDocuments({});
+        const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
         const posts = yield db_mongo_1.collectionPosts.find({}, { projection: { _id: 0 } })
-            .skip((pageNumber - 1) * pageSize)
-            .sort(sortDirection)
+            .skip(countItems)
+            .sort(sortField)
             .limit(pageSize)
             .toArray();
-        console.log(pageNumber);
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,

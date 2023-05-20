@@ -15,7 +15,6 @@ const DEFAULT_SORT_FIELD = 'createdAt';
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};
-    console.log('q', sortDirection);
     sortField[sortBy] = sortDirection;
     return {
         countItems,
@@ -47,14 +46,12 @@ exports.queryBlogsRepository = {
         });
     }),
     getPostsInBlog: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, id) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(sortDirection, 123123);
         const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: id });
         if (findBlog === null) {
             return null;
         }
         const count = yield db_mongo_1.collectionPosts.countDocuments({ blogId: id });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        console.log(sortField);
         const posts = yield db_mongo_1.collectionPosts.find({ blogId: id }, { projection: { _id: 0 } })
             .sort(sortField)
             .skip(countItems)

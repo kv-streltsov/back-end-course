@@ -16,10 +16,11 @@ const posts_validation_1 = require("../middleware/validation/posts-validation");
 const post_service_1 = require("../domain/post-service");
 const query_posts_repository_1 = require("../repositories/query-posts-repository");
 const interface_html_code_1 = require("../dto/interface.html-code");
+const interface_pagination_1 = require("../dto/interface.pagination");
 exports.postRouters = (0, express_1.Router)({});
 exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    const posts = yield query_posts_repository_1.queryPostsRepository.getAllPosts(((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), req.query.sortBy, req.query.sortDirection);
+    var _a, _b, _c, _d;
+    const posts = yield query_posts_repository_1.queryPostsRepository.getAllPosts(((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirection) === 'asc' ? interface_pagination_1.SortType.asc : interface_pagination_1.SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy);
     if (posts !== null) {
         res.status(interface_html_code_1.HttpStatusCode.OK).send(posts);
     }

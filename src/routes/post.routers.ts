@@ -5,19 +5,19 @@ import {createPostValidation, updatePostValidation} from "../middleware/validati
 import {postsService} from "../domain/post-service";
 import {queryPostsRepository} from "../repositories/query-posts-repository";
 import {HttpStatusCode} from "../dto/interface.html-code";
+import {InterfacePaginationQueryParams, SortType} from "../dto/interface.pagination";
 
 export const postRouters = Router({})
 
 
-postRouters.get('/', async (req: Request, res: Response) => {
+postRouters.get('/', async (req: Request<any,any,any,InterfacePaginationQueryParams>, res: Response) => {
 
     const posts = await queryPostsRepository.getAllPosts(
         req.query?.pageNumber && Number(req.query.pageNumber),
         req.query?.pageSize && Number(req.query.pageSize),
-        req.query.sortBy,
-        req.query.sortDirection
+        req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
+        req.query?.sortBy && req.query.sortBy,
     )
-
     if (posts !== null) {
         res.status(HttpStatusCode.OK).send(posts)
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
