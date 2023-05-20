@@ -48,14 +48,13 @@ export const queryBlogsRepository = {
     getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirectioen: number, sortBy: string = DEFAULT_SORT_FIELD, id: string) => {
 
         const findBlog = await collectionBlogs.findOne({id: id})
-        console.log(findBlog)
         if (findBlog === null) {
             return null
         }
         const count: number = await collectionBlogs.countDocuments({id: id})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirectioen)
 
-        const posts = await collectionPosts.find({id: id}, {projection: {_id: 0}})
+        const posts = await collectionPosts.find({blogId: id}, {projection: {_id: 0}})
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)

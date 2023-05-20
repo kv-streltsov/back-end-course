@@ -6,7 +6,6 @@ import {queryBlogsRepository} from "../repositories/query-blogs-repository";
 import {blogsService} from "../domain/blog-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {createPostInBlogValidation, createPostValidation} from "../middleware/validation/posts-validation";
-import {queryPostsRepository} from "../repositories/query-posts-repository";
 
 export const blogRouters = Router({})
 
@@ -41,10 +40,15 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 
 })
-blogRouters.get('/:id/posts/', async (req:Request, res: Response) => {
-
-    const posts = await queryPostsRepository.getAllPosts(Number(req.query.pageNumber), Number(req.query.pageSize), req.query.sortBy, req.query.sortDirection)
-
+blogRouters.get('/:id/posts/', async (req: Request<any, any, any, PaginationQueryParamsType>, res: Response) => {
+    const posts = await queryBlogsRepository.getPostsInBlog
+    (
+        req.query?.pageNumber && Number(req.query.pageNumber),
+        req.query?.pageSize && Number(req.query.pageSize),
+        req.query?.sortDirectioen === 'ask' ? SortType.ask : SortType.desc,
+        req.query?.sortBy && req.query.sortBy,
+        req.params.id.toString()
+    )
     if (posts !== null) {
         res.status(HttpStatusCode.OK).send(posts)
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)

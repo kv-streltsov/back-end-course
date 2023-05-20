@@ -47,13 +47,12 @@ exports.queryBlogsRepository = {
     }),
     getPostsInBlog: (pageNumber = 1, pageSize = 10, sortDirectioen, sortBy = DEFAULT_SORT_FIELD, id) => __awaiter(void 0, void 0, void 0, function* () {
         const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: id });
-        console.log(findBlog);
         if (findBlog === null) {
             return null;
         }
         const count = yield db_mongo_1.collectionBlogs.countDocuments({ id: id });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirectioen);
-        const posts = yield db_mongo_1.collectionPosts.find({ id: id }, { projection: { _id: 0 } })
+        const posts = yield db_mongo_1.collectionPosts.find({ blogId: id }, { projection: { _id: 0 } })
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)

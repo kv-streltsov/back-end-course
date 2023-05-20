@@ -10,6 +10,7 @@ export const queryPostsRepository = {
             .sort(sortDirection)
             .limit(pageSize)
             .toArray()
+
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,
