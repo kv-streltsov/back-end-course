@@ -20,8 +20,8 @@ const posts_validation_1 = require("../middleware/validation/posts-validation");
 exports.blogRouters = (0, express_1.Router)({});
 var SortType;
 (function (SortType) {
-    SortType[SortType["ask"] = 1] = "ask";
-    SortType[SortType["desc"] = -1] = "desc";
+    SortType[SortType["ask"] = -1] = "ask";
+    SortType[SortType["desc"] = 1] = "desc";
 })(SortType || (SortType = {}));
 exports.blogRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d, _e;
