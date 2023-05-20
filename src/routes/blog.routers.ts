@@ -27,7 +27,7 @@ blogRouters.get('/', async (req: Request<any, any, any, PaginationQueryParamsTyp
     const blogs = await queryBlogsRepository.getAllBlogs(
         req.query?.pageNumber && Number(req.query.pageNumber),
         req.query?.pageSize && Number(req.query.pageSize),
-        req.query?.sortDirection === 'ask' ? SortType.desc : SortType.ask,
+        req.query?.sortDirection === 'ask' ? SortType.ask : SortType.desc,
         req.query?.sortBy && req.query.sortBy,
         req.query?.searchNameTerm && req.query.searchNameTerm)
 
