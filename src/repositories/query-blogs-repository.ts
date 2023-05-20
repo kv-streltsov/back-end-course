@@ -3,27 +3,35 @@ import {InterfaceQuery} from "../dto/inteface.query";
 
 const DEFAULT_SORT_FIELD = 'crceatedAt'
 
-export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string) => {
-    return   (pageNumber - 1) * pageSize;
+export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
+    const countItems = (pageNumber - 1) * pageSize;
+
+    let sortField: any = {}
+    sortField[sortBy] = sortDirection
+
+    return {
+        countItems,
+        sortField
+    }
 }
 export const queryBlogsRepository = {
 
     getAllBlogs: async (
         pageNumber: number = 1,
         pageSize: number = 10,
-        sortDirectioen: string,
+        sortDirectioen: number,
         sortBy: string = DEFAULT_SORT_FIELD,
         searchNameTerm: string | null = null
     ) => {
 
-        const countItems = paginationHandler(pageNumber, pageSize, sortBy)
+        const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirectioen)
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
 
 
         const count = await collectionBlogs.countDocuments(findNameTerm)
 
         const blogs = await collectionBlogs.find(findNameTerm, {projection: {_id: 0}})
-            .sort(sortDirectioen)
+            .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
             .toArray()
@@ -43,16 +51,17 @@ export const queryBlogsRepository = {
             projection: {_id: 0},
         });
     },
-    getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirectioen: string, sortBy: string = 'desc', id: string) => {
+    getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirectioen: number, sortBy: string = 'desc', id: string) => {
+
         const findBlog = await collectionBlogs.findOne({id: id})
         if (findBlog === null) {
             return null
         }
         const count: number = await collectionPosts.countDocuments({blogId: id})
-        const countItems = paginationHandler(pageNumber, pageSize, sortBy)
-        console.log(sortDirectioen)
+        const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirectioen)
+
         const posts = await collectionPosts.find({blogId: id}, {projection: {_id: 0}})
-            .sort(sortDirectioen)
+            .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
             .toArray()

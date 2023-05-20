@@ -6,16 +6,28 @@ import {queryBlogsRepository} from "../repositories/query-blogs-repository";
 import {blogsService} from "../domain/blog-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {createPostInBlogValidation, createPostValidation} from "../middleware/validation/posts-validation";
-import {InterfacePaginationQueryParams, SortType} from "../dto/interface.paginatin";
 
 export const blogRouters = Router({})
 
+export type PaginationQueryParamsType = {
+    pageNumber?: number,
+    pageSize?: number,
+    sortDirectioen?: string,
+    sortBy?: string,
+    searchNameTerm?: string
 
-blogRouters.get('/', async (req: Request<any, any, any, InterfacePaginationQueryParams>, res: Response) => {
+}
+
+enum SortType {
+    ask = 1,
+    desc = -1
+}
+
+blogRouters.get('/', async (req: Request<any, any, any, PaginationQueryParamsType>, res: Response) => {
     const blogs = await queryBlogsRepository.getAllBlogs(
         req.query?.pageNumber && Number(req.query.pageNumber),
         req.query?.pageSize && Number(req.query.pageSize),
-        req.query?.sortDirection || 'desk',
+        req.query?.sortDirectioen === 'ask' ? SortType.ask : SortType.desc,
         req.query?.sortBy && req.query.sortBy,
         req.query?.searchNameTerm && req.query.searchNameTerm)
 
@@ -28,13 +40,12 @@ blogRouters.get('/:id', async (req: Request, res: Response) => {
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 
 })
-blogRouters.get('/:id/posts/', async (req: Request<any, any, any, InterfacePaginationQueryParams>, res: Response) => {
-
+blogRouters.get('/:id/posts/', async (req: Request<any, any, any, PaginationQueryParamsType>, res: Response) => {
     const posts = await queryBlogsRepository.getPostsInBlog
     (
         req.query?.pageNumber && Number(req.query.pageNumber),
         req.query?.pageSize && Number(req.query.pageSize),
-        req.query?.sortDirection || 'desk',
+        req.query?.sortDirectioen === 'ask' ? SortType.ask : SortType.desc,
         req.query?.sortBy && req.query.sortBy,
         req.params.id.toString()
     )

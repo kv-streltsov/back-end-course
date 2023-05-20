@@ -5,12 +5,11 @@ import {createPostValidation, updatePostValidation} from "../middleware/validati
 import {postsService} from "../domain/post-service";
 import {queryPostsRepository} from "../repositories/query-posts-repository";
 import {HttpStatusCode} from "../dto/interface.html-code";
-import {InterfacePaginationQueryParams} from "../dto/interface.paginatin";
 
 export const postRouters = Router({})
 
 
-postRouters.get('/', async (req: Request<any, any, any, InterfacePaginationQueryParams>, res: Response) => {
+postRouters.get('/', async (req: Request, res: Response) => {
 
     const posts = await queryPostsRepository.getAllPosts(
         req.query?.pageNumber && Number(req.query.pageNumber),
