@@ -53,7 +53,7 @@ exports.queryBlogsRepository = {
         const count = yield db_mongo_1.collectionPosts.countDocuments({ blogId: id });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirectioen);
         const posts = yield db_mongo_1.collectionPosts.find({ blogId: id }, { projection: { _id: 0 } })
-            .sort(sortField)
+            .sort(sortBy)
             .skip(countItems)
             .limit(pageSize)
             .toArray();
