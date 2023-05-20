@@ -50,7 +50,7 @@ exports.queryBlogsRepository = {
         if (findBlog === null) {
             return null;
         }
-        const count = yield db_mongo_1.collectionBlogs.countDocuments({ id: id });
+        const count = yield db_mongo_1.collectionPosts.countDocuments({ blogId: id });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirectioen);
         const posts = yield db_mongo_1.collectionPosts.find({ blogId: id }, { projection: { _id: 0 } })
             .sort(sortField)

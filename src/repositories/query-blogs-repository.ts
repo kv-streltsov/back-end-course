@@ -51,7 +51,7 @@ export const queryBlogsRepository = {
         if (findBlog === null) {
             return null
         }
-        const count: number = await collectionBlogs.countDocuments({id: id})
+        const count: number = await collectionPosts.countDocuments({blogId: id})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirectioen)
 
         const posts = await collectionPosts.find({blogId: id}, {projection: {_id: 0}})
