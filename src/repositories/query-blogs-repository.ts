@@ -1,7 +1,6 @@
 import {collectionBlogs, collectionPosts} from "../db/db_mongo";
-import {InterfaceQuery} from "../dto/inteface.query";
 
-const DEFAULT_SORT_FIELD = 'crceatedAt'
+const DEFAULT_SORT_FIELD = 'createdAt'
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
     const countItems = (pageNumber - 1) * pageSize;
@@ -19,12 +18,12 @@ export const queryBlogsRepository = {
     getAllBlogs: async (
         pageNumber: number = 1,
         pageSize: number = 10,
-        sortDirectioen: number,
+        sortDirection: number,
         sortBy: string = DEFAULT_SORT_FIELD,
         searchNameTerm: string | null = null
     ) => {
 
-        const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirectioen)
+        const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
 
 
