@@ -4,10 +4,8 @@ const DEFAULT_SORT_FIELD = 'createdAt'
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
     const countItems = (pageNumber - 1) * pageSize;
-    let sortField: any = {
-        sortBy,
-        sortDirection
-    }
+    let sortField: any = {}
+    sortField[sortBy] = sortDirection
     return {
         countItems,
         sortField
@@ -18,7 +16,7 @@ export const queryBlogsRepository = {
     getAllBlogs: async (
         pageNumber: number = 1,
         pageSize: number = 10,
-        sortDirection: number = -1,
+        sortDirection: number,
         sortBy: string = DEFAULT_SORT_FIELD,
         searchNameTerm: string | null = null
     ) => {
@@ -28,7 +26,7 @@ export const queryBlogsRepository = {
 
         const count: number = await collectionBlogs.countDocuments(findNameTerm)
         const blogs = await collectionBlogs.find(findNameTerm, {projection: {_id: 0}})
-            .sort(sortBy, sortDirection)
+            .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
             .toArray()

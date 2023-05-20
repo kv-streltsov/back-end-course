@@ -14,10 +14,8 @@ const db_mongo_1 = require("../db/db_mongo");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     const countItems = (pageNumber - 1) * pageSize;
-    let sortField = {
-        sortBy,
-        sortDirection
-    };
+    let sortField = {};
+    sortField[sortBy] = sortDirection;
     return {
         countItems,
         sortField
@@ -25,12 +23,12 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
 };
 exports.paginationHandler = paginationHandler;
 exports.queryBlogsRepository = {
-    getAllBlogs: (pageNumber = 1, pageSize = 10, sortDirection = -1, sortBy = DEFAULT_SORT_FIELD, searchNameTerm = null) => __awaiter(void 0, void 0, void 0, function* () {
+    getAllBlogs: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, searchNameTerm = null) => __awaiter(void 0, void 0, void 0, function* () {
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
         const findNameTerm = searchNameTerm ? { name: { $regex: searchNameTerm, $options: 'i' } } : {};
         const count = yield db_mongo_1.collectionBlogs.countDocuments(findNameTerm);
         const blogs = yield db_mongo_1.collectionBlogs.find(findNameTerm, { projection: { _id: 0 } })
-            .sort(sortBy, sortDirection)
+            .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
             .toArray();
