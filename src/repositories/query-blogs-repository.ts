@@ -4,10 +4,10 @@ const DEFAULT_SORT_FIELD = 'createdAt'
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
     const countItems = (pageNumber - 1) * pageSize;
-    console.log(sortBy, sortDirection)
-    let sortField: any = { }
-    sortField[sortBy] = sortDirection
-
+    let sortField: any = {
+        sortBy,
+        sortDirection
+    }
     return {
         countItems,
         sortField
@@ -18,7 +18,7 @@ export const queryBlogsRepository = {
     getAllBlogs: async (
         pageNumber: number = 1,
         pageSize: number = 10,
-        sortDirection: number,
+        sortDirection: number = -1,
         sortBy: string = DEFAULT_SORT_FIELD,
         searchNameTerm: string | null = null
     ) => {
@@ -26,11 +26,9 @@ export const queryBlogsRepository = {
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
 
-
         const count: number = await collectionBlogs.countDocuments(findNameTerm)
-        console.log(sortField)
         const blogs = await collectionBlogs.find(findNameTerm, {projection: {_id: 0}})
-            .sort(sortField)
+            .sort(sortBy, sortDirection)
             .skip(countItems)
             .limit(pageSize)
             .toArray()
@@ -56,10 +54,12 @@ export const queryBlogsRepository = {
         if (findBlog === null) {
             return null
         }
+        console.log(sortBy, sortDirection, 'q2')
         const count: number = await collectionPosts.countDocuments({blogId: id})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
+        console.log(sortBy, sortDirection)
         const posts = await collectionPosts.find({blogId: id}, {projection: {_id: 0}})
-            .sort(sortField)
+            .sort(sortBy, sortDirection)
             .skip(countItems)
             .limit(pageSize)
             .toArray()
