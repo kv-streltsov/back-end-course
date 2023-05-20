@@ -13,6 +13,7 @@ exports.queryPostsRepository = exports.paginationHandler = void 0;
 const db_mongo_1 = require("../db/db_mongo");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
+    console.log(sortBy, sortDirection, 123123);
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};
     sortField[sortBy] = sortDirection;
@@ -23,7 +24,7 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
 };
 exports.paginationHandler = paginationHandler;
 exports.queryPostsRepository = {
-    getAllPosts: (pageNumber = 1, pageSize = 10, sortBy = DEFAULT_SORT_FIELD, sortDirection) => __awaiter(void 0, void 0, void 0, function* () {
+    getAllPosts: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) => __awaiter(void 0, void 0, void 0, function* () {
         const count = yield db_mongo_1.collectionPosts.countDocuments({});
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
         const posts = yield db_mongo_1.collectionPosts.find({}, { projection: { _id: 0 } })
