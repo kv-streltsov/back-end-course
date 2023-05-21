@@ -11,6 +11,7 @@ if (!MONGO_URL) {
 export const clientMongo = new MongoClient(MONGO_URL)
 export const collectionBlogs = clientMongo.db('back-end-course').collection('Blogs')
 export const collectionPosts = clientMongo.db('back-end-course').collection('Posts')
+export const collectionUsers = clientMongo.db('back-end-course').collection('Users')
 
 export async function runMongo() {
     try {

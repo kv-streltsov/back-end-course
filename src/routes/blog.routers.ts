@@ -5,7 +5,7 @@ import {InterfaceBlogView} from "../dto/interface.blog";
 import {queryBlogsRepository} from "../repositories/query-blogs-repository";
 import {blogsService} from "../domain/blog-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
-import {createPostInBlogValidation, createPostValidation} from "../middleware/validation/posts-validation";
+import {createPostInBlogValidation} from "../middleware/validation/posts-validation";
 import {InterfacePaginationQueryParams, SortType} from "../dto/interface.pagination";
 
 export const blogRouters = Router({})

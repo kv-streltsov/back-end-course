@@ -43,6 +43,8 @@ const testing_router_1 = require("./routes/testing.router");
 const blog_routers_1 = require("./routes/blog.routers");
 const post_routers_1 = require("./routes/post.routers");
 const db_mongo_1 = require("./db/db_mongo");
+const user_routers_1 = require("./routes/user.routers");
+const auth_routers_1 = require("./routes/auth.routers");
 dotenv.config();
 exports.app = (0, express_1.default)();
 exports.MONGO_URL = process.env.MONGO_URL;
@@ -51,6 +53,8 @@ exports.app.use(express_1.default.json());
 exports.app.use('/videos', video_routers_1.videoRouters);
 exports.app.use('/blogs', blog_routers_1.blogRouters);
 exports.app.use('/posts', post_routers_1.postRouters);
+exports.app.use('/users', user_routers_1.userRouters);
+exports.app.use('/auth', auth_routers_1.authRouters);
 exports.app.use('/testing/all-data', testing_router_1.testingRouter);
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, db_mongo_1.runMongo)();

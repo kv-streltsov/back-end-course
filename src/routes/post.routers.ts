@@ -10,7 +10,7 @@ import {InterfacePaginationQueryParams, SortType} from "../dto/interface.paginat
 export const postRouters = Router({})
 
 
-postRouters.get('/', async (req: Request<any,any,any,InterfacePaginationQueryParams>, res: Response) => {
+postRouters.get('/', async (req: Request<any, any, any, InterfacePaginationQueryParams>, res: Response) => {
 
     const posts = await queryPostsRepository.getAllPosts(
         req.query?.pageNumber && Number(req.query.pageNumber),

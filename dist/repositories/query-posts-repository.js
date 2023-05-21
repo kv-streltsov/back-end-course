@@ -13,7 +13,6 @@ exports.queryPostsRepository = exports.paginationHandler = void 0;
 const db_mongo_1 = require("../db/db_mongo");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
-    console.log(sortBy, sortDirection, 123123);
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};
     sortField[sortBy] = sortDirection;

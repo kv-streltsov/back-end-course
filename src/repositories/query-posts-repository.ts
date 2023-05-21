@@ -1,8 +1,8 @@
 import {collectionPosts} from "../db/db_mongo";
+
 const DEFAULT_SORT_FIELD = 'createdAt'
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
-    console.log(sortBy,sortDirection, 123123)
     const countItems = (pageNumber - 1) * pageSize;
     let sortField: any = {}
     sortField[sortBy] = sortDirection
@@ -14,10 +14,12 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
 }
 export const queryPostsRepository = {
 
-    getAllPosts: async (pageNumber: number = 1,
-                        pageSize: number = 10,
-                        sortDirection: number,
-                        sortBy: string = DEFAULT_SORT_FIELD) => {
+    getAllPosts: async (
+        pageNumber: number = 1,
+        pageSize: number = 10,
+        sortDirection: number,
+        sortBy: string = DEFAULT_SORT_FIELD
+    ) => {
 
         const count = await collectionPosts.countDocuments({})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)

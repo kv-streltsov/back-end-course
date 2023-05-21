@@ -13,7 +13,6 @@ export const blogsService = {
     },
     putBlog: async (body: InterfaceBlog, id: string): Promise<boolean | null> => {
         return blogsRepository.putBlog(body, id)
-
     },
     deleteBlog: async (id: string): Promise<boolean | null> => {
         return blogsRepository.deleteBlog(id)
