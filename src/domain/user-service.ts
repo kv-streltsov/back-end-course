@@ -1,7 +1,5 @@
-import {InterfaceInputUser, InterfaceViewUser} from "../dto/interface.input.user";
 import {usersRepository} from "../repositories/users-repository";
 import bcrypt from "bcrypt";
-import {collectionUsers} from "../db/db_mongo";
 
 
 export const usersService = {
