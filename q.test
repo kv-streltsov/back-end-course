@@ -1,19 +1,85 @@
-  > Homework 4  Posts with pagination  GET -> "/posts": should return status 200; content: posts array with pagination;  used additional methods: POST -> /blogs, POST -> /posts;
 
-    Passed queryParams: ""
 
-    Expected: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1684574942453","createdAt":"2023-05-20T09:29:02.453Z","blogName":"new blog11","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574942319"},{"id":"1684574942126","createdAt":"2023-05-20T09:29:02.126Z","blogName":"new blog10","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574941629"},{"id":"1684574941498","createdAt":"2023-05-20T09:29:01.498Z","blogName":"new blog9","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574941364"},{"id":"1684574941209","createdAt":"2023-05-20T09:29:01.209Z","blogName":"new blog8","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574941051"},{"id":"1684574940918","createdAt":"2023-05-20T09:29:00.918Z","blogName":"new blog7","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574940776"},{"id":"1684574940625","createdAt":"2023-05-20T09:29:00.625Z","blogName":"new blog6","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574940493"},{"id":"1684574940303","createdAt":"2023-05-20T09:29:00.303Z","blogName":"new blog5","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939860"},{"id":"1684574939719","createdAt":"2023-05-20T09:28:59.719Z","blogName":"new blog4","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939571"},{"id":"1684574939428","createdAt":"2023-05-20T09:28:59.429Z","blogName":"new blog3","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939275"},{"id":"1684574939140","createdAt":"2023-05-20T09:28:59.140Z","blogName":"new blog2","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939004"}]}
+  > Homework 5  Users  GET -> "/users": should return status 200; content: users array with pagination;  used additional methods: POST -> /users;
 
-    Received: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1684574941209","createdAt":"2023-05-20T09:29:01.209Z","blogName":"new blog8","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574941051"},{"id":"1684574941498","createdAt":"2023-05-20T09:29:01.498Z","blogName":"new blog9","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574941364"},{"id":"1684574939719","createdAt":"2023-05-20T09:28:59.719Z","blogName":"new blog4","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939571"},{"id":"1684574940918","createdAt":"2023-05-20T09:29:00.918Z","blogName":"new blog7","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574940776"},{"id":"1684574940303","createdAt":"2023-05-20T09:29:00.303Z","blogName":"new blog5","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939860"},{"id":"1684574939428","createdAt":"2023-05-20T09:28:59.429Z","blogName":"new blog3","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939275"},{"id":"1684574938871","createdAt":"2023-05-20T09:28:58.871Z","blogName":"new blog1","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574938715"},{"id":"1684574938574","createdAt":"2023-05-20T09:28:58.574Z","blogName":"new blog0","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574938435"},{"id":"1684574939140","createdAt":"2023-05-20T09:28:59.140Z","blogName":"new blog2","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574939004"},{"id":"1684574940625","createdAt":"2023-05-20T09:29:00.625Z","blogName":"new blog6","content":"new post content","shortDescription":"description","title":"post title","blogId":"1684574940493"}]}
 
-      105 |
-      106 |     if (expectedData) {
-    > 107 |       expect(data).toBeEqualWithQueryParams(expectedData, queryParams, withDiffPrint);
-          |                    ^
-      108 |     }
-      109 |   }
-      110 | };
 
-      at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
+    Expected: ArrayContaining [{"createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "email": Any<String>, "id": Any<String>, "login": Any<String>}]
+
+    Received: [{"login":"user01","email":"email1p@gg.cm","salt":"$2b$10$1oeGxi9dO6HUTUtMQk3WqO","password":"$2b$10$1oeGxi9dO6HUTUtMQk3WqOpQa/UUMoWHorWmdcrW/AM1x/0EvHIs2","id":"1684728061918","createdAt":"2023-05-22T04:01:01.918Z"},{"login":"user02","email":"email1p@gg.com","salt":"$2b$10$a6qLarp3BeJCS8oAA7ALJO","password":"$2b$10$a6qLarp3BeJCS8oAA7ALJOUc0ashOWEx2L2cU.xSpzqHQhGAmCoXS","id":"1684728062214","createdAt":"2023-05-22T04:01:02.214Z"},{"login":"user05","email":"email1p@gg.coi","salt":"$2b$10$so8KnG5lTdknSNqyaMuyXe","password":"$2b$10$so8KnG5lTdknSNqyaMuyXeASnPSrLu1iwWuB7bddqG4OaLKTa5Fp2","id":"1684728062464","createdAt":"2023-05-22T04:01:02.464Z"},{"login":"user03","email":"email1p@gg.cou","salt":"$2b$10$3yGY1DcJ8Y2cI5NqrHcNLe","password":"$2b$10$3yGY1DcJ8Y2cI5NqrHcNLeqO3alZ/sAbv6Brpc4L23C.UuNN/wMmy","id":"1684728062701","createdAt":"2023-05-22T04:01:02.701Z"},{"login":"useee01","email":"email1p@gg.col","salt":"$2b$10$O5dof7zxwC/jdjWKpySDte","password":"$2b$10$O5dof7zxwC/jdjWKpySDteXHPGr8ObBeaPNH/LfYEV6fCpdJwc9h6","id":"1684728062958","createdAt":"2023-05-22T04:01:02.958Z"},{"login":"log01","email":"emai@gg.com","salt":"$2b$10$kZWHrq0JjF6ctVc.o1D2.O","password":"$2b$10$kZWHrq0JjF6ctVc.o1D2.OhnOQg4osCRLhUIEEVBh00nNPayVES.W","id":"1684728063541","createdAt":"2023-05-22T04:01:03.541Z"},{"login":"log02","email":"email2p@g.com","salt":"$2b$10$xBJL0K4/kBe/T8zSLvtGp.","password":"$2b$10$xBJL0K4/kBe/T8zSLvtGp.sjPOTKNRSOHPNXQE/QxQZP3e625IMXi","id":"1684728063779","createdAt":"2023-05-22T04:01:03.779Z"},{"login":"loSer","email":"email2p@gg.om","salt":"$2b$10$JDbnswoT31cbR84Yq5PVTe","password":"$2b$10$JDbnswoT31cbR84Yq5PVTewpOi5QYlDUlKmEi72e8q2dYDXy.M7CS","id":"1684728064036","createdAt":"2023-05-22T04:01:04.036Z"},{"login":"uer15","email":"emarrr1@gg.com","salt":"$2b$10$vxvCsJLHt1BcohbAfIa/0.","password":"$2b$10$vxvCsJLHt1BcohbAfIa/0.xHkFcEnkaCBaLf7T3nf01lttcL9u3rG","id":"1684728064275","createdAt":"2023-05-22T04:01:04.276Z"},{"login":"usr-1-01","email":"email3@gg.com","salt":"$2b$10$a33CtkgRj6jtiZQGrdeESe","password":"$2b$10$a33CtkgRj6jtiZQGrdeESewSN1mgIpVp7beUyfro21c3q4BrVbJF2","id":"1684728064515","createdAt":"2023-05-22T04:01:04.515Z"},{"login":"some01","email":"email1@gyyyg.ru","salt":"$2b$10$aPn2C0fP9oZpwX3174ukf.","password":"$2b$10$aPn2C0fP9oZpwX3174ukf.81DvQnpWYkWqgC/XyOm8zF4ifW41lnS","id":"1684728064834","createdAt":"2023-05-22T04:01:04.834Z"},{"login":"use4406","email":"email1@grrg.ro","salt":"$2b$10$FjKs51v.i21jDuif5TuxM.","password":"$2b$10$FjKs51v.i21jDuif5TuxM.oVWDTXp7W5iXYRMkoSkNPYKdHtK5PKq","id":"1684728065635","createdAt":"2023-05-22T04:01:05.635Z"}]
+
+    Wrong entity: {"login":"user01","email":"email1p@gg.cm","salt":"$2b$10$1oeGxi9dO6HUTUtMQk3WqO","password":"$2b$10$1oeGxi9dO6HUTUtMQk3WqOpQa/UUMoWHorWmdcrW/AM1x/0EvHIs2","id":"1684728061918","createdAt":"2023-05-22T04:01:01.918Z"}
+
+      181 |       );
+      182 |
+    > 183 |       expect(createUsersResult).toBeStrictObjectsArray(userSchema);
+          |                                 ^
+      184 |
+      185 |       await performQueryParamsChecker({
+      186 |         endpoint: path,
+
+      at Object.<anonymous> (src/tests/jest/back/describes/usersApi/users-V2-describe.ts:183:33)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/posts/postsWithPagination-describe.ts:66:7)
+
+  > Homework 5  Login  POST -> "/users": should create new user; status 201; content: created user;  used additional methods: GET => /users;
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 2
+
+      Object {
+        "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+        "email": Any<String>,
+        "id": Any<String>,
+        "login": Any<String>,
+    +   "password": "$2b$10$MrkuKK4USZLxUD74JKCNi.8uMsPEEeNkmyId8xN6B8Iy.awfFLeyi",
+    +   "salt": "$2b$10$MrkuKK4USZLxUD74JKCNi.",
+      }
+
+      130 |       );
+      131 |
+    > 132 |       expect(createUserResponseData).toEqual(userSchema);
+          |                                      ^
+      133 |       expect(getUsersResponseData.items.length + 1).toBe(usersAfterCreating.items.length);
+      134 |       expect(createUserResponseStatus).toBe(201);
+      135 |
+
+      at Object.<anonymous> (src/tests/jest/back/describes/usersApi/users-V2-describe.ts:132:38)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 5  Login  POST -> "/auth/login": should sign in user; status 204;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      23 |   getUserCreds: (): IUserPayload => {
+      24 |     const userCreds = expect.getState().newUserCreds;
+    > 25 |     expect(userCreds).not.toBeUndefined();
+         |                           ^
+      26 |
+      27 |     return userCreds;
+      28 |   },
+
+      at Object.getUserCreds (src/tests/jest/back/testHelpers/jestState/usersState.ts:25:27)
+      at Object.<anonymous> (src/tests/jest/back/describes/usersApi/simpleLogin-V2-describe.ts:28:54)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 5  Login  POST -> "/auth/login": should return error if passed wrong login or password; status 401;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      23 |   getUserCreds: (): IUserPayload => {
+      24 |     const userCreds = expect.getState().newUserCreds;
+    > 25 |     expect(userCreds).not.toBeUndefined();
+         |                           ^
+      26 |
+      27 |     return userCreds;
+      28 |   },
+
+      at Object.getUserCreds (src/tests/jest/back/testHelpers/jestState/usersState.ts:25:27)
+      at Object.<anonymous> (src/tests/jest/back/describes/usersApi/simpleLogin-V2-describe.ts:47:43)
+          at runMicrotasks (<anonymous>)

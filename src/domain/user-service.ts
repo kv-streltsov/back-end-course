@@ -20,7 +20,14 @@ export const usersService = {
         }
 
         await usersRepository.postUser({...createdUser})
-        return createdUser
+
+        return {
+            id: createdUser.id,
+            login: createdUser.login,
+            email: createdUser.email,
+            createdAt: createdUser.createdAt
+
+        }
     },
 
     checkUser: async (loginOrEmail: string, password: string) => {

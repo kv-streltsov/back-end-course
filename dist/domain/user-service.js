@@ -28,7 +28,12 @@ exports.usersService = {
             createdAt: new Date().toISOString()
         };
         yield users_repository_1.usersRepository.postUser(Object.assign({}, createdUser));
-        return createdUser;
+        return {
+            id: createdUser.id,
+            login: createdUser.login,
+            email: createdUser.email,
+            createdAt: createdUser.createdAt
+        };
     }),
     checkUser: (loginOrEmail, password) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield users_repository_1.usersRepository.checkUser(loginOrEmail);
