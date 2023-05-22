@@ -23,7 +23,7 @@ exports.userRouters.get('/', basic_auth_middleware_1.basic_auth, (req, res) => _
     res.status(interface_html_code_1.HttpStatusCode.OK).send(allUsers);
 }));
 exports.userRouters.post('/', basic_auth_middleware_1.basic_auth, user_input_validations_1.createUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newUser = yield user_service_1.usersService.postUser(req.body);
+    const newUser = yield user_service_1.usersService.postUser(req.body.login, req.body.email, req.body.password);
     res.status(interface_html_code_1.HttpStatusCode.CREATED).send(newUser);
 }));
 exports.userRouters.delete('/:id', basic_auth_middleware_1.basic_auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

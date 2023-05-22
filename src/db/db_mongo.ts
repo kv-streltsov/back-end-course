@@ -28,6 +28,8 @@ export async function runMongo() {
 export async function clear_db_mongo(): Promise<boolean> {
     await collectionBlogs.deleteMany({})
     await collectionPosts.deleteMany({})
+    await collectionUsers.deleteMany({})
+
     return true
 }
 

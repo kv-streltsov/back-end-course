@@ -41,7 +41,7 @@ exports.queryUsersRepository = {
         const { countItems, sortField, searchTerm } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection, searchEmailTerm, searchLoginTerm);
         const count = yield db_mongo_1.collectionUsers.countDocuments(searchTerm);
         const users = yield db_mongo_1.collectionUsers
-            .find(searchTerm, { projection: { _id: 0, password: 0 } })
+            .find(searchTerm, { projection: { _id: 0, password: 0, salt: 0 } })
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize).toArray();

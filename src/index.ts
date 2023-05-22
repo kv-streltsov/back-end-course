@@ -10,7 +10,7 @@ import {authRouters} from "./routes/auth.routers";
 
 dotenv.config()
 export const app = express()
-export const MONGO_URL:string | undefined = process.env.MONGO_URL
+export const MONGO_URL: string | undefined = process.env.MONGO_URL
 
 const port = process.env.DEV_PORT || 5001
 

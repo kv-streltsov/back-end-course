@@ -8,6 +8,10 @@ export const usersRepository = {
         return await collectionUsers.insertOne(createdUser)
     },
 
+    checkUser: async (loginOrEmail: string) => {
+        return await collectionUsers.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
+    },
+
     deleteUser: async (id: string) => {
         return await collectionUsers.deleteOne({id: id})
     }

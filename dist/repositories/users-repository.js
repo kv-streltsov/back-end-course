@@ -15,6 +15,9 @@ exports.usersRepository = {
     postUser: (createdUser) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionUsers.insertOne(createdUser);
     }),
+    checkUser: (loginOrEmail) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield db_mongo_1.collectionUsers.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
+    }),
     deleteUser: (id) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionUsers.deleteOne({ id: id });
     })

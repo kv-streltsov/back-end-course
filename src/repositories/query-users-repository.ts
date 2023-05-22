@@ -48,7 +48,7 @@ export const queryUsersRepository = {
         const count: number = await collectionUsers.countDocuments(searchTerm)
 
         const users = await collectionUsers
-            .find(searchTerm, {projection: {_id: 0, password: 0}})
+            .find(searchTerm, {projection: {_id: 0, password: 0, salt: 0}})
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize).toArray()
