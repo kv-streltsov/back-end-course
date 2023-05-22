@@ -13,9 +13,6 @@ const loginValidation = (0, express_validator_1.body)('loginOrEmail').isString()
     }
     return true;
 });
-// throw new Error('id not found in blog')
-//.isLength({min:3, max:10})
-//.matches()
 const passwordValidation = (0, express_validator_1.body)('password').isString().trim().notEmpty().isLength({ min: 6, max: 20 });
 exports.authUserValidation = [loginValidation, passwordValidation, input_validation_middleware_1.inputValidationMiddleware];
 //# sourceMappingURL=user-auth-validations.js.map

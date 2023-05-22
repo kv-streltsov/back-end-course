@@ -16,9 +16,7 @@ const loginValidation = body('loginOrEmail').isString().trim().notEmpty().custom
     return true
 })
 
-// throw new Error('id not found in blog')
-//.isLength({min:3, max:10})
-//.matches()
+
 const passwordValidation = body('password').isString().trim().notEmpty().isLength({min: 6, max: 20})
 
 

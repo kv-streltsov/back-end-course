@@ -16,6 +16,8 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection, searchEm
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};
     sortField[sortBy] = sortDirection;
+    //{$or: [{email: loginOrEmail}, {login: loginOrEmail}]}
+    // {email: {$regex: searchEmailTerm, $options: 'i'}, login: {$regex: searchLoginTerm, $options: 'i'}}
     let searchTerm = {};
     if (searchEmailTerm === null && searchLoginTerm === null) {
         searchTerm = {};
@@ -27,7 +29,12 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection, searchEm
         searchTerm = { login: { $regex: searchLoginTerm, $options: 'i' } };
     }
     else if (searchEmailTerm !== null && searchLoginTerm !== null) {
-        searchTerm = { email: { $regex: searchEmailTerm, $options: 'i' }, login: { $regex: searchLoginTerm, $options: 'i' } };
+        searchTerm = {
+            $or: [
+                { email: { $regex: searchEmailTerm, $options: 'i' } },
+                { login: { $regex: searchLoginTerm, $options: 'i' } }
+            ]
+        };
     }
     return {
         countItems,

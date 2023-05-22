@@ -1,6 +1,4 @@
-import {collectionPosts, collectionUsers} from "../db/db_mongo";
-import {InterfacePaginatorUserView} from "../dto/interface.pagination";
-import {InterfaceViewUser} from "../dto/interface.input.user";
+import {collectionUsers} from "../db/db_mongo";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
 
@@ -11,6 +9,9 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
     let sortField: any = {}
     sortField[sortBy] = sortDirection
 
+    //{$or: [{email: loginOrEmail}, {login: loginOrEmail}]}
+    // {email: {$regex: searchEmailTerm, $options: 'i'}, login: {$regex: searchLoginTerm, $options: 'i'}}
+
     let searchTerm = {}
     if (searchEmailTerm === null && searchLoginTerm === null) {
         searchTerm = {}
@@ -19,7 +20,13 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
     } else if (searchEmailTerm === null && searchLoginTerm !== null) {
         searchTerm = {login: {$regex: searchLoginTerm, $options: 'i'}}
     } else if (searchEmailTerm !== null && searchLoginTerm !== null) {
-        searchTerm = {email: {$regex: searchEmailTerm, $options: 'i'}, login: {$regex: searchLoginTerm, $options: 'i'}}
+        searchTerm = {
+            $or: [
+                {email: {$regex: searchEmailTerm, $options: 'i'}},
+                {login: {$regex: searchLoginTerm, $options: 'i'}}
+            ]
+        }
+
     }
 
     return {
