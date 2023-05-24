@@ -28,6 +28,7 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const BASIC_PASS = process.env.BASIC_AUTH;
 const basic_auth = (req, res, next) => {
+    console.log(req.headers.authorization);
     if (req.headers.authorization === undefined || req.headers.authorization.split(' ')[0] != "Basic") {
         res.sendStatus(401);
     }

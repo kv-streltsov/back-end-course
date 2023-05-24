@@ -11,12 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouters = void 0;
 const express_1 = require("express");
-const basic_auth_middleware_1 = require("../middleware/basic-auth-middleware");
 const auth_service_1 = require("../domain/auth-service");
 const interface_html_code_1 = require("../dto/interface.html-code");
 const user_auth_validations_1 = require("../middleware/validation/user-auth-validations");
 exports.authRouters = (0, express_1.Router)({});
-exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, basic_auth_middleware_1.basic_auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield auth_service_1.authService.checkUser(req.body.loginOrEmail, req.body.password);
     if (userAuth === true) {
         res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);

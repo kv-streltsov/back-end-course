@@ -8,7 +8,7 @@ import {authUserValidation} from "../middleware/validation/user-auth-validations
 export const authRouters = Router({})
 
 
-authRouters.post('/login', authUserValidation, basic_auth, async (req: Request, res: Response) => {
+authRouters.post('/login', authUserValidation, async (req: Request, res: Response) => {
     const userAuth: boolean | null = await authService.checkUser(req.body.loginOrEmail, req.body.password)
 
     if (userAuth === true) {
