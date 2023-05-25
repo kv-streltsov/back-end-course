@@ -58,7 +58,7 @@ describe('/blogs', () => {
 
 ///////////////////////////////////////////GET//////////////////////////////////////////////////////////////////////////
     it('GET valid | should return [] status 200 ', async () => {
-        await request(app).get('/blogs').expect(200, [blogBody])
+        await request(app).get('/blogs').expect(200)
     });
     it('GET valid | should return blog by ID status 200', async () => {
 

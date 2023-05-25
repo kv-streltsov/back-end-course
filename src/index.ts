@@ -21,6 +21,7 @@ app.use('/blogs', blogRouters)
 app.use('/posts', postRouters)
 app.use('/users', userRouters)
 app.use('/auth', authRouters)
+
 app.use('/testing/all-data', testingRouter)
 
 

@@ -17,14 +17,10 @@ const user_auth_validations_1 = require("../middleware/validation/user-auth-vali
 exports.authRouters = (0, express_1.Router)({});
 exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield auth_service_1.authService.checkUser(req.body.loginOrEmail, req.body.password);
-    console.log(userAuth, 1);
     if (userAuth === true) {
         res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
     }
-    if (userAuth === null) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
-    }
-    if (userAuth === false) {
+    if (userAuth === null || userAuth === false) {
         res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
     }
 }));

@@ -9,17 +9,16 @@ export const authRouters = Router({})
 
 
 authRouters.post('/login', authUserValidation, async (req: Request, res: Response) => {
+
     const userAuth: boolean | null = await authService.checkUser(req.body.loginOrEmail, req.body.password)
-    console.log(userAuth, 1)
+
     if (userAuth === true) {
         res.sendStatus(HttpStatusCode.NO_CONTENT)
     }
-    if (userAuth === null) {
-        res.sendStatus(HttpStatusCode.NOT_FOUND)
-    }
-    if (userAuth === false) {
+    if (userAuth === null || userAuth === false) {
         res.sendStatus(HttpStatusCode.UNAUTHORIZED)
     }
+
 
 })
 
