@@ -5,7 +5,6 @@ dotenv.config()
 
 const BASIC_PASS: string | undefined = process.env.BASIC_AUTH
 export const basic_auth = (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.headers.authorization)
     if (req.headers.authorization === undefined || req.headers.authorization.split(' ')[0] != "Basic") {
         res.sendStatus(401)
     } else if (req.headers.authorization.split(' ')[1] === BASIC_PASS) {
