@@ -49,7 +49,7 @@ exports.commentService = {
             return 'forbidden';
         }
         const result = yield comments_repository_1.commentsRepository.updateComment(commentId, comment.content);
-        if (result.matchedCount) {
+        if (result.matchedCount === 1) {
             return true;
         }
         else {
@@ -68,8 +68,9 @@ exports.commentService = {
         if (result.deletedCount === 1) {
             return true;
         }
-        else
+        else {
             return false;
+        }
     })
 };
 //# sourceMappingURL=comment-service.js.map

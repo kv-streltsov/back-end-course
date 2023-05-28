@@ -22,31 +22,3 @@
       at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
           at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:279:7)
-
-  > Homework 6  Comments for posts with auth  PUT, DELETE -> "/comments/:id": should return error if access denied; status 403;  used additional methods: POST -> /users;
-
-
-
-    Tested case params:
-     endpoint: comments/1685276479899,
-     method: PUT,
-     headers: {"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNjg1Mjc2NDgwMTczIiwiaWF0IjoxNjg1Mjc2NDgwLCJleHAiOjE2ODUzMTYwODB9.MsXWiMIIHMR5gBPGS3qERcl84MeKHT4ZjTUkjElXM5Y"},
-    body: {"content":"length_21-weqweqweqwq+NEW"}
-
-    Expected status: 403
-
-    Received status: 500
-
-    Description: try to update or delete the entity that was created by another user
-
-      49 |       }
-      50 |
-    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
-         |                      ^
-      52 |         headers,
-      53 |         endpoint,
-      54 |         method,
-
-      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:375:7)

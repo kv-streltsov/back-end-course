@@ -39,12 +39,12 @@ export const commentService = {
         if (checkComment === null) {
             return null
         }
-
         if (checkComment!.commentatorInfo.userId !== user.id) {
             return 'forbidden'
         }
+
         const result = await commentsRepository.updateComment(commentId, comment.content)
-        if (result.matchedCount) {
+        if (result.matchedCount === 1) {
             return true
         } else {
             return false
@@ -58,9 +58,12 @@ export const commentService = {
         if (checkComment!.commentatorInfo.userId !== user.id) {
             return 'forbidden'
         }
+
         const result = await commentsRepository.deleteComment(commentId)
         if (result.deletedCount === 1) {
             return true
-        } else return false
+        } else {
+            return false
+        }
     }
 }
