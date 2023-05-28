@@ -10,6 +10,7 @@ import {authMiddleware} from "../middleware/jwt-auth-middleware";
 import {commentService} from "../domain/comment-service";
 import {createCommentValidation} from "../middleware/validation/comments-validations";
 import {InterfaceCommentInput} from "../dto/interface.comment";
+import {queryCommentRepository} from "../repositories/query-comment-repository";
 
 export const postRouters = Router({})
 
@@ -31,6 +32,17 @@ postRouters.get('/:id', async (req: Request, res: Response) => {
     if (findPost !== null) {
         res.status(HttpStatusCode.OK).send(findPost)
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
+})
+postRouters.get('/:postId/comments', async (req: Request<any, any, any, InterfacePaginationQueryParams>, res: Response) => {
+    const a = await queryCommentRepository.getAllComments(
+        req.params.postId,
+        req.query?.pageNumber && Number(req.query.pageNumber),
+        req.query?.pageSize && Number(req.query.pageSize),
+        req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
+        req.query?.sortBy && req.query.sortBy,
+    )
+
+    res.send(a)
 })
 
 postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, async (req: Request, res: Response) => {

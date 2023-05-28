@@ -1,47 +1,51 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.videoRepository = void 0;
-const db_local_1 = require("../db/db_local");
-const video_validator_1 = require("../controllers/video/video.validator");
-const video_post_create_1 = require("../controllers/video/video.post.create");
-const video_put_update_1 = require("../controllers/video/video.put.update");
-const interface_html_code_1 = require("../dto/interface.html-code");
-exports.videoRepository = {
-    getAllVideo() {
-        return db_local_1.video_list;
-    },
-    findVideoById(id) {
-        let findVideo = db_local_1.video_list.find(video => video.id === +id);
-        if (!findVideo) {
-            return interface_html_code_1.HttpStatusCode.NOT_FOUND;
-        }
-        return findVideo;
-    },
-    postVideo(body, method) {
-        let valid = (0, video_validator_1.videoValidator)(body, method);
-        if (valid.errorsMessages === undefined)
-            return (0, video_post_create_1.videoPostCreate)(body);
-        else
-            return valid;
-    },
-    putVideo(id, body, method) {
-        let valid = (0, video_validator_1.videoValidator)(body, method);
-        if (valid === true) {
-            let upDateVideo = (0, video_put_update_1.videoPutUpdate)(id, body);
-            if (upDateVideo)
-                return interface_html_code_1.HttpStatusCode.NO_CONTENT;
-            else
-                return interface_html_code_1.HttpStatusCode.NOT_FOUND;
-        }
-        else
-            return valid;
-    },
-    deleteVideo(id) {
-        let findIndexVideo = db_local_1.video_list.findIndex(value => value.id === +id);
-        if (findIndexVideo === -1)
-            return interface_html_code_1.HttpStatusCode.NOT_FOUND;
-        db_local_1.blogs_list.splice(findIndexVideo, 1);
-        return interface_html_code_1.HttpStatusCode.NO_CONTENT;
-    }
-};
+// import {InterfaceVideo} from "../dto/interface.video";
+// import {InterfaceError} from "../dto/Interface-error";
+// import {blogs_list, video_list} from "../db/db_local";
+// import {videoValidator} from "../controllers/video/video.validator";
+// import {videoPostCreate} from "../controllers/video/video.post.create";
+// import {videoPutUpdate} from "../controllers/video/video.put.update";
+// import {HttpStatusCode} from "../dto/interface.html-code";
+//
+// export const videoRepository = {
+//     getAllVideo(): InterfaceVideo[] {
+//         return video_list
+//     },
+//     findVideoById(id: string):InterfaceVideo | number {
+//
+//         let findVideo: InterfaceVideo | undefined = video_list.find(video => video.id === +id)
+//
+//         if (!findVideo) {
+//             return HttpStatusCode.NOT_FOUND
+//         }
+//         return findVideo
+//     },
+//     postVideo(body: InterfaceVideo, method: string): InterfaceVideo | number | InterfaceError {
+//
+//         let valid = videoValidator(body, method)
+//         if (valid.errorsMessages === undefined) return videoPostCreate(body)
+//         else return valid
+//
+//
+//     },
+//     putVideo(id: string, body: InterfaceVideo, method: string) {
+//         let valid = videoValidator(body, method)
+//
+//         if (valid === true) {
+//             let upDateVideo = videoPutUpdate(id, body)
+//             if (upDateVideo) return HttpStatusCode.NO_CONTENT
+//             else return HttpStatusCode.NOT_FOUND
+//         } else return valid
+//
+//     },
+//     deleteVideo(id: string): number {
+//
+//         let findIndexVideo: number = video_list.findIndex(value => value.id === +id)
+//         if (findIndexVideo === -1) return HttpStatusCode.NOT_FOUND
+//         blogs_list.splice(findIndexVideo, 1)
+//         return HttpStatusCode.NO_CONTENT
+//
+//     }
+//
+// }
 //# sourceMappingURL=video-repository.js.map

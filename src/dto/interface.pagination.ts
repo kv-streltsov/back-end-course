@@ -7,6 +7,14 @@ export interface InterfacePaginationQueryParams  {
     sortBy?: string,
     searchNameTerm?: string
 }
+export interface InterfacePaginationQueryParamsComment  {
+    postId: string
+    pageNumber?: number,
+    pageSize?: number,
+    sortDirection?: string,
+    sortBy?: string,
+    searchNameTerm?: string
+}
 
 export interface InterfacePaginationQueryParamsUser  {
     pageNumber?: number,

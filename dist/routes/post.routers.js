@@ -20,6 +20,7 @@ const interface_pagination_1 = require("../dto/interface.pagination");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const comment_service_1 = require("../domain/comment-service");
 const comments_validations_1 = require("../middleware/validation/comments-validations");
+const query_comment_repository_1 = require("../repositories/query-comment-repository");
 exports.postRouters = (0, express_1.Router)({});
 exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
@@ -37,6 +38,11 @@ exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
     }
     else
         res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+}));
+exports.postRouters.get('/:postId/comments', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f, _g, _h;
+    const a = yield query_comment_repository_1.queryCommentRepository.getAllComments(req.params.postId, ((_e = req.query) === null || _e === void 0 ? void 0 : _e.pageNumber) && Number(req.query.pageNumber), ((_f = req.query) === null || _f === void 0 ? void 0 : _f.pageSize) && Number(req.query.pageSize), ((_g = req.query) === null || _g === void 0 ? void 0 : _g.sortDirection) === 'asc' ? interface_pagination_1.SortType.asc : interface_pagination_1.SortType.desc, ((_h = req.query) === null || _h === void 0 ? void 0 : _h.sortBy) && req.query.sortBy);
+    res.send(a);
 }));
 exports.postRouters.post('/:postId/comments', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdComment = yield comment_service_1.commentService.postComment(req.params.postId, req.user, req.body);
