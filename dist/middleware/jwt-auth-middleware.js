@@ -31,40 +31,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MONGO_URL = exports.app = void 0;
-const express_1 = __importDefault(require("express"));
+exports.authMiddleware = void 0;
 const dotenv = __importStar(require("dotenv"));
-const video_routers_1 = require("./routes/video.routers");
-const testing_router_1 = require("./routes/testing.router");
-const blog_routers_1 = require("./routes/blog.routers");
-const post_routers_1 = require("./routes/post.routers");
-const db_mongo_1 = require("./db/db_mongo");
-const user_routers_1 = require("./routes/user.routers");
-const auth_routers_1 = require("./routes/auth.routers");
-const comments_routers_1 = require("./routes/comments.routers");
 dotenv.config();
-exports.app = (0, express_1.default)();
-exports.MONGO_URL = process.env.MONGO_URL;
-const port = process.env.DEV_PORT || 5001;
-exports.app.use(express_1.default.json());
-exports.app.use('/videos', video_routers_1.videoRouters);
-exports.app.use('/blogs', blog_routers_1.blogRouters);
-exports.app.use('/posts', post_routers_1.postRouters);
-exports.app.use('/users', user_routers_1.userRouters);
-exports.app.use('/comments', comments_routers_1.blogComments);
-exports.app.use('/auth', auth_routers_1.authRouters);
-exports.app.use('/testing/all-data', testing_router_1.testingRouter);
-const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, db_mongo_1.runMongo)();
-    if (process.env.NODE_ENV !== 'test') {
-        exports.app.listen(port, () => {
-            console.log(`Example app listening on port ${port}`);
-        });
-    }
+const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // if (!req.headers.authorization) {
+    //     res.sendStatus(HttpStatusCode.UNAUTHORIZED)
+    //     return
+    // }
+    //
+    // const token = req.headers.authorization.split(' ')[1]
+    // const userId = await jwtService.getUserIdByToken(token)
+    //
+    // if (userId) {
+    //     req.user = await usersService.getUserById(userId)
+    //     next()
+    // } else {
+    //     res.sendStatus(HttpStatusCode.UNAUTHORIZED)
+    //     return
+    // }
 });
-startApp();
-//# sourceMappingURL=index.js.map
+exports.authMiddleware = authMiddleware;
+//# sourceMappingURL=jwt-auth-middleware.js.map

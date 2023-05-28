@@ -11,9 +11,8 @@ describe('/blogs', () => {
         email: "clampbeer@google.ru"
     }
 
-    let createduser: any
     it('should return 201 and created user', async () => {
-        createduser = await request(app)
+        await request(app)
             .post('/users')
             .auth("admin", "qwerty")
             .send(user)

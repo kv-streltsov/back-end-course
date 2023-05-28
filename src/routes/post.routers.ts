@@ -6,6 +6,8 @@ import {postsService} from "../domain/post-service";
 import {queryPostsRepository} from "../repositories/query-posts-repository";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {InterfacePaginationQueryParams, SortType} from "../dto/interface.pagination";
+import {authMiddleware} from "../middleware/jwt-auth-middleware";
+import {commentService} from "../domain/comment-service";
 
 export const postRouters = Router({})
 
@@ -29,7 +31,9 @@ postRouters.get('/:id', async (req: Request, res: Response) => {
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 })
 
-
+postRouters.post('/:postId/comments', authMiddleware, async (req: Request, res: Response) => {
+    // const request = commentService.postComment(req.params.postId, req.user, req.body)
+})
 postRouters.post('/', basic_auth, createPostValidation, async (req: Request, res: Response) => {
     const createdPost: InterfacePostView | undefined = await postsService.postPost(req.body)
     res.status(HttpStatusCode.CREATED).send(createdPost)
