@@ -15,6 +15,7 @@ const interface_html_code_1 = require("../dto/interface.html-code");
 const user_auth_validations_1 = require("../middleware/validation/user-auth-validations");
 const jwt_service_1 = require("../application/jwt-service");
 const user_service_1 = require("../domain/user-service");
+const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 exports.authRouters = (0, express_1.Router)({});
 exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield user_service_1.usersService.checkUser(req.body.loginOrEmail, req.body.password);
@@ -22,10 +23,16 @@ exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (
         res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
     }
     if (userAuth) {
-        const token = {
-            "accessToken": yield jwt_service_1.jwtService.createJwt(userAuth)
-        };
+        const token = yield jwt_service_1.jwtService.createJwt(userAuth);
         res.status(interface_html_code_1.HttpStatusCode.OK).send(token);
     }
+}));
+exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = {
+        "email": req.user.email,
+        "login": req.user.login,
+        "userId": req.user.id
+    };
+    res.status(200).send(user);
 }));
 //# sourceMappingURL=auth.routers.js.map

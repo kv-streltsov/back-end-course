@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import {ObjectId} from "mongodb";
 import * as dotenv from 'dotenv'
+import {collectionUsers} from "../db/db_mongo";
 
 dotenv.config()
 
@@ -11,12 +12,19 @@ if (!JWT_SECRET) {
 
 export const jwtService = {
     async createJwt(user: any) {
-        return jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '11h'})
+        return  {
+            "accessToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '11h'})
+        }
     },
 
     async getUserIdByToken(token: string) {
         try {
             const result: any = jwt.verify(token, JWT_SECRET)
+            const checkUser = await collectionUsers.findOne({id: result.userId})
+            if (!checkUser) {
+                return null
+            }
+
             return result.userId
 
         } catch (error) {

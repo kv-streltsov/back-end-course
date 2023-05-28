@@ -38,6 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.jwtService = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
+const db_mongo_1 = require("../db/db_mongo");
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
@@ -46,13 +47,19 @@ if (!JWT_SECRET) {
 exports.jwtService = {
     createJwt(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            return jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '11h' });
+            return {
+                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '11h' })
+            };
         });
     },
     getUserIdByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+                const checkUser = yield db_mongo_1.collectionUsers.findOne({ id: result.userId });
+                if (!checkUser) {
+                    return null;
+                }
                 return result.userId;
             }
             catch (error) {
