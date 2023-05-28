@@ -1,7 +1,6 @@
 import {usersRepository} from "../repositories/users-repository";
 import bcrypt from "bcrypt";
 import {collectionUsers} from "../db/db_mongo";
-import {ObjectId} from "mongodb";
 
 
 export const usersService = {
@@ -29,9 +28,8 @@ export const usersService = {
 
         }
     },
-    getUserById: async (userId: any)=> {
-        const id = new ObjectId(userId)
-        return await collectionUsers.findOne({_id: id})
+    getUserById: async (userId: string)=> {
+        return await collectionUsers.findOne({id: userId})
     },
 
     checkUser: async (loginOrEmail: string, password: string) => {

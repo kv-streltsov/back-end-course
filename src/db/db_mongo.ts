@@ -12,6 +12,7 @@ export const clientMongo = new MongoClient(MONGO_URL)
 export const collectionBlogs = clientMongo.db('back-end-course').collection('Blogs')
 export const collectionPosts = clientMongo.db('back-end-course').collection('Posts')
 export const collectionUsers = clientMongo.db('back-end-course').collection('Users')
+export const collectionComments = clientMongo.db('back-end-course').collection('Comments')
 
 export async function runMongo() {
     try {
@@ -29,6 +30,7 @@ export async function clear_db_mongo(): Promise<boolean> {
     await collectionBlogs.deleteMany({})
     await collectionPosts.deleteMany({})
     await collectionUsers.deleteMany({})
+    await collectionComments.deleteMany({})
 
     return true
 }

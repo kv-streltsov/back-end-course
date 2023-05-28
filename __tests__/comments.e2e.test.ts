@@ -2,6 +2,8 @@ import request from 'supertest'
 import {app} from "../src";
 import {InterfaceBlogInput} from "../src/dto/interface.blog";
 import {InterfacePostInput} from "../src/dto/interface.post";
+import {runInNewContext} from "vm";
+import {InterfaceCommentInput, InterfaceCommentView} from "../src/dto/interface.comment";
 
 const validInputBlog: InterfaceBlogInput = {
     "name": "testBlog",
@@ -13,6 +15,9 @@ const validInputPost: InterfacePostInput = {
     blogId: "string",
     content: "testPost",
     shortDescription: "testPost"
+}
+const commnet:InterfaceCommentInput ={
+    "content":"dfdsfsdfsdfsdfsdfsdfsdfsdfqweqwe"
 }
 const user = {
     "login": "testLogin",
@@ -42,7 +47,7 @@ describe('/blogs', () => {
 
         postId = requestTest.body.id
     });
-    //////////////////////////////////////    CREATE USER    //////////////////////////////////////////
+    //////////////////////////////////////  CREATE USER    ///////////////////////////////////////////
     it('USER create', async () => {
         newUser = await request(app)
             .post('/users')
@@ -50,7 +55,7 @@ describe('/blogs', () => {
             .send(user)
             .expect(201)
     });
-    it('should ', async () => {
+    it('should return token ', async () => {
         const result = await request(app)
             .post('/auth/login').send({
                 "loginOrEmail":newUser.body.login,
@@ -58,6 +63,15 @@ describe('/blogs', () => {
             })
         token = result.text
     });
+    it('CREATED comments ', async () => {
+        const newComment = await request(app)
+            .post(`/posts/${postId}/comments`)
+            .auth(token,{type:"bearer"})
+            .send(commnet)
+            .expect(201)
+
+    });
+
 
 })
 

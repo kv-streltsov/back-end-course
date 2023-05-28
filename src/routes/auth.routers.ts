@@ -1,8 +1,8 @@
 import {Request, Response, Router} from "express";
-import {authService} from "../domain/auth-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {authUserValidation} from "../middleware/validation/user-auth-validations";
 import {jwtService} from "../application/jwt-service";
+import {usersService} from "../domain/user-service";
 
 
 export const authRouters = Router({})
@@ -11,7 +11,7 @@ export const authRouters = Router({})
 
 authRouters.post('/login', authUserValidation, async (req: Request, res: Response) => {
 
-    const userAuth = await authService.checkUser(req.body.loginOrEmail, req.body.password)
+    const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
 
     if(userAuth === null || userAuth === false){
         res.sendStatus(HttpStatusCode.UNAUTHORIZED)

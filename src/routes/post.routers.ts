@@ -8,6 +8,8 @@ import {HttpStatusCode} from "../dto/interface.html-code";
 import {InterfacePaginationQueryParams, SortType} from "../dto/interface.pagination";
 import {authMiddleware} from "../middleware/jwt-auth-middleware";
 import {commentService} from "../domain/comment-service";
+import {createCommentValidation} from "../middleware/validation/comments-validations";
+import {InterfaceCommentInput} from "../dto/interface.comment";
 
 export const postRouters = Router({})
 
@@ -31,8 +33,14 @@ postRouters.get('/:id', async (req: Request, res: Response) => {
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 })
 
-postRouters.post('/:postId/comments', authMiddleware, async (req: Request, res: Response) => {
-    // const request = commentService.postComment(req.params.postId, req.user, req.body)
+postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, async (req: Request, res: Response) => {
+    const createdComment = await commentService.postComment(req.params.postId, req.user, req.body)
+    if (createdComment) {
+        res.status(201).send(createdComment)
+    } else {
+        res.sendStatus(HttpStatusCode.NOT_FOUND)
+    }
+
 })
 postRouters.post('/', basic_auth, createPostValidation, async (req: Request, res: Response) => {
     const createdPost: InterfacePostView | undefined = await postsService.postPost(req.body)

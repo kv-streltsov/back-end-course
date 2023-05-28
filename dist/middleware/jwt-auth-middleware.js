@@ -34,23 +34,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = void 0;
 const dotenv = __importStar(require("dotenv"));
+const interface_html_code_1 = require("../dto/interface.html-code");
+const jwt_service_1 = require("../application/jwt-service");
+const user_service_1 = require("../domain/user-service");
 dotenv.config();
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // if (!req.headers.authorization) {
-    //     res.sendStatus(HttpStatusCode.UNAUTHORIZED)
-    //     return
-    // }
-    //
-    // const token = req.headers.authorization.split(' ')[1]
-    // const userId = await jwtService.getUserIdByToken(token)
-    //
-    // if (userId) {
-    //     req.user = await usersService.getUserById(userId)
-    //     next()
-    // } else {
-    //     res.sendStatus(HttpStatusCode.UNAUTHORIZED)
-    //     return
-    // }
+    if (!req.headers.authorization) {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
+        return;
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    const userId = yield jwt_service_1.jwtService.getUserIdByToken(token);
+    if (userId) {
+        req.user = yield user_service_1.usersService.getUserById(userId);
+        next();
+    }
+    else {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
+        return;
+    }
 });
 exports.authMiddleware = authMiddleware;
 //# sourceMappingURL=jwt-auth-middleware.js.map

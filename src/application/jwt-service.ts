@@ -11,13 +11,13 @@ if (!JWT_SECRET) {
 
 export const jwtService = {
     async createJwt(user: any) {
-        return jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: '1h'})
+        return jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '1h'})
     },
 
     async getUserIdByToken(token: string) {
         try {
             const result: any = jwt.verify(token, JWT_SECRET)
-            return new ObjectId(result.userId)
+            return result.userId
 
         } catch (error) {
             return null

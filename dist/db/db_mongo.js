@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db_mongo = exports.runMongo = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGO_URL = void 0;
+exports.clear_db_mongo = exports.runMongo = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGO_URL = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
@@ -44,6 +44,7 @@ exports.clientMongo = new mongodb_1.MongoClient(exports.MONGO_URL);
 exports.collectionBlogs = exports.clientMongo.db('back-end-course').collection('Blogs');
 exports.collectionPosts = exports.clientMongo.db('back-end-course').collection('Posts');
 exports.collectionUsers = exports.clientMongo.db('back-end-course').collection('Users');
+exports.collectionComments = exports.clientMongo.db('back-end-course').collection('Comments');
 function runMongo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -63,6 +64,7 @@ function clear_db_mongo() {
         yield exports.collectionBlogs.deleteMany({});
         yield exports.collectionPosts.deleteMany({});
         yield exports.collectionUsers.deleteMany({});
+        yield exports.collectionComments.deleteMany({});
         return true;
     });
 }

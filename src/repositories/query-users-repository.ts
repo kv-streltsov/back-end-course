@@ -9,8 +9,6 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
     let sortField: any = {}
     sortField[sortBy] = sortDirection
 
-    //{$or: [{email: loginOrEmail}, {login: loginOrEmail}]}
-    // {email: {$regex: searchEmailTerm, $options: 'i'}, login: {$regex: searchLoginTerm, $options: 'i'}}
 
     let searchTerm = {}
     if (searchEmailTerm === null && searchLoginTerm === null) {

@@ -18,6 +18,8 @@ const query_posts_repository_1 = require("../repositories/query-posts-repository
 const interface_html_code_1 = require("../dto/interface.html-code");
 const interface_pagination_1 = require("../dto/interface.pagination");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
+const comment_service_1 = require("../domain/comment-service");
+const comments_validations_1 = require("../middleware/validation/comments-validations");
 exports.postRouters = (0, express_1.Router)({});
 exports.postRouters.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
@@ -36,8 +38,14 @@ exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
     else
         res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
 }));
-exports.postRouters.post('/:postId/comments', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const request = commentService.postComment(req.params.postId, req.user, req.body)
+exports.postRouters.post('/:postId/comments', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const createdComment = yield comment_service_1.commentService.postComment(req.params.postId, req.user, req.body);
+    if (createdComment) {
+        res.status(201).send(createdComment);
+    }
+    else {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+    }
 }));
 exports.postRouters.post('/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdPost = yield post_service_1.postsService.postPost(req.body);

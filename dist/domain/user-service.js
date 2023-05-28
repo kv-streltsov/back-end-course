@@ -16,7 +16,6 @@ exports.usersService = void 0;
 const users_repository_1 = require("../repositories/users-repository");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_mongo_1 = require("../db/db_mongo");
-const mongodb_1 = require("mongodb");
 exports.usersService = {
     postUser: (login, email, password) => __awaiter(void 0, void 0, void 0, function* () {
         const salt = yield bcrypt_1.default.genSalt(10);
@@ -38,8 +37,7 @@ exports.usersService = {
         };
     }),
     getUserById: (userId) => __awaiter(void 0, void 0, void 0, function* () {
-        const id = new mongodb_1.ObjectId(userId);
-        return yield db_mongo_1.collectionUsers.findOne({ _id: id });
+        return yield db_mongo_1.collectionUsers.findOne({ id: userId });
     }),
     checkUser: (loginOrEmail, password) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield users_repository_1.usersRepository.checkUser(loginOrEmail);
