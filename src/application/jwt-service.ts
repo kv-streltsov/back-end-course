@@ -11,7 +11,7 @@ if (!JWT_SECRET) {
 
 export const jwtService = {
     async createJwt(user: any) {
-        return jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '1h'})
+        return jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '11h'})
     },
 
     async getUserIdByToken(token: string) {

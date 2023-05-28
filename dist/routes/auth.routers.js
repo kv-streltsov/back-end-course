@@ -22,7 +22,9 @@ exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (
         res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
     }
     if (userAuth) {
-        const token = yield jwt_service_1.jwtService.createJwt(userAuth);
+        const token = {
+            "accessToken": yield jwt_service_1.jwtService.createJwt(userAuth)
+        };
         res.status(interface_html_code_1.HttpStatusCode.OK).send(token);
     }
 }));

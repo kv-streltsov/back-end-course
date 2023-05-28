@@ -46,7 +46,7 @@ if (!JWT_SECRET) {
 exports.jwtService = {
     createJwt(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            return jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+            return jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '11h' });
         });
     },
     getUserIdByToken(token) {

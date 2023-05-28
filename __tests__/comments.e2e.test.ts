@@ -16,8 +16,8 @@ const validInputPost: InterfacePostInput = {
     content: "testPost",
     shortDescription: "testPost"
 }
-const commnet:InterfaceCommentInput ={
-    "content":"dfdsfsdfsdfsdfsdfsdfsdfsdfqweqwe"
+const commnet: InterfaceCommentInput = {
+    "content": "dfdsfsdfsdfsdfsdfsdfsdfsdfqweqwe"
 }
 const user = {
     "login": "testLogin",
@@ -26,8 +26,8 @@ const user = {
 }
 
 let postId: string
-let newUser:any
-let token: string
+let newUser: any
+let token:any
 describe('/blogs', () => {
     ///////////////////////////////////// CREATE BLOG AND POST/////////////////////////////////////////
     it('BLOG create;', async () => {
@@ -47,7 +47,7 @@ describe('/blogs', () => {
 
         postId = requestTest.body.id
     });
-    //////////////////////////////////////  CREATE USER    ///////////////////////////////////////////
+    //////////////////////////////////////  CREATE USER     ///////////////////////////////////////////
     it('USER create', async () => {
         newUser = await request(app)
             .post('/users')
@@ -57,16 +57,20 @@ describe('/blogs', () => {
     });
     it('should return token ', async () => {
         const result = await request(app)
-            .post('/auth/login').send({
-                "loginOrEmail":newUser.body.login,
-                "password":"qwerty1"
+            .post('/auth/login')
+            .send({
+                "loginOrEmail": newUser.body.login,
+                "password": "qwerty1"
             })
-        token = result.text
+            .expect(200)
+        token = result.body.accessToken
+
+
     });
     it('CREATED comments ', async () => {
         const newComment = await request(app)
             .post(`/posts/${postId}/comments`)
-            .auth(token,{type:"bearer"})
+            .auth(token, {type: "bearer"})
             .send(commnet)
             .expect(201)
 

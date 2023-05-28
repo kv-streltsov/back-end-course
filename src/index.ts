@@ -18,7 +18,6 @@ const port = process.env.DEV_PORT || 5001
 
 app.use(express.json())
 
-app.use('/videos', videoRouters)
 app.use('/blogs', blogRouters)
 app.use('/posts', postRouters)
 app.use('/users', userRouters)
@@ -37,3 +36,6 @@ const startApp = async () => {
     }
 }
 startApp()
+
+
+
