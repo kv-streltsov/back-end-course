@@ -1,5 +1,3 @@
-
-
   > Homework 6  Comments for posts with auth  DELETE, PUT -> "/comments/:id", GET, POST -> "posts/:postId/comments": should return error if :id from uri param not found; status 404;
 
 
@@ -30,9 +28,9 @@
 
 
     Tested case params:
-     endpoint: comments/1685275907250,
+     endpoint: comments/1685276479899,
      method: PUT,
-     headers: {"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNjg1Mjc1OTA3NTIwIiwiaWF0IjoxNjg1Mjc1OTA3LCJleHAiOjE2ODUzMTU1MDd9.nO57RolQEiG3CzVUPWvRgGxfSCaVqYuDEoUgDBNTcms"},
+     headers: {"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNjg1Mjc2NDgwMTczIiwiaWF0IjoxNjg1Mjc2NDgwLCJleHAiOjE2ODUzMTYwODB9.MsXWiMIIHMR5gBPGS3qERcl84MeKHT4ZjTUkjElXM5Y"},
     body: {"content":"length_21-weqweqweqwq+NEW"}
 
     Expected status: 403

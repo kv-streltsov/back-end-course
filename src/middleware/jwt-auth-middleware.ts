@@ -8,6 +8,7 @@ dotenv.config()
 
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+
     if (!req.headers.authorization) {
         res.sendStatus(HttpStatusCode.UNAUTHORIZED)
         return
