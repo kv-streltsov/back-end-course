@@ -23,7 +23,7 @@ export const queryCommentRepository = {
     ) => {
         const count: number = await collectionComments.countDocuments({postId: postId})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const comments = await collectionComments.find({postId: postId}, {projection: {_id: 0,idPost:0}})
+        const comments = await collectionComments.find({postId: postId}, {projection: {_id: 0,postId:0}})
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)

@@ -26,7 +26,7 @@ exports.queryCommentRepository = {
     getCommentsByPostId: (postId, pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) => __awaiter(void 0, void 0, void 0, function* () {
         const count = yield db_mongo_1.collectionComments.countDocuments({ postId: postId });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const comments = yield db_mongo_1.collectionComments.find({ postId: postId }, { projection: { _id: 0, idPost: 0 } })
+        const comments = yield db_mongo_1.collectionComments.find({ postId: postId }, { projection: { _id: 0, postId: 0 } })
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
