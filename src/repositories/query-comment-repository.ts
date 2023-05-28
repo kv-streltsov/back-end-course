@@ -1,4 +1,4 @@
-import {collectionComments, collectionPosts} from "../db/db_mongo";
+import {collectionComments} from "../db/db_mongo";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
 
@@ -14,16 +14,16 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
 }
 export const queryCommentRepository = {
 
-    getAllComments: async (
+    getCommentsByPostId: async (
         postId: string,
         pageNumber: number = 1,
         pageSize: number = 10,
         sortDirection: number,
         sortBy: string = DEFAULT_SORT_FIELD
     ) => {
-        const count: number = await collectionComments.countDocuments({id: postId})
+        const count: number = await collectionComments.countDocuments({postId: postId})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const comments = await collectionComments.find({id: postId}, {projection: {_id: 0}})
+        const comments = await collectionComments.find({postId: postId}, {projection: {_id: 0,idPost:0}})
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
@@ -38,9 +38,9 @@ export const queryCommentRepository = {
         }
 
     },
-    getPostById: async (id: string) => {
-        return await collectionPosts.findOne({id: id}, {
-            projection: {_id: 0},
+    getCommentById: async (id: string) => {
+        return await collectionComments.findOne({id: id},
+            {projection: {_id: 0,postId:0},
         })
     }
 

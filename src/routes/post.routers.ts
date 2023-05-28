@@ -34,7 +34,7 @@ postRouters.get('/:id', async (req: Request, res: Response) => {
     } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 })
 postRouters.get('/:postId/comments', async (req: Request<any, any, any, InterfacePaginationQueryParams>, res: Response) => {
-    const a = await queryCommentRepository.getAllComments(
+    const a = await queryCommentRepository.getCommentsByPostId(
         req.params.postId,
         req.query?.pageNumber && Number(req.query.pageNumber),
         req.query?.pageSize && Number(req.query.pageSize),

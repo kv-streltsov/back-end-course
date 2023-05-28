@@ -23,10 +23,10 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
 };
 exports.paginationHandler = paginationHandler;
 exports.queryCommentRepository = {
-    getAllComments: (postId, pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) => __awaiter(void 0, void 0, void 0, function* () {
-        const count = yield db_mongo_1.collectionComments.countDocuments({ id: postId });
+    getCommentsByPostId: (postId, pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) => __awaiter(void 0, void 0, void 0, function* () {
+        const count = yield db_mongo_1.collectionComments.countDocuments({ postId: postId });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const comments = yield db_mongo_1.collectionComments.find({ id: postId }, { projection: { _id: 0 } })
+        const comments = yield db_mongo_1.collectionComments.find({ postId: postId }, { projection: { _id: 0, idPost: 0 } })
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
@@ -39,9 +39,8 @@ exports.queryCommentRepository = {
             items: comments
         };
     }),
-    getPostById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionPosts.findOne({ id: id }, {
-            projection: { _id: 0 },
+    getCommentById: (id) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield db_mongo_1.collectionComments.findOne({ id: id }, { projection: { _id: 0, postId: 0 },
         });
     })
 };

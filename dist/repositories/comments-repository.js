@@ -14,6 +14,12 @@ const db_mongo_1 = require("../db/db_mongo");
 exports.commentsRepository = {
     createComment: (commentObj) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionComments.insertOne(commentObj);
+    }),
+    updateComment: (commentId, comment) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield db_mongo_1.collectionComments.updateOne({ id: commentId }, { $set: { content: comment } });
+    }),
+    deleteComment: (commentId) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield db_mongo_1.collectionComments.deleteOne({ id: commentId });
     })
 };
 //# sourceMappingURL=comments-repository.js.map

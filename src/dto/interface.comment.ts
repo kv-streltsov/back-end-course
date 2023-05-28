@@ -4,6 +4,7 @@ export interface InterfaceCommentInput {
 
 export interface InterfaceCommentView {
     id: string
+    postId: string
     content: string
     commentatorInfo: {
         userId: string

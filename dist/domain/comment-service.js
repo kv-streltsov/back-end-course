@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentService = void 0;
 const comments_repository_1 = require("../repositories/comments-repository");
 const db_mongo_1 = require("../db/db_mongo");
+const query_comment_repository_1 = require("../repositories/query-comment-repository");
 exports.commentService = {
     postComment: (postId, user, comment) => __awaiter(void 0, void 0, void 0, function* () {
         const findPost = yield db_mongo_1.collectionPosts.findOne({ id: postId });
@@ -19,7 +20,8 @@ exports.commentService = {
             return null;
         }
         const commentObj = {
-            id: postId,
+            id: new Date().getTime().toString(),
+            postId: postId,
             commentatorInfo: {
                 userId: user.id,
                 userLogin: user.login
@@ -29,9 +31,45 @@ exports.commentService = {
         };
         const newComment = yield comments_repository_1.commentsRepository.createComment(Object.assign({}, commentObj));
         if (newComment.acknowledged) {
-            return commentObj;
+            return {
+                id: commentObj.id,
+                commentatorInfo: commentObj.commentatorInfo,
+                content: commentObj.content,
+                createdAt: commentObj.createdAt
+            };
         }
         return false;
+    }),
+    putComment: (commentId, user, comment) => __awaiter(void 0, void 0, void 0, function* () {
+        const checkComment = yield query_comment_repository_1.queryCommentRepository.getCommentById(commentId);
+        if (checkComment === null) {
+            return null;
+        }
+        if (checkComment.commentatorInfo.userId !== user.id) {
+            return 'forbidden';
+        }
+        const result = yield comments_repository_1.commentsRepository.updateComment(commentId, comment.content);
+        if (result.matchedCount) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }),
+    deleteComment: (commentId, user) => __awaiter(void 0, void 0, void 0, function* () {
+        const checkComment = yield query_comment_repository_1.queryCommentRepository.getCommentById(commentId);
+        if (checkComment === null) {
+            return null;
+        }
+        if (checkComment.commentatorInfo.userId !== user.id) {
+            return 'forbidden';
+        }
+        const result = yield comments_repository_1.commentsRepository.deleteComment(commentId);
+        if (result.deletedCount === 1) {
+            return true;
+        }
+        else
+            return false;
     })
 };
 //# sourceMappingURL=comment-service.js.map

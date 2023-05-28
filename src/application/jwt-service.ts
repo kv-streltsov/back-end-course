@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-import {ObjectId} from "mongodb";
 import * as dotenv from 'dotenv'
 import {collectionUsers} from "../db/db_mongo";
 
