@@ -22,6 +22,9 @@ export const queryCommentRepository = {
         sortBy: string = DEFAULT_SORT_FIELD
     ) => {
         const count: number = await collectionComments.countDocuments({postId: postId})
+        if(count === 0){
+            return null
+        }
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
         const comments = await collectionComments.find({postId: postId}, {projection: {_id: 0,postId:0}})
             .skip(countItems)

@@ -42,7 +42,12 @@ exports.postRouters.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
 exports.postRouters.get('/:postId/comments', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _e, _f, _g, _h;
     const comments = yield query_comment_repository_1.queryCommentRepository.getCommentsByPostId(req.params.postId, ((_e = req.query) === null || _e === void 0 ? void 0 : _e.pageNumber) && Number(req.query.pageNumber), ((_f = req.query) === null || _f === void 0 ? void 0 : _f.pageSize) && Number(req.query.pageSize), ((_g = req.query) === null || _g === void 0 ? void 0 : _g.sortDirection) === 'asc' ? interface_pagination_1.SortType.asc : interface_pagination_1.SortType.desc, ((_h = req.query) === null || _h === void 0 ? void 0 : _h.sortBy) && req.query.sortBy);
-    res.status(interface_html_code_1.HttpStatusCode.OK).send(comments);
+    if (comments !== null) {
+        res.status(interface_html_code_1.HttpStatusCode.OK).send(comments);
+    }
+    else {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+    }
 }));
 exports.postRouters.post('/:postId/comments', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdComment = yield comment_service_1.commentService.postComment(req.params.postId, req.user, req.body);

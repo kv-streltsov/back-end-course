@@ -205,6 +205,11 @@ describe('/blogs', () => {
             .get(`/comments/0000}`)
             .expect(404)
     });
+    it('GET comments by ID Post doesnt exists | should return 404 ', async () => {
+        await request(app)
+            .get(`/posts/0000/comments`)
+            .expect(404)
+    });
     it('DELETE comments by ID Unauthorized | should return 401 ', async () => {
         await request(app)
             .delete(`/comments/${commentId}`)

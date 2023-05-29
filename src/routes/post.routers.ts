@@ -42,7 +42,12 @@ postRouters.get('/:postId/comments', async (req: Request<any, any, any, Interfac
         req.query?.sortBy && req.query.sortBy,
     )
 
-    res.status(HttpStatusCode.OK).send(comments)
+    if (comments !== null) {
+        res.status(HttpStatusCode.OK).send(comments)
+    } else {
+        res.sendStatus(HttpStatusCode.NOT_FOUND)
+    }
+
 })
 
 postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, async (req: Request, res: Response) => {
