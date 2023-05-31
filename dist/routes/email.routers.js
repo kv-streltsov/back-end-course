@@ -20,8 +20,8 @@ exports.emailRouters.post('/', (req, res) => __awaiter(void 0, void 0, void 0, f
     const transporter = nodemailer_1.default.createTransport({
         service: 'gmail',
         auth: {
-            user: 'clampbeer@gmail.com',
-            pass: 'essydfnwanivnavo'
+            user: '',
+            pass: ''
         }
     });
     const mailOptions = {
