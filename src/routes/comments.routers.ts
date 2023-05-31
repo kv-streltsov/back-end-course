@@ -6,10 +6,10 @@ import {commentService} from "../domain/comment-service";
 import {createCommentValidation} from "../middleware/validation/comments-validations";
 
 
-export const postComments = Router({})
+export const commentsRouter = Router({})
 
 
-postComments.get('/:id', async (req: Request, res: Response) => {
+commentsRouter.get('/:id', async (req: Request, res: Response) => {
     const comment = await queryCommentRepository.getCommentById(req.params.id)
     if (comment) {
         return res.status(200).send(comment)
@@ -17,7 +17,7 @@ postComments.get('/:id', async (req: Request, res: Response) => {
         return res.sendStatus(HttpStatusCode.NOT_FOUND)
     }
 })
-postComments.put('/:id', authMiddleware, createCommentValidation, async (req: Request, res: Response) => {
+commentsRouter.put('/:id', authMiddleware, createCommentValidation, async (req: Request, res: Response) => {
     const result: boolean | string | null = await commentService.putComment(req.params.id, req.user, req.body)
     if (result === 'forbidden') {
         return res.sendStatus(HttpStatusCode.FORBIDDEN)
@@ -28,7 +28,7 @@ postComments.put('/:id', authMiddleware, createCommentValidation, async (req: Re
         return res.sendStatus(HttpStatusCode.NOT_FOUND)
     }
 })
-postComments.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
+commentsRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const result: boolean | string | null = await commentService.deleteComment(req.params.id, req.user)
     if (result === 'forbidden') {
         return res.sendStatus(HttpStatusCode.FORBIDDEN)

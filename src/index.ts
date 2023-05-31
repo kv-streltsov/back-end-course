@@ -6,7 +6,8 @@ import {postRouters} from "./routes/post.routers";
 import {runMongo} from "./db/db_mongo";
 import {userRouters} from "./routes/user.routers";
 import {authRouters} from "./routes/auth.routers";
-import {postComments} from "./routes/comments.routers";
+import {commentsRouter} from "./routes/comments.routers";
+import {emailRouters} from "./routes/email.routers";
 
 dotenv.config()
 export const app = express()
@@ -19,8 +20,9 @@ app.use(express.json())
 app.use('/blogs', blogRouters)
 app.use('/posts', postRouters)
 app.use('/users', userRouters)
-app.use('/comments', postComments)
+app.use('/comments', commentsRouter)
 app.use('/auth', authRouters)
+app.use('/send', emailRouters)
 
 app.use('/testing/all-data', testingRouter)
 

@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postComments = void 0;
+exports.commentsRouter = void 0;
 const express_1 = require("express");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const query_comment_repository_1 = require("../repositories/query-comment-repository");
 const interface_html_code_1 = require("../dto/interface.html-code");
 const comment_service_1 = require("../domain/comment-service");
 const comments_validations_1 = require("../middleware/validation/comments-validations");
-exports.postComments = (0, express_1.Router)({});
-exports.postComments.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.commentsRouter = (0, express_1.Router)({});
+exports.commentsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const comment = yield query_comment_repository_1.queryCommentRepository.getCommentById(req.params.id);
     if (comment) {
         return res.status(200).send(comment);
@@ -26,7 +26,7 @@ exports.postComments.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0,
         return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
     }
 }));
-exports.postComments.put('/:id', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.commentsRouter.put('/:id', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield comment_service_1.commentService.putComment(req.params.id, req.user, req.body);
     if (result === 'forbidden') {
         return res.sendStatus(interface_html_code_1.HttpStatusCode.FORBIDDEN);
@@ -38,7 +38,7 @@ exports.postComments.put('/:id', jwt_auth_middleware_1.authMiddleware, comments_
         return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
     }
 }));
-exports.postComments.delete('/:id', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.commentsRouter.delete('/:id', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield comment_service_1.commentService.deleteComment(req.params.id, req.user);
     if (result === 'forbidden') {
         return res.sendStatus(interface_html_code_1.HttpStatusCode.FORBIDDEN);

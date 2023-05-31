@@ -31,7 +31,6 @@ export const usersService = {
     getUserById: async (userId: string)=> {
         return await collectionUsers.findOne({id: userId})
     },
-
     checkUser: async (loginOrEmail: string, password: string) => {
         const user = await usersRepository.checkUser(loginOrEmail)
         if (user === null) {
@@ -45,11 +44,9 @@ export const usersService = {
         }
         return user
     },
-
     deleteUser: async (id: string) => {
         return await usersRepository.deleteUser(id)
     },
-
     _generateHash: async (password: string, salt: string) => {
         return await bcrypt.hash(password, salt)
     }
