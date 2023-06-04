@@ -10,7 +10,7 @@
 
     Received status: 400
 
-    Passed body: {"code":"1c0bf66e-df2c-4f13-9352-2e5eaa4e613b"}
+    Passed body: {"code":"16b2bfac-3dc3-4a22-bb9f-6fa5554443ac"}
 
     Expected data: { errorsMessages: [{ message: Any<String>, field: "code" }] }
 
@@ -25,6 +25,7 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:146:7)
 
   > Homework 7  Registration  POST -> "auth/registration-email-resending": should return error if email already confirmed; status 400;
@@ -54,6 +55,7 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:164:7)
 
   > Homework 7  Registration  Registration flow body validation  POST -> "auth/registration-confirmation": should return error if code doesnt exist; status 400;
@@ -83,6 +85,7 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-body-validation-describe.ts:62:7)
 
   > Homework 7  Registration  Registration flow body validation  POST -> "auth/registration-email-resending": should return error if user email doesnt exist; status 400;
@@ -112,4 +115,5 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-body-validation-describe.ts:80:7)
