@@ -24,8 +24,8 @@ userRouters.get('/', basic_auth, async (req: Request<any, any, any, InterfacePag
 })
 
 userRouters.post('/', basic_auth, createUserValidation, async (req: Request<any, any, InterfaceInputUser>, res: Response) => {
-    const newUser = await usersService.postUser(req.body.login, req.body.email, req.body.password)
-    res.status(HttpStatusCode.CREATED).send(newUser)
+    const newUser = await usersService.postUser(req.body.login, req.body.email, req.body.password,true)
+    res.status(HttpStatusCode.CREATED).send(newUser.createdUser)
 })
 userRouters.delete('/:id', basic_auth, async (req: Request<any, any, InterfaceInputUser>, res: Response) => {
 

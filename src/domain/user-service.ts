@@ -5,7 +5,7 @@ import {randomUUID} from "crypto";
 
 export const usersService = {
 
-    postUser: async (login: string, email: string, password: string) => {
+    postUser: async (login: string, email: string, password: string, confirmAdmin: boolean = false) => {
         const salt: string = await bcrypt.genSalt(10)
         const passwordHash: string = await usersService._generateHash(password, salt)
 
@@ -14,8 +14,8 @@ export const usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: null,
-                wasConfirm: false
+                code: uuid,
+                wasConfirm: confirmAdmin
             },
             salt,
             password: passwordHash,

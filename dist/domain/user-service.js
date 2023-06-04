@@ -18,7 +18,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_mongo_1 = require("../db/db_mongo");
 const crypto_1 = require("crypto");
 exports.usersService = {
-    postUser: (login, email, password) => __awaiter(void 0, void 0, void 0, function* () {
+    postUser: (login, email, password, confirmAdmin = false) => __awaiter(void 0, void 0, void 0, function* () {
         const salt = yield bcrypt_1.default.genSalt(10);
         const passwordHash = yield exports.usersService._generateHash(password, salt);
         const uuid = (0, crypto_1.randomUUID)();
@@ -26,8 +26,8 @@ exports.usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: null,
-                wasConfirm: false
+                code: uuid,
+                wasConfirm: confirmAdmin
             },
             salt,
             password: passwordHash,
