@@ -22,6 +22,7 @@ app.use('/posts', postRouters)
 app.use('/users', userRouters)
 app.use('/comments', commentsRouter)
 app.use('/auth', authRouters)
+
 app.use('/send', emailRouters)
 
 app.use('/testing/all-data', testingRouter)

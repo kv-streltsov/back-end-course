@@ -16,25 +16,39 @@ exports.usersService = void 0;
 const users_repository_1 = require("../repositories/users-repository");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_mongo_1 = require("../db/db_mongo");
+const crypto_1 = require("crypto");
 exports.usersService = {
     postUser: (login, email, password) => __awaiter(void 0, void 0, void 0, function* () {
         const salt = yield bcrypt_1.default.genSalt(10);
         const passwordHash = yield exports.usersService._generateHash(password, salt);
+        const uuid = (0, crypto_1.randomUUID)();
         const createdUser = {
             login: login,
             email: email,
+            confirmation: {
+                code: uuid,
+                wasConfirm: false
+            },
             salt,
             password: passwordHash,
             id: new Date().getTime().toString(),
             createdAt: new Date().toISOString()
         };
         yield users_repository_1.usersRepository.postUser(Object.assign({}, createdUser));
-        return {
-            id: createdUser.id,
-            login: createdUser.login,
-            email: createdUser.email,
-            createdAt: createdUser.createdAt
-        };
+        return ({ createdUser: {
+                id: createdUser.id,
+                login: createdUser.login,
+                email: createdUser.email,
+                createdAt: createdUser.createdAt
+            }, uuid });
+    }),
+    confirmationUser: (code) => __awaiter(void 0, void 0, void 0, function* () {
+        const findUser = yield db_mongo_1.collectionUsers.findOne({ 'confirmation.code': code });
+        if (findUser === null) {
+            return null;
+        }
+        yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, { $set: { "confirmation.wasConfirm": true } });
+        return true;
     }),
     getUserById: (userId) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionUsers.findOne({ id: userId });

@@ -16,6 +16,8 @@ const user_auth_validations_1 = require("../middleware/validation/user-auth-vali
 const jwt_service_1 = require("../application/jwt-service");
 const user_service_1 = require("../domain/user-service");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
+const user_input_validations_1 = require("../middleware/validation/user-input-validations");
+const email_service_1 = require("../domain/email-service");
 exports.authRouters = (0, express_1.Router)({});
 exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield user_service_1.usersService.checkUser(req.body.loginOrEmail, req.body.password);
@@ -26,6 +28,19 @@ exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (
         const token = yield jwt_service_1.jwtService.createJwt(userAuth);
         res.status(interface_html_code_1.HttpStatusCode.OK).send(token);
     }
+}));
+exports.authRouters.post('/registration', user_input_validations_1.createUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const createdUser = yield user_service_1.usersService.postUser(req.body.login, req.body.email, req.body.password);
+    yield email_service_1.emailService.sendMailRegistration(req.body.email, createdUser.uuid);
+    res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
+}));
+exports.authRouters.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.usersService.confirmationUser(req.query.code);
+    if (result === null) {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+        return;
+    }
+    res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
 exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = {

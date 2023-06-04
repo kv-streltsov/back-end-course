@@ -1,4 +1,6 @@
 import {collectionBlogs, collectionPosts} from "../db/db_mongo";
+import {InterfaceBlogView, InterfaceGetBlogsWitchQuery} from "../dto/interface.blog";
+import {WithId} from "mongodb";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
 
@@ -21,7 +23,7 @@ export const queryBlogsRepository = {
         sortDirection: number,
         sortBy: string = DEFAULT_SORT_FIELD,
         searchNameTerm: string | null = null
-    ) => {
+    ):Promise<InterfaceGetBlogsWitchQuery> => {
 
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
@@ -49,7 +51,7 @@ export const queryBlogsRepository = {
             projection: {_id: 0},
         });
     },
-    getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string) => {
+    getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string):Promise<WithId<any>> => {
         const findBlog = await collectionBlogs.findOne({id: id})
         if (findBlog === null) {
             return null
