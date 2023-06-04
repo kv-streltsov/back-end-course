@@ -27,7 +27,10 @@ exports.emailService = {
             from: process.env.EMAIL_ADDRES,
             to: email,
             subject: 'registration confirm',
-            html: `Your link <a>http://localhost:5001/auth/registration-confirmation?code=${uuid}</a>`
+            html: `<h1>Thank for your registration</h1>
+                 <p>To finish registration please follow the link below:
+                    <a href='http://localhost:5001/auth/registration-confirmation?code=${uuid}'>complete registration</a>
+                 </p>`
         };
         yield transporter.sendMail(mailOptions, (error, info) => __awaiter(void 0, void 0, void 0, function* () {
             if (error) {

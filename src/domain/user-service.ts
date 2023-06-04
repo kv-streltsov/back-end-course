@@ -14,7 +14,7 @@ export const usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: uuid,
+                code: null,
                 wasConfirm: false
             },
             salt,
@@ -25,23 +25,34 @@ export const usersService = {
 
         await usersRepository.postUser({...createdUser})
 
-        return ({createdUser:{
+        return ({
+            createdUser: {
                 id: createdUser.id,
                 login: createdUser.login,
                 email: createdUser.email,
                 createdAt: createdUser.createdAt
 
-            },uuid})
+            }, uuid
+        })
     },
-    confirmationUser: async (code: string)=>{
+    confirmationUser: async (code: string) => {
         const findUser = await collectionUsers.findOne({'confirmation.code': code})
-        if(findUser === null){
+        if (findUser === null) {
             return null
         }
-        await collectionUsers.updateOne({'confirmation.code': code},{$set: {"confirmation.wasConfirm":true}})
+        await collectionUsers.updateOne({'confirmation.code': code}, {$set: {"confirmation.wasConfirm": true}})
         return true
     },
-    getUserById: async (userId: string)=> {
+    reassignConfirmationCode: async (email: string) => {
+        const findUser = await collectionUsers.findOne({email: email})
+        if (findUser === null) {
+            return null
+        }
+        const result = await collectionUsers.updateOne({email: email}, {$set: {"confirmation.code": randomUUID()}})
+        return true
+
+    },
+    getUserById: async (userId: string) => {
         return await collectionUsers.findOne({id: userId})
     },
     checkUser: async (loginOrEmail: string, password: string) => {

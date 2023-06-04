@@ -18,6 +18,7 @@ const user_service_1 = require("../domain/user-service");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const user_input_validations_1 = require("../middleware/validation/user-input-validations");
 const email_service_1 = require("../domain/email-service");
+const db_mongo_1 = require("../db/db_mongo");
 exports.authRouters = (0, express_1.Router)({});
 exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield user_service_1.usersService.checkUser(req.body.loginOrEmail, req.body.password);
@@ -40,6 +41,16 @@ exports.authRouters.post('/registration-confirmation', (req, res) => __awaiter(v
         res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
         return;
     }
+    res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
+}));
+exports.authRouters.post('/registration-email-resending', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.usersService.reassignConfirmationCode(req.body.email);
+    const findUser = yield db_mongo_1.collectionUsers.findOne({ email: req.body.email });
+    if (result === null || findUser === null) {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+        return;
+    }
+    yield email_service_1.emailService.sendMailRegistration(req.body.email, findUser.confirmation.code);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
 exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

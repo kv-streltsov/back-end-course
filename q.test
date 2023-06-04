@@ -1,24 +1,359 @@
-  > Homework 6  Comments for posts with auth  DELETE, PUT -> "/comments/:id", GET, POST -> "posts/:postId/comments": should return error if :id from uri param not found; status 404;
+  > Homework 7  Registration  POST -> "auth/registration": should create new user and send confirmation email with code; status 204;
 
+    thrown: "no message found after 1 minutes waiting"
 
+      27 |
+      28 | const userRegistrationTest = async () =>
+    > 29 |   it(
+         |   ^
+      30 |     getDescription({
+      31 |       method: 'POST',
+      32 |       endpoint: AuthEndpoint.Registration,
 
-    Tested case params:
-     endpoint: posts/602afe92-7d97-4395-b1b9-6cf98b351bbe/comments,
-     method: GET,
-     headers: undefined,
+      at userRegistrationTest (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:29:3)
+      at src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:190:5
+      at performRegistrationDescribe (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:181:3)
+      at src/tests/jest/back/back-v2-07-homework-01/user-registration.spec.ts:16:30
+      at Object.<anonymous> (src/tests/jest/back/back-v2-07-homework-01/user-registration.spec.ts:10:1)
 
-    Expected status: 404
+  > Homework 7  Registration  POST -> "auth/registration-email-resending": should send email with new code if user exists but not confirmed yet; status 204;
 
-    Received status: 200
+    expect(received).not.toBeUndefined()
 
-      49 |       }
-      50 |
-    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
+    Received: undefined
+
+       8 |   getCode: (): string => {
+       9 |     const code = expect.getState().code;
+    > 10 |     expect(code).not.toBeUndefined();
          |                      ^
-      52 |         headers,
-      53 |         endpoint,
-      54 |         method,
+      11 |
+      12 |     return code;
+      13 |   },
 
-      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
+      at Object.getCode (src/tests/jest/back/testHelpers/jestState/registrationCodeState.ts:10:22)
+      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:98:51)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:279:7)
+
+  > Homework 7  Registration  POST -> "auth/registration-confirmation": should confirm registration by email; status 204;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+       8 |   getCode: (): string => {
+       9 |     const code = expect.getState().code;
+    > 10 |     expect(code).not.toBeUndefined();
+         |                      ^
+      11 |
+      12 |     return code;
+      13 |   },
+
+      at Object.getCode (src/tests/jest/back/testHelpers/jestState/registrationCodeState.ts:10:22)
+      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:124:45)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Registration  POST -> "auth/registration-confirmation": should return error if code already confirmed; status 400;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+       8 |   getCode: (): string => {
+       9 |     const code = expect.getState().code;
+    > 10 |     expect(code).not.toBeUndefined();
+         |                      ^
+      11 |
+      12 |     return code;
+      13 |   },
+
+      at Object.getCode (src/tests/jest/back/testHelpers/jestState/registrationCodeState.ts:10:22)
+      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:144:42)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Registration  POST -> "auth/registration-email-resending": should return error if email already confirmed; status 400;
+
+
+
+    Tested endpoint: auth/registration-email-resending
+
+    Tested method: POST
+
+    Expected status: 400
+
+    Received status: 404
+
+    Passed body: {"email":"vantreytest1@yandex.com"}
+
+    Expected data: { errorsMessages: [{ message: Any<String>, field: "email" }] }
+
+    Received data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /auth/registration-email-resending</pre>\n</body>\n</html>\n"
+
+      40 |     }
+      41 |
+    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
+         |                      ^
+      43 |       endpoint: url,
+      44 |       method,
+      45 |     });
+
+      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:164:7)
+
+  > Homework 7  Registration  POST -> "/auth/login": should sign in user; status 200; content: JWT token;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      23 |   getUserCreds: (): IUserPayload => {
+      24 |     const userCreds = expect.getState().newUserCreds;
+    > 25 |     expect(userCreds).not.toBeUndefined();
+         |                           ^
+      26 |
+      27 |     return userCreds;
+      28 |   },
+
+      at Object.getUserCreds (src/tests/jest/back/testHelpers/jestState/usersState.ts:25:27)
+      at Object.<anonymous> (src/tests/jest/back/describes/usersApi/login-V2-describe.ts:36:54)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Registration  Registration flow body validation  POST -> "auth/registration-confirmation": should return error if code doesnt exist; status 400;
+
+
+
+    Tested endpoint: auth/registration-confirmation
+
+    Tested method: POST
+
+    Expected status: 400
+
+    Received status: 400
+
+    Passed body: {"code":"invalid code"}
+
+    Expected data: { errorsMessages: [{ message: Any<String>, field: "code" }] }
+
+    Received data: "Bad Request"
+
+      40 |     }
+      41 |
+    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
+         |                      ^
+      43 |       endpoint: url,
+      44 |       method,
+      45 |     });
+
+      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-body-validation-describe.ts:62:7)
+
+  > Homework 7  Registration  Registration flow body validation  POST -> "auth/registration-email-resending": should return error if user email doesnt exist; status 400;
+
+
+
+    Tested endpoint: auth/registration-email-resending
+
+    Tested method: POST
+
+    Expected status: 400
+
+    Received status: 404
+
+    Passed body: {"email":"someemail@gmail.cm"}
+
+    Expected data: { errorsMessages: [{ message: Any<String>, field: "email" }] }
+
+    Received data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /auth/registration-email-resending</pre>\n</body>\n</html>\n"
+
+      40 |     }
+      41 |
+    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
+         |                      ^
+      43 |       endpoint: url,
+      44 |       method,
+      45 |     });
+
+      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-body-validation-describe.ts:80:7)
+
+  > Homework 7  Comments for posts with auth  POST -> "/posts/:postId/comments": should create new comment; status 201; content: created comment;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /comments/:commentId;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:86:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  GET -> "/posts/:postId/comments": should return status 200; content: comments with pagination;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /comments;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:160:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  DELETE -> "/comments/:id": should delete comment by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /comments/:id;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:224:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  PUT -> "/comments/:commentId": should update comment by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /posts/:postId/comments, GET -> /comments/:commentId;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:121:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  GET -> "comments/:commentsId": should return status 200; content: comment by id;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /posts/:postId/comments;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:196:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  DELETE, PUT -> "/comments/:id", GET, POST -> "posts/:postId/comments": should return error if :id from uri param not found; status 404;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:247:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  DELETE, PUT -> "/comments/:id", POST -> "posts/:postId/comments": should return error if auth credentials is incorrect; status 401;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /comments;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:298:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  PUT, DELETE -> "/comments/:id": should return error if access denied; status 403;  used additional methods: POST -> /users;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:338:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  Comments body validation  POST -> "/posts/:postId/comments": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-body-validatin-v2-describe.ts:45:33)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 7  Comments for posts with auth  Comments body validation  PUT -> "/comments/:commentId": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-body-validatin-v2-describe.ts:70:33)
+          at runMicrotasks (<anonymous>)

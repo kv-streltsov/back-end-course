@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import {Router} from "express";
 
 
 const transporter = nodemailer.createTransport({
@@ -10,15 +9,18 @@ const transporter = nodemailer.createTransport({
     }
 });
 export const emailService = {
-    sendMailRegistration: async (email: string,uuid: string) => {
+    sendMailRegistration: async (email: string, uuid: string) => {
         const mailOptions = {
             from: process.env.EMAIL_ADDRES,
             to: email,
             subject: 'registration confirm',
-            html:`Your link <a>http://localhost:5001/auth/registration-confirmation?code=${uuid}</a>`
+            html:
+                `<h1>Thank for your registration</h1>
+                 <p>To finish registration please follow the link below:
+                    <a href='http://localhost:5001/auth/registration-confirmation?code=${uuid}'>complete registration</a>
+                 </p>`
         };
-        await transporter.sendMail(mailOptions, async (error, info) =>
-        {
+        await transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {
                 console.log(error);
             } else {

@@ -29,3 +29,6 @@ export interface InterfaceUserDb {
 export interface ICodeConfirm{
     code:string
 }
+export interface IEmail{
+    email:string
+}

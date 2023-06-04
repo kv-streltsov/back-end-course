@@ -26,7 +26,7 @@ exports.usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: uuid,
+                code: null,
                 wasConfirm: false
             },
             salt,
@@ -35,12 +35,14 @@ exports.usersService = {
             createdAt: new Date().toISOString()
         };
         yield users_repository_1.usersRepository.postUser(Object.assign({}, createdUser));
-        return ({ createdUser: {
+        return ({
+            createdUser: {
                 id: createdUser.id,
                 login: createdUser.login,
                 email: createdUser.email,
                 createdAt: createdUser.createdAt
-            }, uuid });
+            }, uuid
+        });
     }),
     confirmationUser: (code) => __awaiter(void 0, void 0, void 0, function* () {
         const findUser = yield db_mongo_1.collectionUsers.findOne({ 'confirmation.code': code });
@@ -48,6 +50,14 @@ exports.usersService = {
             return null;
         }
         yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, { $set: { "confirmation.wasConfirm": true } });
+        return true;
+    }),
+    reassignConfirmationCode: (email) => __awaiter(void 0, void 0, void 0, function* () {
+        const findUser = yield db_mongo_1.collectionUsers.findOne({ email: email });
+        if (findUser === null) {
+            return null;
+        }
+        const result = yield db_mongo_1.collectionUsers.updateOne({ email: email }, { $set: { "confirmation.code": (0, crypto_1.randomUUID)() } });
         return true;
     }),
     getUserById: (userId) => __awaiter(void 0, void 0, void 0, function* () {
