@@ -26,7 +26,7 @@ exports.usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: confirmAdmin,
+                code: (0, crypto_1.randomUUID)(),
                 wasConfirm: confirmAdmin
             },
             salt,
