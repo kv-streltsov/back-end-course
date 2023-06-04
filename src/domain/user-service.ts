@@ -37,7 +37,7 @@ export const usersService = {
     },
     confirmationUser: async (code: string) => {
         const findUser = await collectionUsers.findOne({'confirmation.code': code})
-        if (findUser === null) {
+        if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return null
         }
         await collectionUsers.updateOne({'confirmation.code': code}, {$set: {"confirmation.wasConfirm": true, "confirmation.code": null}})

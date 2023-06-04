@@ -9,11 +9,11 @@ import {ICodeConfirm, IEmail, InterfaceUserInput} from "../dto/interface.user";
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
 import {collectionUsers} from "../db/db_mongo";
+import {registrationConfirmationValidation} from "../middleware/validation/user-confirmation-validations";
+import {emailResendingValidation} from "../middleware/validation/email-resending-validations";
 
 
-
-
-export const  authRouters = Router({})
+export const authRouters = Router({})
 
 
 authRouters.post('/login', authUserValidation, async (req: Request, res: Response) => {
@@ -31,27 +31,27 @@ authRouters.post('/login', authUserValidation, async (req: Request, res: Respons
 
 
 })
-authRouters.post('/registration', createUserValidation,  async (req: RequestWithBody<InterfaceUserInput>, res: Response) => {
-    const createdUser = await usersService.postUser(req.body.login,req.body.email,req.body.password)
-    await emailService.sendMailRegistration(createdUser.createdUser.email,createdUser.uuid)
+authRouters.post('/registration', createUserValidation, async (req: RequestWithBody<InterfaceUserInput>, res: Response) => {
+    const createdUser = await usersService.postUser(req.body.login, req.body.email, req.body.password)
+    await emailService.sendMailRegistration(createdUser.createdUser.email, createdUser.uuid)
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-confirmation', async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
+authRouters.post('/registration-confirmation', registrationConfirmationValidation, async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
     const result = await usersService.confirmationUser(req.body.code)
-    if (result===null) {
+    if (result === null) {
         res.sendStatus(HttpStatusCode.BAD_REQUEST)
         return
     }
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-email-resending', async (req: RequestWithBody<IEmail>, res: Response) => {
+authRouters.post('/registration-email-resending',emailResendingValidation, async (req: RequestWithBody<IEmail>, res: Response) => {
     const result = await usersService.reassignConfirmationCode(req.body.email)
     const findUser = await collectionUsers.findOne({email: req.body.email},)
-    if (result === null || findUser === null){
+    if (result === null || findUser === null) {
         res.sendStatus(HttpStatusCode.BAD_REQUEST)
         return
     }
-    await emailService.sendMailRegistration(req.body.email,findUser.confirmation.code)
+    await emailService.sendMailRegistration(req.body.email, findUser.confirmation.code)
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 
 

@@ -46,7 +46,7 @@ exports.usersService = {
     }),
     confirmationUser: (code) => __awaiter(void 0, void 0, void 0, function* () {
         const findUser = yield db_mongo_1.collectionUsers.findOne({ 'confirmation.code': code });
-        if (findUser === null) {
+        if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return null;
         }
         yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, { $set: { "confirmation.wasConfirm": true, "confirmation.code": null } });
