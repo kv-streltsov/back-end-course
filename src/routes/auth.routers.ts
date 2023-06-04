@@ -33,7 +33,7 @@ authRouters.post('/login', authUserValidation, async (req: Request, res: Respons
 })
 authRouters.post('/registration', createUserValidation,  async (req: RequestWithBody<InterfaceUserInput>, res: Response) => {
     const createdUser = await usersService.postUser(req.body.login,req.body.email,req.body.password)
-    await emailService.sendMailRegistration(req.body.email,createdUser.uuid)
+    await emailService.sendMailRegistration(createdUser.createdUser.email,createdUser.uuid)
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/registration-confirmation', async (req: RequestWithQuery<ICodeConfirm>, res: Response) => {

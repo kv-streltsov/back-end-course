@@ -20,13 +20,7 @@ export const emailService = {
                     <a href='http://localhost:5001/auth/registration-confirmation?code=${uuid}'>complete registration</a>
                  </p>`
         };
-        await transporter.sendMail(mailOptions, async (error, info) => {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        });
+        return transporter.sendMail(mailOptions);
 
     }
 }
