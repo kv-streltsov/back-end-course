@@ -32,11 +32,11 @@ exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (
 }));
 exports.authRouters.post('/registration', user_input_validations_1.createUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdUser = yield user_service_1.usersService.postUser(req.body.login, req.body.email, req.body.password);
-    yield email_service_1.emailService.sendMailRegistration(req.body.email, createdUser.uuid);
+    yield email_service_1.emailService.sendMailRegistration(createdUser.createdUser.email, createdUser.uuid);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
 exports.authRouters.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.usersService.confirmationUser(req.query.code);
+    const result = yield user_service_1.usersService.confirmationUser(req.body.code);
     if (result === null) {
         res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
         return;

@@ -26,12 +26,12 @@ exports.usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: uuid,
+                code: confirmAdmin,
                 wasConfirm: confirmAdmin
             },
             salt,
             password: passwordHash,
-            id: new Date().getTime().toString(),
+            id: (0, crypto_1.randomUUID)(),
             createdAt: new Date().toISOString()
         };
         yield users_repository_1.usersRepository.postUser(Object.assign({}, createdUser));
@@ -49,7 +49,7 @@ exports.usersService = {
         if (findUser === null) {
             return null;
         }
-        yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, { $set: { "confirmation.wasConfirm": true } });
+        yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, { $set: { "confirmation.wasConfirm": true, "confirmation.code": null } });
         return true;
     }),
     reassignConfirmationCode: (email) => __awaiter(void 0, void 0, void 0, function* () {

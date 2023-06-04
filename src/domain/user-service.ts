@@ -14,12 +14,12 @@ export const usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: uuid,
+                code: confirmAdmin,
                 wasConfirm: confirmAdmin
             },
             salt,
             password: passwordHash,
-            id: new Date().getTime().toString(),
+            id: randomUUID(),
             createdAt: new Date().toISOString()
         }
 
@@ -40,7 +40,7 @@ export const usersService = {
         if (findUser === null) {
             return null
         }
-        await collectionUsers.updateOne({'confirmation.code': code}, {$set: {"confirmation.wasConfirm": true}})
+        await collectionUsers.updateOne({'confirmation.code': code}, {$set: {"confirmation.wasConfirm": true, "confirmation.code": null}})
         return true
     },
     reassignConfirmationCode: async (email: string) => {

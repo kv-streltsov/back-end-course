@@ -13,7 +13,7 @@ import {collectionUsers} from "../db/db_mongo";
 
 
 
-export const authRouters = Router({})
+export const  authRouters = Router({})
 
 
 authRouters.post('/login', authUserValidation, async (req: Request, res: Response) => {
@@ -36,8 +36,8 @@ authRouters.post('/registration', createUserValidation,  async (req: RequestWith
     await emailService.sendMailRegistration(createdUser.createdUser.email,createdUser.uuid)
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-confirmation', async (req: RequestWithQuery<ICodeConfirm>, res: Response) => {
-    const result = await usersService.confirmationUser(req.query.code)
+authRouters.post('/registration-confirmation', async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
+    const result = await usersService.confirmationUser(req.body.code)
     if (result===null) {
         res.sendStatus(HttpStatusCode.BAD_REQUEST)
         return

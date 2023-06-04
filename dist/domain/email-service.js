@@ -32,14 +32,7 @@ exports.emailService = {
                     <a href='http://localhost:5001/auth/registration-confirmation?code=${uuid}'>complete registration</a>
                  </p>`
         };
-        yield transporter.sendMail(mailOptions, (error, info) => __awaiter(void 0, void 0, void 0, function* () {
-            if (error) {
-                console.log(error);
-            }
-            else {
-                console.log('Email sent: ' + info.response);
-            }
-        }));
+        return transporter.sendMail(mailOptions);
     })
 };
 //# sourceMappingURL=email-service.js.map
