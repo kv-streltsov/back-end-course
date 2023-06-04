@@ -36,7 +36,7 @@ authRouters.post('/registration', createUserValidation, async (req: RequestWithB
     await emailService.sendMailRegistration(createdUser.createdUser.email, createdUser.uuid)
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-confirmation', registrationConfirmationValidation, async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
+authRouters.post('/registration-confirmation',  async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
     const result = await usersService.confirmationUser(req.body.code)
     if (result === null) {
         res.sendStatus(HttpStatusCode.BAD_REQUEST)
@@ -44,7 +44,7 @@ authRouters.post('/registration-confirmation', registrationConfirmationValidatio
     }
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-email-resending',emailResendingValidation, async (req: RequestWithBody<IEmail>, res: Response) => {
+authRouters.post('/registration-email-resending', async (req: RequestWithBody<IEmail>, res: Response) => {
     const result = await usersService.reassignConfirmationCode(req.body.email)
     const findUser = await collectionUsers.findOne({email: req.body.email},)
     if (result === null || findUser === null) {
