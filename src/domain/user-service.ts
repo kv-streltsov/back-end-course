@@ -14,7 +14,7 @@ export const usersService = {
             login: login,
             email: email,
             confirmation: {
-                code: randomUUID(),
+                code: uuid,
                 wasConfirm: confirmAdmin
             },
             salt,
