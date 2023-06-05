@@ -37,6 +37,7 @@ authRouters.post('/registration', createUserValidation, async (req: RequestWithB
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/registration-confirmation', registrationConfirmationValidation, async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
+    console.log(req.body)
     const result = await usersService.confirmationUser(req.body.code)
     if (result === null) {
         res.sendStatus(HttpStatusCode.BAD_REQUEST)
