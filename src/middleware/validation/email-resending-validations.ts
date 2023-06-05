@@ -5,7 +5,7 @@ import {collectionUsers} from "../../db/db_mongo";
 const emailValidation = body('email').isString().trim().notEmpty().isEmail()
     .custom(async email => {
         const findUser = await collectionUsers.findOne({email: email})
-        if (findUser === null || findUser.findUser.confirmation.wasConfirm === true) {
+        if (findUser === null || findUser.confirmation.wasConfirm === true) {
             throw new Error("email already exist")
         } else {
             return true

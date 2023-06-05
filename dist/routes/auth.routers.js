@@ -20,6 +20,7 @@ const user_input_validations_1 = require("../middleware/validation/user-input-va
 const email_service_1 = require("../domain/email-service");
 const db_mongo_1 = require("../db/db_mongo");
 const user_confirmation_validations_1 = require("../middleware/validation/user-confirmation-validations");
+const email_resending_validations_1 = require("../middleware/validation/email-resending-validations");
 exports.authRouters = (0, express_1.Router)({});
 exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield user_service_1.usersService.checkUser(req.body.loginOrEmail, req.body.password);
@@ -45,7 +46,7 @@ exports.authRouters.post('/registration-confirmation', user_confirmation_validat
     }
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.post('/registration-email-resending', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouters.post('/registration-email-resending', email_resending_validations_1.emailResendingValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.usersService.reassignConfirmationCode(req.body.email);
     const findUser = yield db_mongo_1.collectionUsers.findOne({ email: req.body.email });
     if (result === null || findUser === null) {

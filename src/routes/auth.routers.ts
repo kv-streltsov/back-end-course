@@ -45,7 +45,7 @@ authRouters.post('/registration-confirmation', registrationConfirmationValidatio
     }
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-email-resending', async (req: RequestWithBody<IEmail>, res: Response) => {
+authRouters.post('/registration-email-resending', emailResendingValidation, async (req: RequestWithBody<IEmail>, res: Response) => {
     const result = await usersService.reassignConfirmationCode(req.body.email)
     const findUser = await collectionUsers.findOne({email: req.body.email},)
     if (result === null || findUser === null) {
