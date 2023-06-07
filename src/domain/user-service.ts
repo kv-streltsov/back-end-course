@@ -47,6 +47,7 @@ export const usersService = {
 				]
 			}
 		}
+
 		await collectionUsers.updateOne({'confirmation.code': code}, {
 			$set: {
 				"confirmation.wasConfirm": true,

@@ -11,6 +11,7 @@ import {emailService} from "../domain/email-service";
 import {collectionUsers} from "../db/db_mongo";
 import {registrationConfirmationValidation} from "../middleware/validation/user-confirmation-validations";
 import {emailResendingValidation} from "../middleware/validation/email-resending-validations";
+import {InterfaceError} from "../dto/Interface-error";
 
 
 export const authRouters = Router({})
@@ -38,8 +39,8 @@ authRouters.post('/registration', createUserValidation, async (req: RequestWithB
 })
 authRouters.post('/registration-confirmation', async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
     const result = await usersService.confirmationUser(req.body.code)
-    if (result === null) {
-        res.sendStatus(HttpStatusCode.BAD_REQUEST)
+    if (result !== true) {
+        res.status(HttpStatusCode.BAD_REQUEST).send(result)
         return
     }
     res.sendStatus(HttpStatusCode.NO_CONTENT)

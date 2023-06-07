@@ -38,8 +38,8 @@ exports.authRouters.post('/registration', user_input_validations_1.createUserVal
 }));
 exports.authRouters.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.usersService.confirmationUser(req.body.code);
-    if (result === null) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+    if (result !== true) {
+        res.status(interface_html_code_1.HttpStatusCode.BAD_REQUEST).send(result);
         return;
     }
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
