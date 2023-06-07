@@ -21,7 +21,7 @@ exports.usersService = {
     postUser: (login, email, password, confirmAdmin = false) => __awaiter(void 0, void 0, void 0, function* () {
         const salt = yield bcrypt_1.default.genSalt(10);
         const passwordHash = yield exports.usersService._generateHash(password, salt);
-        const uuid = (0, crypto_1.randomUUID)();
+        const uuid = (0, crypto_1.randomUUID)(); //
         const createdUser = {
             login: login,
             email: email,
@@ -47,9 +47,21 @@ exports.usersService = {
     confirmationUser: (code) => __awaiter(void 0, void 0, void 0, function* () {
         const findUser = yield db_mongo_1.collectionUsers.findOne({ 'confirmation.code': code });
         if (findUser === null || findUser.confirmation.wasConfirm === true) {
-            return null;
+            return {
+                "errorsMessages": [
+                    {
+                        "message": "confirm code error",
+                        "field": "code"
+                    }
+                ]
+            };
         }
-        yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, { $set: { "confirmation.wasConfirm": true, "confirmation.code": null } });
+        yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, {
+            $set: {
+                "confirmation.wasConfirm": true,
+                "confirmation.code": null
+            }
+        });
         return true;
     }),
     reassignConfirmationCode: (email) => __awaiter(void 0, void 0, void 0, function* () {
@@ -57,7 +69,7 @@ exports.usersService = {
         if (findUser === null) {
             return null;
         }
-        const result = yield db_mongo_1.collectionUsers.updateOne({ email: email }, { $set: { "confirmation.code": (0, crypto_1.randomUUID)() } });
+        yield db_mongo_1.collectionUsers.updateOne({ email: email }, { $set: { "confirmation.code": (0, crypto_1.randomUUID)() } });
         return true;
     }),
     getUserById: (userId) => __awaiter(void 0, void 0, void 0, function* () {
