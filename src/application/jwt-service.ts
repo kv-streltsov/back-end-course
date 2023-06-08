@@ -12,8 +12,8 @@ if (!JWT_SECRET) {
 export const jwtService = {
 	async createJwt(user: any) {
 		return {
-			"accessToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '100s'}),
-			"refreshToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '200s'})
+			"accessToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '10'}),
+			"refreshToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: '20'})
 		}
 	},
 

@@ -48,8 +48,8 @@ exports.jwtService = {
     createJwt(user) {
         return __awaiter(this, void 0, void 0, function* () {
             return {
-                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '100s' }),
-                "refreshToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '200s' })
+                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '10' }),
+                "refreshToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '20' })
             };
         });
     },
