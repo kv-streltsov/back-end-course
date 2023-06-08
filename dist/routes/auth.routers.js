@@ -26,7 +26,7 @@ exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (
     }
     if (userAuth) {
         const token = yield jwt_service_1.jwtService.createJwt(userAuth);
-        res.cookie('refresh_token', token.refreshToken, { httpOnly: true, secure: true });
+        res.cookie('refresh_token', { "refreshToken": token.refreshToken }, { httpOnly: true, secure: true });
         res.status(interface_html_code_1.HttpStatusCode.OK).send({
             "accessToken": token.accessToken
         });
