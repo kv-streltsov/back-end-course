@@ -20,7 +20,7 @@ authRouters.post('/login', authUserValidation, async (req: RequestWithBody<Inter
 
 	if (userAuth) {
 		const token = await jwtService.createJwt(userAuth)
-		res.cookie('refresh_token', {"refreshToken": token.refreshToken}, {httpOnly: true, secure: true})
+		res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true})
 
 		res.status(HttpStatusCode.OK).send({
 			"accessToken": token.accessToken
@@ -53,7 +53,8 @@ authRouters.post('/registration-email-resending', async (req: RequestWithBody<IE
 	res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/refresh-token', async (req: Request, res: Response) => {
-	const refreshToken: string = req.cookies.refresh_token
+	const refreshToken: string = req.cookies
+	console.log(refreshToken)
 	const jwtPair = await jwtService.refreshJwtPair(refreshToken)
 	console.log(jwtPair)
 	if (!jwtPair) {

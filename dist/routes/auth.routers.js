@@ -26,7 +26,7 @@ exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (
     }
     if (userAuth) {
         const token = yield jwt_service_1.jwtService.createJwt(userAuth);
-        res.cookie('refresh_token', { "refreshToken": token.refreshToken }, { httpOnly: true, secure: true });
+        res.cookie('refreshToken', token.refreshToken, { httpOnly: true, secure: true });
         res.status(interface_html_code_1.HttpStatusCode.OK).send({
             "accessToken": token.accessToken
         });
@@ -55,7 +55,8 @@ exports.authRouters.post('/registration-email-resending', (req, res) => __awaite
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
 exports.authRouters.post('/refresh-token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const refreshToken = req.cookies.refresh_token;
+    const refreshToken = req.cookies;
+    console.log(refreshToken);
     const jwtPair = yield jwt_service_1.jwtService.refreshJwtPair(refreshToken);
     console.log(jwtPair);
     if (!jwtPair) {
