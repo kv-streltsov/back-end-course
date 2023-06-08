@@ -55,6 +55,7 @@ authRouters.post('/registration-email-resending', async (req: RequestWithBody<IE
 authRouters.post('/refresh-token', async (req: Request, res: Response) => {
 	const refreshToken: string = req.cookies.refresh_token
 	const jwtPair = await jwtService.refreshJwtPair(refreshToken)
+	console.log(jwtPair)
 	if(!jwtPair){
 		res.sendStatus(HttpStatusCode.UNAUTHORIZED)
 		return

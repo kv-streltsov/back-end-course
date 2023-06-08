@@ -1,59 +1,158 @@
-  > Homework 7  Registration  POST -> "auth/registration-email-resending": should return error if email already confirmed; status 400;
+  > Homework 8  RefreshToken  POST -> "/auth/login": should sign in user; status 200; content: JWT 'access' token, JWT 'refresh' token in cookie (http only, secure);
 
+    expect(received).toEqual(expected) // deep equality
 
+    Expected: StringContaining "."
+    Received: undefined
 
-    Tested endpoint: auth/registration-email-resending
+      29 |
+      30 |   const setCookieObject = parseCookieString(responseHeaders['set-cookie'][0]);
+    > 31 |   expect(setCookieObject.refreshToken).toEqual(expect.stringContaining('.'));
+         |                                        ^
+      32 |
+      33 |   expect(setCookieObject.Secure).toBe(true);
+      34 |
 
-    Tested method: POST
-
-    Expected status: 400
-
-    Received status: 204
-
-    Passed body: {"email":"vantreytest1@yandex.com"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "email" }] }
-
-    Received data: ""
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+      at performTokensTestFlow (src/tests/jest/back/describes/refreshToken/refreshTokenTestsFlow.ts:31:40)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-v2-describe.ts:164:7)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:63:45)
 
-  > Homework 7  Registration  Registration flow body validation  POST -> "auth/registration-email-resending": should return error if user email doesnt exist; status 400;
+  > Homework 8  RefreshToken  POST -> "/auth/me": should return the error when the 'access' token has expired or there is no one in the headers; status 401;
 
+    expect(received).not.toBeUndefined()
 
+    Received: undefined
 
-    Tested endpoint: auth/registration-email-resending
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
 
-    Tested method: POST
-
-    Expected status: 400
-
-    Received status: 400
-
-    Passed body: {"email":"someemail@gmail.cm"}
-
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "email" }] }
-
-    Received data: "Bad Request"
-
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
-
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:107:39)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/registrationWithEmail/registration-body-validation-describe.ts:80:7)
+
+  > Homework 8  RefreshToken  POST -> "/auth/refresh-token", "/auth/logout": should return an error when the "refresh" token has expired or there is no one in the cookie; status 401;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      74 |   getRefreshToken: (): string => {
+      75 |     const refreshToken = expect.getState().refreshToken;
+    > 76 |     expect(refreshToken).not.toBeUndefined();
+         |                              ^
+      77 |
+      78 |     return refreshToken;
+      79 |   },
+
+      at Object.getRefreshToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:76:30)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:205:40)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 8  RefreshToken  POST -> "/auth/login": should sign in user; status 200; content: JWT 'access' token, JWT 'refresh' token in cookie (http only, secure);
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: StringContaining "."
+    Received: undefined
+
+      29 |
+      30 |   const setCookieObject = parseCookieString(responseHeaders['set-cookie'][0]);
+    > 31 |   expect(setCookieObject.refreshToken).toEqual(expect.stringContaining('.'));
+         |                                        ^
+      32 |
+      33 |   expect(setCookieObject.Secure).toBe(true);
+      34 |
+
+      at performTokensTestFlow (src/tests/jest/back/describes/refreshToken/refreshTokenTestsFlow.ts:31:40)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:63:45)
+
+  > Homework 8  RefreshToken  POST -> "/auth/refresh-token": should return new 'refresh' and 'access' tokens; status 200; content: new JWT 'access' token, new JWT 'refresh' token in cookie (http only, secure);
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      74 |   getRefreshToken: (): string => {
+      75 |     const refreshToken = expect.getState().refreshToken;
+    > 76 |     expect(refreshToken).not.toBeUndefined();
+         |                              ^
+      77 |
+      78 |     return refreshToken;
+      79 |   },
+
+      at Object.getRefreshToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:76:30)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:137:40)
+
+  > Homework 8  RefreshToken  POST -> "/auth/refresh-token", "/auth/logout": should return an error if the "refresh" token has become invalid; status 401;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      80 |   getOldRefreshToken: (): string => {
+      81 |     const oldRefreshToken = expect.getState().oldRefreshToken;
+    > 82 |     expect(oldRefreshToken).not.toBeUndefined();
+         |                                 ^
+      83 |
+      84 |     return oldRefreshToken;
+      85 |   },
+
+      at Object.getOldRefreshToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:82:33)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:241:43)
+
+  > Homework 8  RefreshToken  POST -> "/auth/me": should check "access" token and return current user data; status 200; content: current user data;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      68 |   getAccessToken: (): string => {
+      69 |     const accessToken = expect.getState().accessToken;
+    > 70 |     expect(accessToken).not.toBeUndefined();
+         |                             ^
+      71 |
+      72 |     return accessToken;
+      73 |   },
+
+      at Object.getAccessToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:70:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:85:39)
+
+  > Homework 8  RefreshToken  POST -> "/auth/logout": should make the 'refresh' token invalid; status 204;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      180 |     async () => {
+      181 |       const refreshToken = expect.getState().refreshToken;
+    > 182 |       expect(refreshToken).not.toBeUndefined();
+          |                                ^
+      183 |
+      184 |       const { status: logoutResponseStatus } = await logoutRequest(refreshToken).catch((error) =>
+      185 |         handleTestError(error)
+
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:182:32)
+      at TestScheduler.scheduleTests (node_modules/@jest/core/build/TestScheduler.js:542:7)
+
+  > Homework 8  RefreshToken  POST -> "/auth/refresh-token", "/auth/logout": should return an error if the "refresh" token has become invalid; status 401;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      80 |   getOldRefreshToken: (): string => {
+      81 |     const oldRefreshToken = expect.getState().oldRefreshToken;
+    > 82 |     expect(oldRefreshToken).not.toBeUndefined();
+         |                                 ^
+      83 |
+      84 |     return oldRefreshToken;
+      85 |   },
+
+      at Object.getOldRefreshToken (src/tests/jest/back/testHelpers/jestState/usersState.ts:82:33)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:241:43)

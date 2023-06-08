@@ -57,6 +57,7 @@ exports.authRouters.post('/registration-email-resending', (req, res) => __awaite
 exports.authRouters.post('/refresh-token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const refreshToken = req.cookies.refresh_token;
     const jwtPair = yield jwt_service_1.jwtService.refreshJwtPair(refreshToken);
+    console.log(jwtPair);
     if (!jwtPair) {
         res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
         return;
