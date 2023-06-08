@@ -11,7 +11,9 @@ export interface InterfaceUserInput {
     password: string
 }
 
-
+export interface IUuid {
+    uuid: string
+}
 export interface InterfaceUserDb {
     _id: ObjectId
     login: string

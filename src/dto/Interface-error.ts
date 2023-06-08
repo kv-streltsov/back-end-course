@@ -1,6 +1,9 @@
 export interface InterfaceError {
-    errorsMessages:[{
-        message: string,
-        field: string
-    }]
+    errorsMessages:IErrorMessage[]
 }
+
+export interface IErrorMessage {
+    message: string,
+    field: string
+}
+

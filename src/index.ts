@@ -8,6 +8,7 @@ import {userRouters} from "./routes/user.routers";
 import {authRouters} from "./routes/auth.routers";
 import {commentsRouter} from "./routes/comments.routers";
 import {emailRouters} from "./routes/email.routers";
+import cookieParser from "cookie-parser";
 
 dotenv.config()
 export const app = express()
@@ -16,6 +17,7 @@ export const MONGO_URL: string | undefined = process.env.MONGO_URL
 const port = process.env.DEV_PORT || 5001
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.use('/blogs', blogRouters)
 app.use('/posts', postRouters)
@@ -37,6 +39,3 @@ const startApp = async () => {
     }
 }
 startApp()
-
-
-

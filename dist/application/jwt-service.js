@@ -48,8 +48,24 @@ exports.jwtService = {
     createJwt(user) {
         return __awaiter(this, void 0, void 0, function* () {
             return {
-                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '11h' })
+                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '100s' }),
+                "refreshToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '200s' })
             };
+        });
+    },
+    refreshJwtPair(refreshToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = jsonwebtoken_1.default.verify(refreshToken, JWT_SECRET);
+                const checkUser = yield db_mongo_1.collectionUsers.findOne({ id: result.userId });
+                if (!checkUser) {
+                    return null;
+                }
+                return this.createJwt(result.userId);
+            }
+            catch (error) {
+                return null;
+            }
         });
     },
     getUserIdByToken(token) {

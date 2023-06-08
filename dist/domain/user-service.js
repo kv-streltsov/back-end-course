@@ -48,12 +48,14 @@ exports.usersService = {
         const findUser = yield db_mongo_1.collectionUsers.findOne({ 'confirmation.code': code });
         if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return {
+                data: null,
                 "errorsMessages": [
                     {
                         "message": "confirm code error",
                         "field": "code"
                     }
-                ]
+                ],
+                isSuccess: false
             };
         }
         yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, {
@@ -62,15 +64,29 @@ exports.usersService = {
                 "confirmation.code": null
             }
         });
-        return true;
+        return { data: true, errorsMessages: null, isSuccess: true };
     }),
     reassignConfirmationCode: (email) => __awaiter(void 0, void 0, void 0, function* () {
         const findUser = yield db_mongo_1.collectionUsers.findOne({ email: email });
-        if (findUser === null) {
-            return null;
+        if (findUser === null || findUser.confirmation.wasConfirm === true) {
+            return {
+                isSuccess: false,
+                errorsMessages: [
+                    {
+                        message: "email already exist or confirmed",
+                        field: "email"
+                    }
+                ],
+                data: null
+            };
         }
-        yield db_mongo_1.collectionUsers.updateOne({ email: email }, { $set: { "confirmation.code": (0, crypto_1.randomUUID)() } });
-        return true;
+        const uuid = (0, crypto_1.randomUUID)();
+        yield db_mongo_1.collectionUsers.updateOne({ email: email }, { $set: { "confirmation.code": uuid } });
+        return {
+            data: uuid,
+            isSuccess: true,
+            errorsMessages: null
+        };
     }),
     getUserById: (userId) => __awaiter(void 0, void 0, void 0, function* () {
         return yield db_mongo_1.collectionUsers.findOne({ id: userId });

@@ -2,6 +2,7 @@ import {usersRepository} from "../repositories/users-repository";
 import bcrypt from "bcrypt";
 import {collectionUsers} from "../db/db_mongo";
 import {randomUUID} from "crypto";
+import {IResultUserService} from "../dto/interface.user.service.contract";
 
 export const usersService = {
 
@@ -35,34 +36,49 @@ export const usersService = {
 			}, uuid
 		})
 	},
-	confirmationUser: async (code: string) => {
+	confirmationUser: async (code: string): Promise<IResultUserService<boolean>> => {
 		const findUser = await collectionUsers.findOne({'confirmation.code': code})
 		if (findUser === null || findUser.confirmation.wasConfirm === true) {
 			return {
+				data: null,
 				"errorsMessages": [
 					{
 						"message": "confirm code error",
 						"field": "code"
 					}
-				]
+				],
+				isSuccess: false
 			}
 		}
-
 		await collectionUsers.updateOne({'confirmation.code': code}, {
 			$set: {
 				"confirmation.wasConfirm": true,
 				"confirmation.code": null
 			}
 		})
-		return true
+		return {data: true, errorsMessages: null, isSuccess: true}
 	},
-	reassignConfirmationCode: async (email: string) => {
+	reassignConfirmationCode: async (email: string):Promise<IResultUserService<string>> => {
 		const findUser = await collectionUsers.findOne({email: email})
-		if (findUser === null) {
-			return null
+		if (findUser === null || findUser.confirmation.wasConfirm === true) {
+			return {
+				isSuccess: false,
+				errorsMessages: [
+					{
+						message: "email already exist or confirmed",
+						field: "email"
+					}
+				],
+				data: null
+			}
 		}
-		await collectionUsers.updateOne({email: email}, {$set: {"confirmation.code": randomUUID()}})
-		return true
+		const uuid: string = randomUUID()
+		await collectionUsers.updateOne({email: email}, {$set: {"confirmation.code": uuid}})
+		return {
+			data: uuid,
+			isSuccess: true,
+			errorsMessages: null
+		}
 
 	},
 	getUserById: async (userId: string) => {

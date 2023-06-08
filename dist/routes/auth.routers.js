@@ -18,8 +18,6 @@ const user_service_1 = require("../domain/user-service");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const user_input_validations_1 = require("../middleware/validation/user-input-validations");
 const email_service_1 = require("../domain/email-service");
-const db_mongo_1 = require("../db/db_mongo");
-const email_resending_validations_1 = require("../middleware/validation/email-resending-validations");
 exports.authRouters = (0, express_1.Router)({});
 exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield user_service_1.usersService.checkUser(req.body.loginOrEmail, req.body.password);
@@ -28,7 +26,10 @@ exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (
     }
     if (userAuth) {
         const token = yield jwt_service_1.jwtService.createJwt(userAuth);
-        res.status(interface_html_code_1.HttpStatusCode.OK).send(token);
+        res.cookie('refresh_token', token.refreshToken, { httpOnly: true, secure: true });
+        res.status(interface_html_code_1.HttpStatusCode.OK).send({
+            "accessToken": token.accessToken
+        });
     }
 }));
 exports.authRouters.post('/registration', user_input_validations_1.createUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,21 +39,32 @@ exports.authRouters.post('/registration', user_input_validations_1.createUserVal
 }));
 exports.authRouters.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.usersService.confirmationUser(req.body.code);
-    if (result !== true) {
-        res.status(interface_html_code_1.HttpStatusCode.BAD_REQUEST).send(result);
+    if (!result.isSuccess) {
+        res.status(interface_html_code_1.HttpStatusCode.BAD_REQUEST).send(result.errorsMessages);
         return;
     }
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.post('/registration-email-resending', email_resending_validations_1.emailResendingValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouters.post('/registration-email-resending', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.usersService.reassignConfirmationCode(req.body.email);
-    const findUser = yield db_mongo_1.collectionUsers.findOne({ email: req.body.email });
-    if (result === null || findUser === null) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+    if (!result.isSuccess) {
+        res.status(interface_html_code_1.HttpStatusCode.BAD_REQUEST).json(result.errorsMessages);
         return;
     }
-    yield email_service_1.emailService.sendMailRegistration(req.body.email, findUser.confirmation.code);
+    yield email_service_1.emailService.sendMailRegistration(req.body.email, result.data);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
+}));
+exports.authRouters.post('/refresh-token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const refreshToken = req.cookies.refresh_token;
+    const jwtPair = yield jwt_service_1.jwtService.refreshJwtPair(refreshToken);
+    if (!jwtPair) {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
+        return;
+    }
+    res.cookie('refresh_token', jwtPair.refreshToken, { httpOnly: true, secure: true });
+    res.status(interface_html_code_1.HttpStatusCode.OK).send({
+        "accessToken": jwtPair.accessToken
+    });
 }));
 exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = {
