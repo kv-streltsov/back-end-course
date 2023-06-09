@@ -8,7 +8,6 @@ import {RequestWithBody} from "../dto/interface.request";
 import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput, IUuid} from "../dto/interface.user";
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
-import {collectionExpiredTokens} from "../db/db_mongo";
 import * as dotenv from "dotenv";
 
 dotenv.config()
@@ -24,7 +23,6 @@ authRouters.post('/login', authUserValidation, async (req: RequestWithBody<Inter
 
 	if (userAuth) {
 		const token = await jwtService.createJwt(userAuth)
-
 		res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
 		res.status(HttpStatusCode.OK).send({
 			"accessToken": token.accessToken
@@ -61,7 +59,10 @@ authRouters.post('/refresh-token', async (req: Request, res: Response) => {
 		res.sendStatus(HttpStatusCode.UNAUTHORIZED)
 		return
 	}
-	res.cookie('refresh_token', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE as unknown as boolean})
+
+	res.cookie('refresh_token',
+		{"refreshToken": jwtPair.refreshToken},
+		{httpOnly: true, secure: COOKIE_SECURE as unknown as boolean})
 	res.status(HttpStatusCode.OK).send({
 		"accessToken": jwtPair.accessToken
 	})

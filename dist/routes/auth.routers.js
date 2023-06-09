@@ -87,7 +87,7 @@ exports.authRouters.post('/refresh-token', (req, res) => __awaiter(void 0, void 
         res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
         return;
     }
-    res.cookie('refresh_token', jwtPair.refreshToken, { httpOnly: true, secure: exports.COOKIE_SECURE });
+    res.cookie('refresh_token', { "refreshToken": jwtPair.refreshToken }, { httpOnly: true, secure: exports.COOKIE_SECURE });
     res.status(interface_html_code_1.HttpStatusCode.OK).send({
         "accessToken": jwtPair.accessToken
     });
