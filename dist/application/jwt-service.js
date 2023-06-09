@@ -41,15 +41,17 @@ const dotenv = __importStar(require("dotenv"));
 const db_mongo_1 = require("../db/db_mongo");
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-    throw new Error('not found jwt secret');
+const JWT_ACCESS_EXPIRES = process.env.JWT_ACCESS_EXPIRES;
+const JWT_REFRESH_EXPIRES = process.env.JWT_REFRESH_EXPIRES;
+if (!JWT_SECRET || !JWT_REFRESH_EXPIRES || !JWT_ACCESS_EXPIRES) {
+    throw new Error('not found something jwt env');
 }
 exports.jwtService = {
     createJwt(user) {
         return __awaiter(this, void 0, void 0, function* () {
             return {
-                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '10s' }),
-                "refreshToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '20s' })
+                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_ACCESS_EXPIRES }),
+                "refreshToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES })
             };
         });
     },
@@ -58,10 +60,29 @@ exports.jwtService = {
             try {
                 const result = jsonwebtoken_1.default.verify(refreshToken, JWT_SECRET);
                 const checkUser = yield db_mongo_1.collectionUsers.findOne({ id: result.userId });
-                if (!checkUser) {
+                const checkRefreshToken = yield db_mongo_1.collectionExpiredTokens.findOne({ expiredToken: refreshToken });
+                if (!checkUser || checkRefreshToken) {
                     return null;
                 }
+                yield db_mongo_1.collectionExpiredTokens.insertOne({ userId: result.userId, expiredToken: refreshToken });
                 return this.createJwt(result.userId);
+            }
+            catch (error) {
+                return null;
+            }
+        });
+    },
+    revokeRefreshToken(refreshToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = jsonwebtoken_1.default.verify(refreshToken, JWT_SECRET);
+                const checkUser = yield db_mongo_1.collectionUsers.findOne({ id: result.userId });
+                const checkRefreshToken = yield db_mongo_1.collectionExpiredTokens.findOne({ expiredToken: refreshToken });
+                if (!checkUser || checkRefreshToken) {
+                    return null;
+                }
+                yield db_mongo_1.collectionExpiredTokens.insertOne({ userId: result.userId, expiredToken: refreshToken });
+                return true;
             }
             catch (error) {
                 return null;

@@ -8,7 +8,11 @@ import {RequestWithBody} from "../dto/interface.request";
 import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput, IUuid} from "../dto/interface.user";
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
+import {collectionExpiredTokens} from "../db/db_mongo";
+import * as dotenv from "dotenv";
 
+dotenv.config()
+export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
 
 export const authRouters = Router({})
 
@@ -20,14 +24,12 @@ authRouters.post('/login', authUserValidation, async (req: RequestWithBody<Inter
 
 	if (userAuth) {
 		const token = await jwtService.createJwt(userAuth)
-		res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: true})
 
+		res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
 		res.status(HttpStatusCode.OK).send({
 			"accessToken": token.accessToken
 		})
 	}
-
-
 })
 authRouters.post('/registration', createUserValidation, async (req: RequestWithBody<InterfaceUserInput>, res: Response) => {
 	const createdUser = await usersService.postUser(req.body.login, req.body.email, req.body.password)
@@ -53,18 +55,27 @@ authRouters.post('/registration-email-resending', async (req: RequestWithBody<IE
 	res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/refresh-token', async (req: Request, res: Response) => {
-	const refreshToken: string = req.cookies
-	console.log(refreshToken)
+	const refreshToken: string = req.cookies.refreshToken
 	const jwtPair = await jwtService.refreshJwtPair(refreshToken)
-	console.log(jwtPair)
 	if (!jwtPair) {
 		res.sendStatus(HttpStatusCode.UNAUTHORIZED)
 		return
 	}
-	res.cookie('refresh_token', jwtPair.refreshToken, {httpOnly: true, secure: true})
+	res.cookie('refresh_token', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE as unknown as boolean})
 	res.status(HttpStatusCode.OK).send({
 		"accessToken": jwtPair.accessToken
 	})
+
+})
+authRouters.post('/logout', async (req: Request, res: Response) => {
+	const refreshToken: string = req.cookies.refreshToken
+	const result = await jwtService.revokeRefreshToken(refreshToken)
+	if (!result) {
+		res.sendStatus(HttpStatusCode.UNAUTHORIZED)
+		return
+	}
+	res.sendStatus(HttpStatusCode.NO_CONTENT)
+
 
 })
 authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
