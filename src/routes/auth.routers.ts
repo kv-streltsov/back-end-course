@@ -9,6 +9,7 @@ import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput, IUuid} 
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
 import * as dotenv from "dotenv";
+import {collectionUsers} from "../db/db_mongo";
 
 dotenv.config()
 export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
@@ -59,6 +60,7 @@ authRouters.post('/refresh-token', async (req: Request, res: Response) => {
 		res.sendStatus(HttpStatusCode.UNAUTHORIZED)
 		return
 	}
+	console.log(refreshToken)
 	console.log({"refreshToken": jwtPair.refreshToken})
 	res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
 	res.status(HttpStatusCode.OK).send({
@@ -77,11 +79,16 @@ authRouters.post('/logout', async (req: Request, res: Response) => {
 
 
 })
-authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
-	const user = {
-		"email": req.user.email,
-		"login": req.user.login,
-		"userId": req.user.id
+authRouters.get('/me', async (req: Request, res: Response) => {
+	const userId = await jwtService.getUserIdByToken(req.body.accessToken)
+	const user = await collectionUsers.findOne({id: userId})
+	if (!user) {
+		res.sendStatus(HttpStatusCode.UNAUTHORIZED)
+		return
 	}
-	res.status(200).send(user)
+	res.status(200).json({
+		"email": user.email,
+		"login": user.login,
+		"userId": user.id
+	})
 })

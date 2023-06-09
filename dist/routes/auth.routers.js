@@ -38,10 +38,10 @@ const interface_html_code_1 = require("../dto/interface.html-code");
 const user_auth_validations_1 = require("../middleware/validation/user-auth-validations");
 const jwt_service_1 = require("../application/jwt-service");
 const user_service_1 = require("../domain/user-service");
-const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const user_input_validations_1 = require("../middleware/validation/user-input-validations");
 const email_service_1 = require("../domain/email-service");
 const dotenv = __importStar(require("dotenv"));
+const db_mongo_1 = require("../db/db_mongo");
 dotenv.config();
 exports.COOKIE_SECURE = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
 exports.authRouters = (0, express_1.Router)({});
@@ -87,6 +87,7 @@ exports.authRouters.post('/refresh-token', (req, res) => __awaiter(void 0, void 
         res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
         return;
     }
+    console.log(refreshToken);
     console.log({ "refreshToken": jwtPair.refreshToken });
     res.cookie('refreshToken', jwtPair.refreshToken, { httpOnly: true, secure: exports.COOKIE_SECURE });
     res.status(interface_html_code_1.HttpStatusCode.OK).send({
@@ -102,12 +103,17 @@ exports.authRouters.post('/logout', (req, res) => __awaiter(void 0, void 0, void
     }
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = {
-        "email": req.user.email,
-        "login": req.user.login,
-        "userId": req.user.id
-    };
-    res.status(200).send(user);
+exports.authRouters.get('/me', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = yield jwt_service_1.jwtService.getUserIdByToken(req.body.accessToken);
+    const user = yield db_mongo_1.collectionUsers.findOne({ id: userId });
+    if (!user) {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
+        return;
+    }
+    res.status(200).json({
+        "email": user.email,
+        "login": user.login,
+        "userId": user.id
+    });
 }));
 //# sourceMappingURL=auth.routers.js.map
