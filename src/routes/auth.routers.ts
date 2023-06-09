@@ -22,10 +22,10 @@ authRouters.post('/login', authUserValidation, async (req: RequestWithBody<Inter
 	}
 
 	if (userAuth) {
-		const token = await jwtService.createJwt(userAuth)
-		res.cookie('refreshToken', token.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
+		const jwtPair = await jwtService.createJwt(userAuth)
+		res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
 		res.status(HttpStatusCode.OK).send({
-			"accessToken": token.accessToken
+			"accessToken": jwtPair.accessToken
 		})
 	}
 })
@@ -59,10 +59,8 @@ authRouters.post('/refresh-token', async (req: Request, res: Response) => {
 		res.sendStatus(HttpStatusCode.UNAUTHORIZED)
 		return
 	}
-
-	res.cookie('refresh_token',
-		{"refreshToken": jwtPair.refreshToken},
-		{httpOnly: true, secure: COOKIE_SECURE as unknown as boolean})
+	console.log({"refreshToken": jwtPair.refreshToken})
+	res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
 	res.status(HttpStatusCode.OK).send({
 		"accessToken": jwtPair.accessToken
 	})
