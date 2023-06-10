@@ -19,37 +19,6 @@ export const jwtService = {
 			"refreshToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: JWT_REFRESH_EXPIRES})
 		}
 	},
-	async refreshJwtPair(refreshToken: string) {
-		try {
-			const result: any = jwt.verify(refreshToken, JWT_SECRET)
-			const checkUser = await collectionUsers.findOne({id: result.userId})
-			if(!checkUser) return null
-			const checkRefreshToken = await collectionExpiredTokens.findOne({expiredToken: refreshToken})
-			if (checkRefreshToken) return null
-			await collectionExpiredTokens.insertOne({userId: result.userId, expiredToken: refreshToken})
-			return this.createJwt(result.userId)
-
-		} catch (error) {
-			return null
-		}
-
-	},
-	async revokeRefreshToken(refreshToken: string) {
-		try {
-			const result: any = jwt.verify(refreshToken, JWT_SECRET)
-			const checkUser = await collectionUsers.findOne({id: result.userId})
-			const checkRefreshToken = await collectionExpiredTokens.findOne({expiredToken: refreshToken})
-			if (!checkUser || checkRefreshToken){
-				return null
-			}
-			await collectionExpiredTokens.insertOne({userId: result.userId, expiredToken: refreshToken})
-			return true
-
-		} catch (error) {
-			return null
-		}
-
-	},
 	async getUserIdByToken(token: string) {
 		try {
 			const result: any = jwt.verify(token, JWT_SECRET)
@@ -64,5 +33,4 @@ export const jwtService = {
 			return null
 		}
 	}
-
 }

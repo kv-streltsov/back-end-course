@@ -5,8 +5,6 @@ import {collectionExpiredTokens, collectionUsers} from "../db/db_mongo";
 
 export const refreshTokenMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 
-	console.log(req.cookies.refreshToken.length)
-
 	const refreshToken = req.cookies.refreshToken
 	if (!refreshToken) return res.sendStatus(401)
 

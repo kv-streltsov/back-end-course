@@ -55,41 +55,6 @@ exports.jwtService = {
             };
         });
     },
-    refreshJwtPair(refreshToken) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = jsonwebtoken_1.default.verify(refreshToken, JWT_SECRET);
-                const checkUser = yield db_mongo_1.collectionUsers.findOne({ id: result.userId });
-                if (!checkUser)
-                    return null;
-                const checkRefreshToken = yield db_mongo_1.collectionExpiredTokens.findOne({ expiredToken: refreshToken });
-                if (checkRefreshToken)
-                    return null;
-                yield db_mongo_1.collectionExpiredTokens.insertOne({ userId: result.userId, expiredToken: refreshToken });
-                return this.createJwt(result.userId);
-            }
-            catch (error) {
-                return null;
-            }
-        });
-    },
-    revokeRefreshToken(refreshToken) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const result = jsonwebtoken_1.default.verify(refreshToken, JWT_SECRET);
-                const checkUser = yield db_mongo_1.collectionUsers.findOne({ id: result.userId });
-                const checkRefreshToken = yield db_mongo_1.collectionExpiredTokens.findOne({ expiredToken: refreshToken });
-                if (!checkUser || checkRefreshToken) {
-                    return null;
-                }
-                yield db_mongo_1.collectionExpiredTokens.insertOne({ userId: result.userId, expiredToken: refreshToken });
-                return true;
-            }
-            catch (error) {
-                return null;
-            }
-        });
-    },
     getUserIdByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

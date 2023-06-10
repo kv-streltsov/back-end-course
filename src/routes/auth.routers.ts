@@ -63,19 +63,6 @@ authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, 
 		"accessToken": jwtPair.accessToken
 	})
 
-
-
-	// const refreshToken: string = req.cookies.refreshToken
-	// const jwtPair = await jwtService.refreshJwtPair(refreshToken)
-	// if (!jwtPair) {
-	// 	res.sendStatus(HttpStatusCode.UNAUTHORIZED)
-	// 	return
-	// }
-	// res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
-	// res.status(HttpStatusCode.OK).send({
-	// 	"accessToken": jwtPair.accessToken
-	// })
-
 })
 authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Response) => {
 	res.sendStatus(HttpStatusCode.NO_CONTENT)

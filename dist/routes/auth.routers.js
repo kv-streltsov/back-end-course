@@ -88,16 +88,6 @@ exports.authRouters.post('/refresh-token', refresh_token_middleware_1.refreshTok
     return res.status(interface_html_code_1.HttpStatusCode.OK).send({
         "accessToken": jwtPair.accessToken
     });
-    // const refreshToken: string = req.cookies.refreshToken
-    // const jwtPair = await jwtService.refreshJwtPair(refreshToken)
-    // if (!jwtPair) {
-    // 	res.sendStatus(HttpStatusCode.UNAUTHORIZED)
-    // 	return
-    // }
-    // res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
-    // res.status(HttpStatusCode.OK).send({
-    // 	"accessToken": jwtPair.accessToken
-    // })
 }));
 exports.authRouters.post('/logout', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
