@@ -38,25 +38,27 @@ const interface_html_code_1 = require("../dto/interface.html-code");
 const user_auth_validations_1 = require("../middleware/validation/user-auth-validations");
 const jwt_service_1 = require("../application/jwt-service");
 const user_service_1 = require("../domain/user-service");
+const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const user_input_validations_1 = require("../middleware/validation/user-input-validations");
 const email_service_1 = require("../domain/email-service");
 const dotenv = __importStar(require("dotenv"));
-const db_mongo_1 = require("../db/db_mongo");
+const refresh_token_middleware_1 = require("../middleware/refresh-token-middleware");
 dotenv.config();
 exports.COOKIE_SECURE = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
 exports.authRouters = (0, express_1.Router)({});
 exports.authRouters.post('/login', user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield user_service_1.usersService.checkUser(req.body.loginOrEmail, req.body.password);
-    if (userAuth === null || userAuth === false) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
+    if (!userAuth) {
+        return res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
     }
     if (userAuth) {
         const jwtPair = yield jwt_service_1.jwtService.createJwt(userAuth);
         res.cookie('refreshToken', jwtPair.refreshToken, { httpOnly: true, secure: exports.COOKIE_SECURE });
-        res.status(interface_html_code_1.HttpStatusCode.OK).send({
+        return res.status(interface_html_code_1.HttpStatusCode.OK).send({
             "accessToken": jwtPair.accessToken
         });
     }
+    return;
 }));
 exports.authRouters.post('/registration', user_input_validations_1.createUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdUser = yield user_service_1.usersService.postUser(req.body.login, req.body.email, req.body.password);
@@ -80,40 +82,31 @@ exports.authRouters.post('/registration-email-resending', (req, res) => __awaite
     yield email_service_1.emailService.sendMailRegistration(req.body.email, result.data);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.post('/refresh-token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const refreshToken = req.cookies.refreshToken;
-    const jwtPair = yield jwt_service_1.jwtService.refreshJwtPair(refreshToken);
-    if (!jwtPair) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
-        return;
-    }
-    console.log(refreshToken);
-    console.log({ "refreshToken": jwtPair.refreshToken });
+exports.authRouters.post('/refresh-token', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const jwtPair = yield jwt_service_1.jwtService.createJwt(req.user);
     res.cookie('refreshToken', jwtPair.refreshToken, { httpOnly: true, secure: exports.COOKIE_SECURE });
-    res.status(interface_html_code_1.HttpStatusCode.OK).send({
+    return res.status(interface_html_code_1.HttpStatusCode.OK).send({
         "accessToken": jwtPair.accessToken
     });
+    // const refreshToken: string = req.cookies.refreshToken
+    // const jwtPair = await jwtService.refreshJwtPair(refreshToken)
+    // if (!jwtPair) {
+    // 	res.sendStatus(HttpStatusCode.UNAUTHORIZED)
+    // 	return
+    // }
+    // res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
+    // res.status(HttpStatusCode.OK).send({
+    // 	"accessToken": jwtPair.accessToken
+    // })
 }));
-exports.authRouters.post('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const refreshToken = req.cookies.refreshToken;
-    const result = yield jwt_service_1.jwtService.revokeRefreshToken(refreshToken);
-    if (!result) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
-        return;
-    }
+exports.authRouters.post('/logout', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.get('/me', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = yield jwt_service_1.jwtService.getUserIdByToken(req.body.accessToken);
-    const user = yield db_mongo_1.collectionUsers.findOne({ id: userId });
-    if (!user) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);
-        return;
-    }
+exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({
-        "email": user.email,
-        "login": user.login,
-        "userId": user.id
+        "email": req.user.email,
+        "login": req.user.login,
+        "userId": req.user.id
     });
 }));
 //# sourceMappingURL=auth.routers.js.map

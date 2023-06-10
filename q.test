@@ -1,4 +1,30 @@
+  > Homework 8  RefreshToken  POST -> "/auth/me": should check "access" token and return current user data; status 200; content: current user data;
 
+
+
+    Expected: success response
+
+    Received: Request failed with status code 401
+
+    Config:
+     url: auth/me
+     method: get
+     response status: 401
+     request body: undefined
+     response data: "Unauthorized"
+
+      22 |     };
+      23 |
+    > 24 |     expect(mappedError).printError(description);
+         |                         ^
+      25 |   }
+      26 |
+      27 |   throw new Error(error.message);
+
+      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
+      at src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:88:35
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:87:66)
 
   > Homework 8  RefreshToken  POST -> "/auth/logout": should make the 'refresh' token invalid; status 204;
 
@@ -25,4 +51,5 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:185:24
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:184:48)

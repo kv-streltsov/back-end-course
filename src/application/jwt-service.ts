@@ -23,10 +23,9 @@ export const jwtService = {
 		try {
 			const result: any = jwt.verify(refreshToken, JWT_SECRET)
 			const checkUser = await collectionUsers.findOne({id: result.userId})
+			if(!checkUser) return null
 			const checkRefreshToken = await collectionExpiredTokens.findOne({expiredToken: refreshToken})
-			if (!checkUser || checkRefreshToken){
-				return null
-			}
+			if (checkRefreshToken) return null
 			await collectionExpiredTokens.insertOne({userId: result.userId, expiredToken: refreshToken})
 			return this.createJwt(result.userId)
 

@@ -60,10 +60,11 @@ exports.jwtService = {
             try {
                 const result = jsonwebtoken_1.default.verify(refreshToken, JWT_SECRET);
                 const checkUser = yield db_mongo_1.collectionUsers.findOne({ id: result.userId });
-                const checkRefreshToken = yield db_mongo_1.collectionExpiredTokens.findOne({ expiredToken: refreshToken });
-                if (!checkUser || checkRefreshToken) {
+                if (!checkUser)
                     return null;
-                }
+                const checkRefreshToken = yield db_mongo_1.collectionExpiredTokens.findOne({ expiredToken: refreshToken });
+                if (checkRefreshToken)
+                    return null;
                 yield db_mongo_1.collectionExpiredTokens.insertOne({ userId: result.userId, expiredToken: refreshToken });
                 return this.createJwt(result.userId);
             }

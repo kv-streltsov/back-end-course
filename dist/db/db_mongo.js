@@ -66,6 +66,7 @@ function clear_db_mongo() {
         yield exports.collectionPosts.deleteMany({});
         yield exports.collectionUsers.deleteMany({});
         yield exports.collectionComments.deleteMany({});
+        yield exports.collectionExpiredTokens.deleteMany({});
         return true;
     });
 }

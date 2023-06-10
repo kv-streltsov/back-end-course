@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv'
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {jwtService} from "../application/jwt-service";
 import {usersService} from "../domain/user-service";
+import {log} from "util";
 
 dotenv.config()
 

@@ -1,5 +1,7 @@
 import request from 'supertest'
 import {app} from "../src";
+import {usersRepository} from "../src/repositories/users-repository";
+import {collectionUsers} from "../src/db/db_mongo";
 
 
 describe('/blogs', () => {
@@ -10,6 +12,14 @@ describe('/blogs', () => {
         password: "qwerty1",
         email: "clampbeer@google.ru"
     }
+
+    it('should wipe all data', async () => {
+        const response = await request(app).delete('/testing/all-data')
+
+        expect(response.status).toBe(204)
+        const userCount = await collectionUsers.countDocuments()
+        expect(userCount).toBe(0)
+    });
 
     it('should return 201 and created user', async () => {
         await request(app)

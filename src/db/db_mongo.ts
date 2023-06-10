@@ -32,6 +32,7 @@ export async function clear_db_mongo(): Promise<boolean> {
     await collectionPosts.deleteMany({})
     await collectionUsers.deleteMany({})
     await collectionComments.deleteMany({})
+    await collectionExpiredTokens.deleteMany({})
 
     return true
 }
