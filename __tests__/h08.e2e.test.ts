@@ -12,16 +12,14 @@ const user: InterfaceUserInput = {
 let accessToken: any
 let refreshToken: any
 
-let testCook:any
 
 describe('/08', () => {
-
+	/////////////////////////////    PREPARATION    /////////////////////////////////////////
 	it('should delete all data', async () => {
 		await request(app)
 			.delete('/testing/all-data')
 			.expect(204)
 	});
-
 	it('USERS CREATE | should return 201 and created user', async () => {
 		await request(app)
 			.post('/users')
@@ -29,7 +27,9 @@ describe('/08', () => {
 			.send(user)
 			.expect(201)
 	});
-	it('LOGIN IN | should return JWT Pair and status 200', async () => {
+
+	/////////////////////////////     TOKEN FLOW   //////////////////////////////////////////
+	it('LOGIN         | should return JWT Pair      | status 200', async () => {
 		const response = await request(app)
 			.post('/auth/login')
 			.send({
@@ -39,19 +39,70 @@ describe('/08', () => {
 			.expect(200)
 
 		accessToken = response.body.accessToken
-		refreshToken = response.headers["set-cookie"][0].split(';')[0].slice(13)
-		testCook = response.headers["set-cookie"]
+		refreshToken = response.headers["set-cookie"]
 	});
-
-	it('REFRESH TOKEN | should return JWT Pair and status 200', async () => {
+	it('REFRESH TOKEN | should return JWT Pair      | status 200', async () => {
 		const response = await request(app)
 			.post('/auth/refresh-token')
-			.set('Cookie', [testCook])
+			.set('Cookie', [refreshToken])
+			.expect(200)
+
+		refreshToken = response.headers["set-cookie"]
+
+
+	});
+	it('LOGOUT        | should expired refreshToken | status 204', async () => {
+		const response = await request(app)
+			.post('/auth/refresh-token')
+			.set('Cookie', [refreshToken])
 			.expect(200)
 
 	});
+	/////////////////////////////    ERROR TOKEN FLOW   //////////////////////////////////////
+	it('LOGIN         | incorrect login      | should return 401', async () => {
+		await request(app)
+			.post('/auth/login')
+			.send({
+				"loginOrEmail": 'bad_login',
+				"password": user.password
+			})
+			.expect(401)
+	});
+	it('LOGIN         | incorrect password   | should return 401', async () => {
+		await request(app)
+			.post('/auth/login')
+			.send({
+				"loginOrEmail": user.email,
+				"password": 'bad_password'
+			})
+			.expect(401)
+	});
+	it('REFRESH TOKEN | expired refreshToken | should return 401', async () => {
+		await request(app)
+			.post('/auth/refresh-token')
+			.set('Cookie', [refreshToken])
+			.expect(401)
 
 
+	});
+	it('REFRESH TOKEN | empty cookies        | should return 401', async () => {
+		await request(app)
+			.post('/auth/refresh-token')
+			.expect(401)
+	});
+	it('LOGOUT        | expired refreshToken | should return 401', async () => {
+		const response = await request(app)
+			.post('/auth/refresh-token')
+			.set('Cookie', [refreshToken])
+			.expect(401)
+
+	});
+	it('LOGOUT        | empty cookies        | should return 401', async () => {
+		const response = await request(app)
+			.post('/auth/refresh-token')
+			.expect(401)
+
+	});
 })
 
 

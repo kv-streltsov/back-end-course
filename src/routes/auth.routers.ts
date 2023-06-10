@@ -9,7 +9,6 @@ import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput, IUuid} 
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
 import * as dotenv from "dotenv";
-import {collectionUsers} from "../db/db_mongo";
 import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
 
 dotenv.config()
@@ -17,6 +16,7 @@ export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false
 
 export const authRouters = Router({})
 
+///////////////////////////////////////////////  TOKEN FLOW     ////////////////////////////////////////////////////////
 authRouters.post('/login', authUserValidation, async (req: RequestWithBody<InterfaceUserAuthPost>, res: Response) => {
 	const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
 	if (!userAuth) {
@@ -32,6 +32,20 @@ authRouters.post('/login', authUserValidation, async (req: RequestWithBody<Inter
 	}
 	return
 })
+authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Response) => {
+	res.sendStatus(HttpStatusCode.NO_CONTENT)
+})
+authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {
+
+	const jwtPair = await jwtService.createJwt(req.user)
+	res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
+	return res.status(HttpStatusCode.OK).send({
+		"accessToken": jwtPair.accessToken
+	})
+
+})
+
+///////////////////////////////////////////  REGISTRATION FLOW     /////////////////////////////////////////////////////
 authRouters.post('/registration', createUserValidation, async (req: RequestWithBody<InterfaceUserInput>, res: Response) => {
 	const createdUser = await usersService.postUser(req.body.login, req.body.email, req.body.password)
 	await emailService.sendMailRegistration(createdUser.createdUser.email, createdUser.uuid)
@@ -55,18 +69,7 @@ authRouters.post('/registration-email-resending', async (req: RequestWithBody<IE
 	await emailService.sendMailRegistration(req.body.email, result.data!)
 	res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {
 
-	const jwtPair = await jwtService.createJwt(req.user)
-	res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
-	return res.status(HttpStatusCode.OK).send({
-		"accessToken": jwtPair.accessToken
-	})
-
-})
-authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Response) => {
-	res.sendStatus(HttpStatusCode.NO_CONTENT)
-})
 authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
 
 	res.status(200).json({
