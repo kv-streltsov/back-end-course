@@ -44,5 +44,23 @@ export const jwtService = {
 		} catch (error) {
 			return null
 		}
+	},
+	async getDevisesByToken(token: string) {
+		try {
+			const result: any = jwt.verify(token, JWT_SECRET)
+			const devises = await collectionDevicesSessions.find({userId: result.userId}).toArray()
+			if (!devises) {
+				return null
+			}
+
+			return devises
+
+		} catch (error) {
+			return null
+		}
+	},
+	async logout(token: string){
+		const tokenDecode: any = jwt.decode(token)
+		return await jwtRepository.deleteDeviceSession(tokenDecode.deviceId)
 	}
 }

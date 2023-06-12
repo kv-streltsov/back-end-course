@@ -4,3 +4,11 @@ export interface IDevice {
 	iat: number
 	exp: number
 }
+
+export interface IDeviceView {
+	ip: string
+	title: string
+	lastActiveDate: string
+	deviceId: string
+}
+

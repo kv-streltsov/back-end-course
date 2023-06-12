@@ -64,6 +64,7 @@ exports.authRouters.post('/login', rate_limit_middleware_1.rateCountLimitMiddlew
     return;
 }));
 exports.authRouters.post('/logout', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield jwt_service_1.jwtService.logout(req.cookies.refreshToken);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
 exports.authRouters.post('/refresh-token', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

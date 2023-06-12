@@ -77,6 +77,27 @@ exports.jwtService = {
                 return null;
             }
         });
+    },
+    getDevisesByToken(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+                const devises = yield db_mongo_1.collectionDevicesSessions.find({ userId: result.userId }).toArray();
+                if (!devises) {
+                    return null;
+                }
+                return devises;
+            }
+            catch (error) {
+                return null;
+            }
+        });
+    },
+    logout(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tokenDecode = jsonwebtoken_1.default.decode(token);
+            return yield jwt_repository_1.jwtRepository.deleteDeviceSession(tokenDecode.deviceId);
+        });
     }
 };
 //# sourceMappingURL=jwt-service.js.map
