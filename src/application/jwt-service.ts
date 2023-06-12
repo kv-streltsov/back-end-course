@@ -1,6 +1,9 @@
 import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
-import {collectionExpiredTokens, collectionUsers} from "../db/db_mongo";
+import {collectionDevicesSessions, collectionUsers} from "../db/db_mongo";
+import {randomUUID} from "crypto";
+import {jwtRepository} from "../repositories/jwt-repository";
+import {IDevice} from "../dto/interface.device";
 
 dotenv.config()
 
@@ -13,11 +16,20 @@ if (!JWT_SECRET || !JWT_REFRESH_EXPIRES || !JWT_ACCESS_EXPIRES) {
 }
 
 export const jwtService = {
-	async createJwt(user: any) {
-		return {
+	async createJwt(user: any, userAgent: string = 'someDevice', ip: string | string[] | undefined) {
+
+		const tokenPair = {
 			"accessToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: JWT_ACCESS_EXPIRES}),
-			"refreshToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: JWT_REFRESH_EXPIRES})
+			"refreshToken": jwt.sign({
+				userId: user.id,
+				deviceId: randomUUID()
+			}, JWT_SECRET, {expiresIn: JWT_REFRESH_EXPIRES})
 		}
+
+		const jwtPayload: any = jwt.decode(tokenPair.refreshToken)
+		await jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip)
+
+		return tokenPair
 	},
 	async getUserIdByToken(token: string) {
 		try {

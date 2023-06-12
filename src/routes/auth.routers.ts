@@ -5,11 +5,12 @@ import {jwtService} from "../application/jwt-service";
 import {usersService} from "../domain/user-service";
 import {authMiddleware} from "../middleware/jwt-auth-middleware";
 import {RequestWithBody} from "../dto/interface.request";
-import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput, IUuid} from "../dto/interface.user";
+import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput} from "../dto/interface.user";
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
-import * as dotenv from "dotenv";
 import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
+import {rateCountLimitMiddleware} from "../middleware/rate-limit-middleware";
+import * as dotenv from "dotenv";
 
 dotenv.config()
 export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
@@ -17,14 +18,16 @@ export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false
 export const authRouters = Router({})
 
 ///////////////////////////////////////////////  TOKEN FLOW     ////////////////////////////////////////////////////////
-authRouters.post('/login', authUserValidation, async (req: RequestWithBody<InterfaceUserAuthPost>, res: Response) => {
+authRouters.post('/login', rateCountLimitMiddleware, authUserValidation, async (req: RequestWithBody<InterfaceUserAuthPost>, res: Response) => {
+
 	const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
 	if (!userAuth) {
 		return res.sendStatus(HttpStatusCode.UNAUTHORIZED)
 	}
 
 	if (userAuth) {
-		const jwtPair = await jwtService.createJwt(userAuth)
+		const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+		const jwtPair = await jwtService.createJwt(userAuth, req.headers["user-agent"],ip)
 		res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
 		return res.status(HttpStatusCode.OK).send({
 			"accessToken": jwtPair.accessToken
@@ -37,7 +40,8 @@ authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Re
 })
 authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {
 
-	const jwtPair = await jwtService.createJwt(req.user)
+	const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+	const jwtPair = await jwtService.createJwt(req.user,req.headers["user-agent"],ip)
 	res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
 	return res.status(HttpStatusCode.OK).send({
 		"accessToken": jwtPair.accessToken
@@ -69,7 +73,6 @@ authRouters.post('/registration-email-resending', async (req: RequestWithBody<IE
 	await emailService.sendMailRegistration(req.body.email, result.data!)
 	res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-
 authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
 
 	res.status(200).json({

@@ -39,6 +39,8 @@ exports.jwtService = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
 const db_mongo_1 = require("../db/db_mongo");
+const crypto_1 = require("crypto");
+const jwt_repository_1 = require("../repositories/jwt-repository");
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_ACCESS_EXPIRES = process.env.JWT_ACCESS_EXPIRES;
@@ -47,12 +49,18 @@ if (!JWT_SECRET || !JWT_REFRESH_EXPIRES || !JWT_ACCESS_EXPIRES) {
     throw new Error('not found something jwt env');
 }
 exports.jwtService = {
-    createJwt(user) {
+    createJwt(user, userAgent = 'someDevice', ip) {
         return __awaiter(this, void 0, void 0, function* () {
-            return {
+            const tokenPair = {
                 "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_ACCESS_EXPIRES }),
-                "refreshToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES })
+                "refreshToken": jsonwebtoken_1.default.sign({
+                    userId: user.id,
+                    deviceId: (0, crypto_1.randomUUID)()
+                }, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES })
             };
+            const jwtPayload = jsonwebtoken_1.default.decode(tokenPair.refreshToken);
+            yield jwt_repository_1.jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip);
+            return tokenPair;
         });
     },
     getUserIdByToken(token) {
