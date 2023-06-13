@@ -9,7 +9,6 @@ import {authRouters} from "./routes/auth.routers";
 import {commentsRouter} from "./routes/comments.routers";
 import {emailRouters} from "./routes/email.routers";
 import cookieParser from "cookie-parser";
-import {rateInsertLimitMiddleware} from "./middleware/rate-isert-limit-middleware";
 import {securityDevicesRouters} from "./routes/security.devices.routers";
 
 dotenv.config()
@@ -20,7 +19,7 @@ const port = process.env.DEV_PORT || 5001
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(rateInsertLimitMiddleware)
+// app.use(rateInsertLimitMiddleware)
 app.set('trust proxy', true)
 
 

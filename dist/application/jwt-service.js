@@ -59,6 +59,8 @@ exports.jwtService = {
                 }, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES })
             };
             const jwtPayload = jsonwebtoken_1.default.decode(tokenPair.refreshToken);
+            jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString();
+            jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString();
             yield jwt_repository_1.jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip);
             return tokenPair;
         });

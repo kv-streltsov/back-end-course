@@ -42,13 +42,13 @@ const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const user_input_validations_1 = require("../middleware/validation/user-input-validations");
 const email_service_1 = require("../domain/email-service");
 const refresh_token_middleware_1 = require("../middleware/refresh-token-middleware");
-const rate_limit_middleware_1 = require("../middleware/rate-limit-middleware");
 const dotenv = __importStar(require("dotenv"));
+const rate_limit_middleware_1 = require("../middleware/rate-limit-middleware");
 dotenv.config();
 exports.COOKIE_SECURE = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
 exports.authRouters = (0, express_1.Router)({});
 ///////////////////////////////////////////////  TOKEN FLOW     ////////////////////////////////////////////////////////
-exports.authRouters.post('/login', rate_limit_middleware_1.rateCountLimitMiddleware, user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouters.post('/login', rate_limit_middleware_1.rateLimitMiddleware, user_auth_validations_1.authUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userAuth = yield user_service_1.usersService.checkUser(req.body.loginOrEmail, req.body.password);
     if (!userAuth) {
         return res.sendStatus(interface_html_code_1.HttpStatusCode.UNAUTHORIZED);

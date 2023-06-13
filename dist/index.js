@@ -47,7 +47,6 @@ const auth_routers_1 = require("./routes/auth.routers");
 const comments_routers_1 = require("./routes/comments.routers");
 const email_routers_1 = require("./routes/email.routers");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const rate_isert_limit_middleware_1 = require("./middleware/rate-isert-limit-middleware");
 const security_devices_routers_1 = require("./routes/security.devices.routers");
 dotenv.config();
 exports.app = (0, express_1.default)();
@@ -55,7 +54,7 @@ exports.MONGO_URL = process.env.MONGO_URL;
 const port = process.env.DEV_PORT || 5001;
 exports.app.use(express_1.default.json());
 exports.app.use((0, cookie_parser_1.default)());
-exports.app.use(rate_isert_limit_middleware_1.rateInsertLimitMiddleware);
+// app.use(rateInsertLimitMiddleware)
 exports.app.set('trust proxy', true);
 exports.app.use('/blogs', blog_routers_1.blogRouters);
 exports.app.use('/posts', post_routers_1.postRouters);

@@ -2,9 +2,23 @@
 
 
 
-[{"deviceId": Any<String>, "ip": Any<String>, "lastActiveDate": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "title": Any<String>}]
+[
+{"deviceId": Any<String>,
+"ip": Any<String>,
+"lastActiveDate": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+"title": Any<String>}
+]
 
-[{"ip":"3.69.49.83","title":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36","lastActiveDate":1686653700,"deviceId":"380c1d8b-8447-4aaa-b84a-4cb851238e00"},{"ip":"3.69.49.83","title":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0","lastActiveDate":1686653700,"deviceId":"759dadfc-6fb4-4a29-a47c-58db44503511"},{"ip":"3.69.49.83","title":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36","lastActiveDate":1686653701,"deviceId":"225905eb-ffd6-4baf-91e5-e428f4f28fa1"},{"ip":"3.69.49.83","title":"Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15","lastActiveDate":1686653701,"deviceId":"5928b7ff-1eb2-4231-8c18-9da0c54e5318"}]
+[
+{
+"deviceId":"380c1d8b-8447-4aaa-b84a-4cb851238e00"}
+"ip":"3.69.49.83",
+"lastActiveDate":1686653700,
+"title":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+
+
+
+,{"ip":"3.69.49.83","title":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0","lastActiveDate":1686653700,"deviceId":"759dadfc-6fb4-4a29-a47c-58db44503511"},{"ip":"3.69.49.83","title":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36","lastActiveDate":1686653701,"deviceId":"225905eb-ffd6-4baf-91e5-e428f4f28fa1"},{"ip":"3.69.49.83","title":"Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15","lastActiveDate":1686653701,"deviceId":"5928b7ff-1eb2-4231-8c18-9da0c54e5318"}]
 
     Wrong entity: {"ip":"3.69.49.83","title":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36","lastActiveDate":1686653700,"deviceId":"380c1d8b-8447-4aaa-b84a-4cb851238e00"}
 

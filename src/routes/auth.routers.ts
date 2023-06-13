@@ -9,8 +9,8 @@ import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput} from ".
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
 import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
-import {rateCountLimitMiddleware} from "../middleware/rate-limit-middleware";
 import * as dotenv from "dotenv";
+import {rateLimitMiddleware} from "../middleware/rate-limit-middleware";
 
 dotenv.config()
 export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
@@ -18,7 +18,7 @@ export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false
 export const authRouters = Router({})
 
 ///////////////////////////////////////////////  TOKEN FLOW     ////////////////////////////////////////////////////////
-authRouters.post('/login', rateCountLimitMiddleware, authUserValidation, async (req: RequestWithBody<InterfaceUserAuthPost>, res: Response) => {
+authRouters.post('/login', rateLimitMiddleware, authUserValidation, async (req: RequestWithBody<InterfaceUserAuthPost>, res: Response) => {
 
 	const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
 	if (!userAuth) {
