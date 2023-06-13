@@ -37,7 +37,7 @@ authRouters.post('/login', rateCountLimitMiddleware, authUserValidation, async (
 	return
 })
 authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Response) => {
-	await jwtService.logout(req.cookies.refreshToken)
+	await jwtService.logoutSpecifiedDevice(req.cookies.refreshToken)
 	res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {

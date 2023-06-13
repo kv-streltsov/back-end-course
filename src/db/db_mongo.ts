@@ -13,7 +13,7 @@ export const collectionBlogs = clientMongo.db('back-end-course').collection('Blo
 export const collectionPosts = clientMongo.db('back-end-course').collection('Posts')
 export const collectionUsers = clientMongo.db('back-end-course').collection('Users')
 export const collectionComments = clientMongo.db('back-end-course').collection('Comments')
-export const collectionExpiredTokens = clientMongo.db('back-end-course').collection('ExpiredTokens')
+//export const collectionExpiredTokens = clientMongo.db('back-end-course').collection('ExpiredTokens')
 export const collectionRateLimit = clientMongo.db('back-end-course').collection('RateLimit')
 export const collectionDevicesSessions = clientMongo.db('back-end-course').collection('DevicesSessions')
 
@@ -36,7 +36,7 @@ export async function clear_db_mongo(): Promise<boolean> {
         await collectionPosts.deleteMany({}),
         await collectionUsers.deleteMany({}),
         await collectionComments.deleteMany({}),
-        await collectionExpiredTokens.deleteMany({}),
+        // await collectionExpiredTokens.deleteMany({}),
         await collectionRateLimit.deleteMany({}),
         await collectionDevicesSessions.deleteMany({}),
     ]

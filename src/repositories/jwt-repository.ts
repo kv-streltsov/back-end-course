@@ -47,6 +47,14 @@ export const jwtRepository = {
 		}catch (error) {
 			return error
 		}
+	},
+	deleteAllDevicesSessions: async (userId: string)=>{
+		try {
+			await collectionDevicesSessions.deleteMany({userId: userId})
+			return true
+		}catch (error) {
+			return error
+		}
 	}
 
 }

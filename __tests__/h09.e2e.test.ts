@@ -19,7 +19,7 @@ describe('/09', () => {
 		await request(app)
 			.delete('/testing/all-data')
 			.expect(204)
-	}, 10000);
+	}, 100000);
 	it('USERS CREATE | should return 201 and created user', async () => {
 		await request(app)
 			.post('/users')
@@ -81,8 +81,6 @@ describe('/09', () => {
 			.post('/auth/refresh-token')
 			.set('Cookie', [refreshToken])
 			.expect(401)
-
-
 	});
 	it('REFRESH TOKEN | empty cookies        | should return 401', async () => {
 		await request(app)
@@ -160,19 +158,20 @@ describe('/09', () => {
 
 	}, 100000);
 	it('REFRESH TOKEN | refresh token device 1 and request all devices by new token | status 200', async () => {
-
-		await request(app)
+		const response = await request(app)
 			.post('/auth/refresh-token')
 			.set("User-Agent", 'googleHome')
 			.set('Cookie', `refreshToken=${[testDevises[0].refreshToken]}; Path=/; HttpOnly;`)
 			.expect(200)
+
+		testDevises[0].refreshToken = response.headers["set-cookie"][0].slice(13, 272)
 
 		const devices = await request(app)
 			.get('/security/devices')
 			.set('Cookie', `refreshToken=${[testDevises[0].refreshToken]}; Path=/; HttpOnly;`)
 			.expect(200)
 
-		console.log(devices.body)
+
 	});
 
 

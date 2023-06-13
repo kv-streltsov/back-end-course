@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db_mongo = exports.runMongo = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionExpiredTokens = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGO_URL = void 0;
+exports.clear_db_mongo = exports.runMongo = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGO_URL = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
@@ -45,7 +45,7 @@ exports.collectionBlogs = exports.clientMongo.db('back-end-course').collection('
 exports.collectionPosts = exports.clientMongo.db('back-end-course').collection('Posts');
 exports.collectionUsers = exports.clientMongo.db('back-end-course').collection('Users');
 exports.collectionComments = exports.clientMongo.db('back-end-course').collection('Comments');
-exports.collectionExpiredTokens = exports.clientMongo.db('back-end-course').collection('ExpiredTokens');
+//export const collectionExpiredTokens = clientMongo.db('back-end-course').collection('ExpiredTokens')
 exports.collectionRateLimit = exports.clientMongo.db('back-end-course').collection('RateLimit');
 exports.collectionDevicesSessions = exports.clientMongo.db('back-end-course').collection('DevicesSessions');
 function runMongo() {
@@ -69,7 +69,7 @@ function clear_db_mongo() {
             yield exports.collectionPosts.deleteMany({}),
             yield exports.collectionUsers.deleteMany({}),
             yield exports.collectionComments.deleteMany({}),
-            yield exports.collectionExpiredTokens.deleteMany({}),
+            // await collectionExpiredTokens.deleteMany({}),
             yield exports.collectionRateLimit.deleteMany({}),
             yield exports.collectionDevicesSessions.deleteMany({}),
         ];

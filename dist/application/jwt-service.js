@@ -78,7 +78,7 @@ exports.jwtService = {
             }
         });
     },
-    getDevisesByToken(token) {
+    getAllDevisesByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = jsonwebtoken_1.default.verify(token, JWT_SECRET);
@@ -93,10 +93,37 @@ exports.jwtService = {
             }
         });
     },
-    logout(token) {
+    getSpecifiedDeviceByToken(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+                const devise = yield db_mongo_1.collectionDevicesSessions.findOne({ deviceId: result.deviceId });
+                if (!devise) {
+                    return null;
+                }
+                return devise;
+            }
+            catch (error) {
+                return null;
+            }
+        });
+    },
+    logoutSpecifiedDevice(token, deviceId = 'false') {
         return __awaiter(this, void 0, void 0, function* () {
             const tokenDecode = jsonwebtoken_1.default.decode(token);
-            return yield jwt_repository_1.jwtRepository.deleteDeviceSession(tokenDecode.deviceId);
+            if (deviceId === 'false')
+                return yield jwt_repository_1.jwtRepository.deleteDeviceSession(tokenDecode.deviceId);
+            if (tokenDecode.deviceId === deviceId) {
+                return jwt_repository_1.jwtRepository.deleteDeviceSession(deviceId);
+            }
+            if (tokenDecode.deviceId !== deviceId)
+                return false;
+        });
+    },
+    logoutAllDevices(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tokenDecode = jsonwebtoken_1.default.decode(token);
+            return yield jwt_repository_1.jwtRepository.deleteAllDevicesSessions(tokenDecode.userId);
         });
     }
 };
