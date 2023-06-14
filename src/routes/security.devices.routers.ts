@@ -36,7 +36,7 @@ securityDevicesRouters.delete('/devices', refreshTokenMiddleware, async (req: Re
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 
 })
-securityDevicesRouters.delete('/devices:devicesId', refreshTokenMiddleware, async (req: Request, res: Response) => {
+securityDevicesRouters.delete('/devices/:devicesId', refreshTokenMiddleware, async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken
     const result = await jwtService.logoutSpecifiedDevice(refreshToken, req.params.devicesId)
     if (!result) {
