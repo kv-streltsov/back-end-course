@@ -4,7 +4,7 @@ import {collectionDevicesSessions, collectionUsers} from "../db/db_mongo";
 import {randomUUID} from "crypto";
 import {jwtRepository} from "../repositories/jwt-repository";
 import {format, compareAsc} from 'date-fns'
-import {IDeviceDB} from "../dto/interface.device";
+import {IDevice, IDeviceDB} from "../dto/interface.device";
 
 dotenv.config()
 
@@ -35,6 +35,27 @@ export const jwtService = {
         await jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip)
 
         return tokenPair
+    },
+    async refreshJwt(user: any, refreshToken: string, userAgent: string = 'someDevice', ip: string | string[] | undefined) {
+
+        const tokenDecode: any = jwt.decode(refreshToken)
+        const tokenPair = {
+            "accessToken": jwt.sign({userId: user.id}, JWT_SECRET, {expiresIn: JWT_ACCESS_EXPIRES}),
+            "refreshToken": jwt.sign({
+                userId: user.id,
+                deviceId: tokenDecode!.deviceId
+            }, JWT_SECRET, {expiresIn: JWT_REFRESH_EXPIRES})
+        }
+
+        const jwtPayload: any = jwt.decode(tokenPair.refreshToken)
+
+        jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString()
+        jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString()
+
+        await jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip)
+
+        return tokenPair
+
     },
     async getUserIdByToken(token: string) {
         try {
@@ -83,10 +104,11 @@ export const jwtService = {
         const tokenDecode: any = jwt.decode(token)
         const device: any = await jwtRepository.findDeviceSessionById(deviceId)
 
+
         if (!device) return null
         if (tokenDecode.userId !== device.userId) return false
 
-        await jwtRepository.deleteDeviceSession(device.userId)
+        await jwtRepository.deleteDeviceSession(device.deviceId)
         return true
 
     },

@@ -37,13 +37,19 @@ authRouters.post('/login', rateLimitMiddleware, authUserValidation, async (req: 
     return
 })
 authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Response) => {
-    await jwtService.logoutSpecifiedDevice(req.cookies.refreshToken)
+
+    const refreshToken = req.cookies.refreshToken
+    const result = await jwtService.getSpecifiedDeviceByToken(refreshToken)
+    await jwtService.logoutSpecifiedDevice(req.cookies.refreshToken,result!.deviceId)
+
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {
 
+    const refreshToken = req.cookies.refreshToken
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-    const jwtPair = await jwtService.createJwt(req.user, req.headers["user-agent"], ip)
+    const jwtPair = await jwtService.refreshJwt(req.user,refreshToken, req.headers["user-agent"], ip)
+
     res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
     return res.status(HttpStatusCode.OK).send({
         "accessToken": jwtPair.accessToken

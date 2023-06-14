@@ -64,12 +64,15 @@ exports.authRouters.post('/login', rate_limit_middleware_1.rateLimitMiddleware, 
     return;
 }));
 exports.authRouters.post('/logout', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield jwt_service_1.jwtService.logoutSpecifiedDevice(req.cookies.refreshToken);
+    const refreshToken = req.cookies.refreshToken;
+    const result = yield jwt_service_1.jwtService.getSpecifiedDeviceByToken(refreshToken);
+    yield jwt_service_1.jwtService.logoutSpecifiedDevice(req.cookies.refreshToken, result.deviceId);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
 exports.authRouters.post('/refresh-token', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const refreshToken = req.cookies.refreshToken;
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const jwtPair = yield jwt_service_1.jwtService.createJwt(req.user, req.headers["user-agent"], ip);
+    const jwtPair = yield jwt_service_1.jwtService.refreshJwt(req.user, refreshToken, req.headers["user-agent"], ip);
     res.cookie('refreshToken', jwtPair.refreshToken, { httpOnly: true, secure: exports.COOKIE_SECURE });
     return res.status(interface_html_code_1.HttpStatusCode.OK).send({
         "accessToken": jwtPair.accessToken

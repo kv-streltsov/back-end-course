@@ -65,6 +65,23 @@ exports.jwtService = {
             return tokenPair;
         });
     },
+    refreshJwt(user, refreshToken, userAgent = 'someDevice', ip) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const tokenDecode = jsonwebtoken_1.default.decode(refreshToken);
+            const tokenPair = {
+                "accessToken": jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_ACCESS_EXPIRES }),
+                "refreshToken": jsonwebtoken_1.default.sign({
+                    userId: user.id,
+                    deviceId: tokenDecode.deviceId
+                }, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES })
+            };
+            const jwtPayload = jsonwebtoken_1.default.decode(tokenPair.refreshToken);
+            jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString();
+            jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString();
+            yield jwt_repository_1.jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip);
+            return tokenPair;
+        });
+    },
     getUserIdByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -118,7 +135,7 @@ exports.jwtService = {
                 return null;
             if (tokenDecode.userId !== device.userId)
                 return false;
-            yield jwt_repository_1.jwtRepository.deleteDeviceSession(device.userId);
+            yield jwt_repository_1.jwtRepository.deleteDeviceSession(device.deviceId);
             return true;
         });
     },
