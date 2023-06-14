@@ -149,6 +149,7 @@ describe('/09', () => {
 				const tokenDecode: any = await jwt.decode(refreshToken)
 
 				testDevises.push({
+					deviceId: tokenDecode.deviceId,
 					refreshToken: refreshToken,
 					iat: tokenDecode.iat,
 					userAgent: req.headers["user-agent"]

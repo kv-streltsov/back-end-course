@@ -12,3 +12,14 @@ export interface IDeviceView {
 	deviceId: string
 }
 
+
+export interface IDeviceDB {
+	_id: any
+	issued: string
+	expiration: string
+	userId: string
+	deviceId: string
+	userAgent: string
+	ip: string
+}
+

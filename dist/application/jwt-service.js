@@ -110,16 +110,16 @@ exports.jwtService = {
             }
         });
     },
-    logoutSpecifiedDevice(token, deviceId = 'false') {
+    logoutSpecifiedDevice(token, deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
             const tokenDecode = jsonwebtoken_1.default.decode(token);
-            if (deviceId === 'false')
-                return yield jwt_repository_1.jwtRepository.deleteDeviceSession(tokenDecode.deviceId);
-            if (tokenDecode.deviceId === deviceId) {
-                return jwt_repository_1.jwtRepository.deleteDeviceSession(deviceId);
-            }
-            if (tokenDecode.deviceId !== deviceId)
+            const device = yield jwt_repository_1.jwtRepository.findDeviceSessionById(deviceId);
+            if (!device)
+                return null;
+            if (tokenDecode.userId !== device.userId)
                 return false;
+            yield jwt_repository_1.jwtRepository.deleteDeviceSession(device.userId);
+            return true;
         });
     },
     logoutAllDevices(token) {

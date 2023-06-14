@@ -4,6 +4,13 @@ import {IDevice} from "../dto/interface.device";
 
 
 export const jwtRepository = {
+	findDeviceSessionById: async (deviceId: string)=>{
+		try {
+			return await collectionDevicesSessions.findOne({deviceId: deviceId})
+		}catch (error) {
+			return error
+		}
+	},
 	insertDeviceSessions: async (deviceSession: IDevice, userAgent: string, ip: string | string[] | undefined) => {
 
 		try {

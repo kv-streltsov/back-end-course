@@ -3,7 +3,8 @@ import * as dotenv from 'dotenv'
 import {collectionDevicesSessions, collectionUsers} from "../db/db_mongo";
 import {randomUUID} from "crypto";
 import {jwtRepository} from "../repositories/jwt-repository";
-import { format, compareAsc } from 'date-fns'
+import {format, compareAsc} from 'date-fns'
+import {IDeviceDB} from "../dto/interface.device";
 
 dotenv.config()
 
@@ -77,15 +78,16 @@ export const jwtService = {
             return null
         }
     },
-    async logoutSpecifiedDevice(token: string, deviceId: string = 'false') {
+    async logoutSpecifiedDevice(token: string, deviceId: string) {
 
         const tokenDecode: any = jwt.decode(token)
-        if (deviceId === 'false') return await jwtRepository.deleteDeviceSession(tokenDecode.deviceId)
-        if (tokenDecode.deviceId === deviceId) {
-			return jwtRepository.deleteDeviceSession(deviceId)
-        }
-        if(tokenDecode.deviceId !== deviceId) return false
+        const device: any = await jwtRepository.findDeviceSessionById(deviceId)
 
+        if (!device) return null
+        if (tokenDecode.userId !== device.userId) return false
+
+        await jwtRepository.deleteDeviceSession(device.userId)
+        return true
 
     },
     async logoutAllDevices(token: string) {

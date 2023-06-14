@@ -39,6 +39,10 @@ securityDevicesRouters.delete('/devices', refreshTokenMiddleware, async (req: Re
 securityDevicesRouters.delete('/devices/:devicesId', refreshTokenMiddleware, async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken
     const result = await jwtService.logoutSpecifiedDevice(refreshToken, req.params.devicesId)
+    if(result === null){
+        res.sendStatus(HttpStatusCode.NOT_FOUND)
+        return
+    }
     if (!result) {
         res.sendStatus(HttpStatusCode.FORBIDDEN)
         return
