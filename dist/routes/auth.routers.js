@@ -76,12 +76,12 @@ exports.authRouters.post('/refresh-token', refresh_token_middleware_1.refreshTok
     });
 }));
 ///////////////////////////////////////////  REGISTRATION FLOW     /////////////////////////////////////////////////////
-exports.authRouters.post('/registration', user_input_validations_1.createUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouters.post('/registration', rate_limit_middleware_1.rateLimitMiddleware, user_input_validations_1.createUserValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const createdUser = yield user_service_1.usersService.postUser(req.body.login, req.body.email, req.body.password);
     yield email_service_1.emailService.sendMailRegistration(createdUser.createdUser.email, createdUser.uuid);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouters.post('/registration-confirmation', rate_limit_middleware_1.rateLimitMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.usersService.confirmationUser(req.body.code);
     if (!result.isSuccess) {
         res.status(interface_html_code_1.HttpStatusCode.BAD_REQUEST).send(result.errorsMessages);
@@ -89,7 +89,7 @@ exports.authRouters.post('/registration-confirmation', (req, res) => __awaiter(v
     }
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.post('/registration-email-resending', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouters.post('/registration-email-resending', rate_limit_middleware_1.rateLimitMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.usersService.reassignConfirmationCode(req.body.email);
     if (!result.isSuccess) {
         res.status(interface_html_code_1.HttpStatusCode.BAD_REQUEST).json(result.errorsMessages);

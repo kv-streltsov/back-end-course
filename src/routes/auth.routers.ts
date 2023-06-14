@@ -20,66 +20,66 @@ export const authRouters = Router({})
 ///////////////////////////////////////////////  TOKEN FLOW     ////////////////////////////////////////////////////////
 authRouters.post('/login', rateLimitMiddleware, authUserValidation, async (req: RequestWithBody<InterfaceUserAuthPost>, res: Response) => {
 
-	const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
-	if (!userAuth) {
-		return res.sendStatus(HttpStatusCode.UNAUTHORIZED)
-	}
+    const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
+    if (!userAuth) {
+        return res.sendStatus(HttpStatusCode.UNAUTHORIZED)
+    }
 
-	if (userAuth) {
-		const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-		const jwtPair = await jwtService.createJwt(userAuth, req.headers["user-agent"],ip)
+    if (userAuth) {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+        const jwtPair = await jwtService.createJwt(userAuth, req.headers["user-agent"], ip)
 
-		res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
-		return res.status(HttpStatusCode.OK).send({
-			"accessToken": jwtPair.accessToken
-		})
-	}
-	return
+        res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
+        return res.status(HttpStatusCode.OK).send({
+            "accessToken": jwtPair.accessToken
+        })
+    }
+    return
 })
 authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Response) => {
-	await jwtService.logoutSpecifiedDevice(req.cookies.refreshToken)
-	res.sendStatus(HttpStatusCode.NO_CONTENT)
+    await jwtService.logoutSpecifiedDevice(req.cookies.refreshToken)
+    res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {
 
-	const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-	const jwtPair = await jwtService.createJwt(req.user,req.headers["user-agent"],ip)
-	res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
-	return res.status(HttpStatusCode.OK).send({
-		"accessToken": jwtPair.accessToken
-	})
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    const jwtPair = await jwtService.createJwt(req.user, req.headers["user-agent"], ip)
+    res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
+    return res.status(HttpStatusCode.OK).send({
+        "accessToken": jwtPair.accessToken
+    })
 
 })
 
 ///////////////////////////////////////////  REGISTRATION FLOW     /////////////////////////////////////////////////////
-authRouters.post('/registration', createUserValidation, async (req: RequestWithBody<InterfaceUserInput>, res: Response) => {
-	const createdUser = await usersService.postUser(req.body.login, req.body.email, req.body.password)
-	await emailService.sendMailRegistration(createdUser.createdUser.email, createdUser.uuid)
-	res.sendStatus(HttpStatusCode.NO_CONTENT)
+authRouters.post('/registration', rateLimitMiddleware, createUserValidation, async (req: RequestWithBody<InterfaceUserInput>, res: Response) => {
+    const createdUser = await usersService.postUser(req.body.login, req.body.email, req.body.password)
+    await emailService.sendMailRegistration(createdUser.createdUser.email, createdUser.uuid)
+    res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-confirmation', async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
-	const result = await usersService.confirmationUser(req.body.code)
-	if (!result.isSuccess) {
-		res.status(HttpStatusCode.BAD_REQUEST).send(result.errorsMessages)
-		return
-	}
-	res.sendStatus(HttpStatusCode.NO_CONTENT)
+authRouters.post('/registration-confirmation', rateLimitMiddleware, async (req: RequestWithBody<ICodeConfirm>, res: Response) => {
+    const result = await usersService.confirmationUser(req.body.code)
+    if (!result.isSuccess) {
+        res.status(HttpStatusCode.BAD_REQUEST).send(result.errorsMessages)
+        return
+    }
+    res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.post('/registration-email-resending', async (req: RequestWithBody<IEmail>, res: Response) => {
-	const result = await usersService.reassignConfirmationCode(req.body.email)
-	if (!result.isSuccess) {
-		res.status(HttpStatusCode.BAD_REQUEST).json(result.errorsMessages)
-		return
-	}
+authRouters.post('/registration-email-resending', rateLimitMiddleware, async (req: RequestWithBody<IEmail>, res: Response) => {
+    const result = await usersService.reassignConfirmationCode(req.body.email)
+    if (!result.isSuccess) {
+        res.status(HttpStatusCode.BAD_REQUEST).json(result.errorsMessages)
+        return
+    }
 
-	await emailService.sendMailRegistration(req.body.email, result.data!)
-	res.sendStatus(HttpStatusCode.NO_CONTENT)
+    await emailService.sendMailRegistration(req.body.email, result.data!)
+    res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
 
-	res.status(200).json({
-		"email": req.user.email,
-		"login": req.user.login,
-		"userId": req.user.id
-	})
+    res.status(200).json({
+        "email": req.user.email,
+        "login": req.user.login,
+        "userId": req.user.id
+    })
 })

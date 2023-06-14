@@ -1,15 +1,15 @@
-  > Homework 9  Devices  GET -> "/security/devices", DELETE -> "/security/devices/:deviceId", DELETE -> "security/devices": should return error if auth credentials is incorrect; status 401;
+  > Homework 9  Devices  DELETE -> "/security/devices/:deviceId": should return error if :id from uri param not found; status 404;
 
 
 
     Tested case params:
-     endpoint: security/devices/0a5b5c3c-c1a9-43be-9c9f-ee3d7154ffba,
+     endpoint: security/devices/602afe92-7d97-4395-b1b9-6cf98b351bbe,
      method: DELETE,
-     headers: undefined,
+     headers: {"cookie":"refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjZWQxYWI3My0xNmIyLTQxYTItYjMwZS1jMzg0YThkMGQ2ZWQiLCJkZXZpY2VJZCI6ImMzMmE2OGQ2LWEwNmUtNGJjZi1iZTBlLWVhOTUwM2FhOWU2NCIsImlhdCI6MTY4NjcxNDI4MSwiZXhwIjoxNjg2NzE0MzAxfQ.gXNPdVUst7mfaYLfQOHN5wEvcJJy58gV0Xgv3K0m2-I;"},
 
-    Expected status: 401
+    Expected status: 404
 
-    Received status: 404
+    Received status: 403
 
       49 |       }
       50 |
@@ -21,39 +21,7 @@
 
       at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
           at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/devices/devices-describe.ts:243:7)
-
-  > Homework 9  Devices  DELETE -> "/security/devices/:sessionId":
-      Get device list by user1.
-      Create user2, login user 2 with the same user-agent header as user 1.
-      Try to delete second device by user2 from device list of user1.
-      Should return forbidden error
-      ; status 403;  used additional methods: GET -> /security/devices, POST -> /users, POST -> /auth/login;
-
-
-
-    Tested case params:
-     endpoint: security/devices/0a5b5c3c-c1a9-43be-9c9f-ee3d7154ffba,
-     method: DELETE,
-     headers: {"cookie":"refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyYzAyMjEwNC1jMThlLTRjMTMtYWM1NC1kYWY0NjgxYWZiNWUiLCJkZXZpY2VJZCI6ImU3NzY5ZmQyLWNmYmEtNDVmYy04NTA4LTk5OGU2ODI4Njk3YyIsImlhdCI6MTY4NjY3Njg1NSwiZXhwIjoxNjg2Njc2ODc1fQ.W7Nvn4BjksB6HtjEZcC5mhGyc6Eu6k5xqeC48nxOlZg;"},
-
-    Expected status: 403
-
-    Received status: 404
-
-    Description: try to update or delete the entity that was created by another user
-
-      49 |       }
-      50 |
-    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
-         |                      ^
-      52 |         headers,
-      53 |         endpoint,
-      54 |         method,
-
-      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
-          at runMicrotasks (<anonymous>)
-      at Object.<anonymous> (src/tests/jest/back/describes/devices/devices-describe.ts:301:7)
+      at Object.<anonymous> (src/tests/jest/back/describes/devices/devices-describe.ts:206:7)
 
   > Homework 9  Devices  GET -> "/security/devices": should not change device id after call /auth/refresh-token. LastActiveDate should be changed; status 200; content: device list;
 
@@ -61,7 +29,7 @@
 
     Expected length: 4
     Received length: 5
-    Received array:  [{"deviceId": "c2abe669-c1e3-4253-b50b-ef2d11bede22", "ip": "3.69.49.83", "lastActiveDate": "2023-06-13T17:20:53.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"}, {"deviceId": "0a5b5c3c-c1a9-43be-9c9f-ee3d7154ffba", "ip": "3.69.49.83", "lastActiveDate": "2023-06-13T17:20:53.000Z", "title": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0"}, {"deviceId": "99391bf7-6f90-4e53-a147-aeb5afdf410b", "ip": "3.69.49.83", "lastActiveDate": "2023-06-13T17:20:53.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"}, {"deviceId": "496c8819-d19b-4df1-817d-725d833a0eca", "ip": "3.69.49.83", "lastActiveDate": "2023-06-13T17:20:54.000Z", "title": "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15"}, {"deviceId": "8ccc18a4-b343-428a-8209-85d531f9c9ce", "ip": "3.69.49.83", "lastActiveDate": "2023-06-13T17:20:57.000Z", "title": "axios/1.3.4"}]
+    Received array:  [{"deviceId": "c32a68d6-a06e-4bcf-be0e-ea9503aa9e64", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T03:44:41.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"}, {"deviceId": "2b32d9ce-e959-48e8-9acd-3eb7cdc7f841", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T03:44:42.000Z", "title": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0"}, {"deviceId": "9c9a58cc-b437-4037-bed7-eadb79100688", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T03:44:42.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"}, {"deviceId": "97647514-d143-48f4-90cf-8a8430dcd5bb", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T03:44:42.000Z", "title": "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15"}, {"deviceId": "c10f3e73-21c0-44e6-9138-2af64d86cf61", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T03:44:45.000Z", "title": "axios/1.3.4"}]
 
       323 |
       324 |       expect(devicesList).toBeStrictObjectsArray(securityDeviceSchema);
@@ -80,14 +48,14 @@
 
     Expected: success response
 
-    Received: Request failed with status code 404
+    Received: Request failed with status code 403
 
     Config:
-     url: security/devices/0a5b5c3c-c1a9-43be-9c9f-ee3d7154ffba
+     url: security/devices/2b32d9ce-e959-48e8-9acd-3eb7cdc7f841
      method: delete
-     response status: 404
+     response status: 403
      request body: undefined
-     response data: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot DELETE /security/devices/0a5b5c3c-c1a9-43be-9c9f-ee3d7154ffba</pre>\n</body>\n</html>\n"
+     response data: "Forbidden"
 
       22 |     };
       23 |
@@ -146,7 +114,6 @@
       47 |       const statusAfter10secWaiting = await performRequest({
 
       at Object.<anonymous> (src/tests/jest/back/describes/ipRestriction/ipRestriction.ts:44:36)
-          at runMicrotasks (<anonymous>)
 
   > Homework 9  Ip restriction  POST -> "/auth/login": for a non-existent user, it should return status code 429 if more than 5 requests were sent within 10 seconds, and 401 after waiting; status 429, 401;
 
@@ -164,7 +131,6 @@
       24 |   const statusAfterWaiting = await performRequest({ method: 'post', endpoint, body });
 
       at performManyAttemptsTestFlow (src/tests/jest/back/describes/ipRestriction/performManyAttemptsTestFlow.ts:21:38)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/ipRestriction/ipRestriction.ts:71:7)
 
   > Homework 9  Ip restriction  POST -> "/auth/registration-email-resending": should return status code 429 if more than 5 requests were sent within 10 seconds, and 204 after waiting; status 429, 204;
@@ -183,7 +149,6 @@
       24 |   const statusAfterWaiting = await performRequest({ method: 'post', endpoint, body });
 
       at performManyAttemptsTestFlow (src/tests/jest/back/describes/ipRestriction/performManyAttemptsTestFlow.ts:21:38)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/ipRestriction/ipRestriction.ts:92:7)
 
   > Homework 9  Ip restriction  POST -> "/auth/registration-confirmation": should return status code 429 if more than 5 requests were sent within 10 seconds, and 400 after waiting; status 429, 400;
@@ -202,5 +167,4 @@
       24 |   const statusAfterWaiting = await performRequest({ method: 'post', endpoint, body });
 
       at performManyAttemptsTestFlow (src/tests/jest/back/describes/ipRestriction/performManyAttemptsTestFlow.ts:21:38)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/ipRestriction/ipRestriction.ts:112:7)
