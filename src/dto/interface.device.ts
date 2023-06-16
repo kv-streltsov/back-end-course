@@ -1,3 +1,6 @@
+export interface IDeviceId{
+	deviceId: string
+}
 export interface IDevice {
 	userId: string
 	deviceId: string

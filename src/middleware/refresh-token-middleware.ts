@@ -5,7 +5,6 @@ import {HttpStatusCode} from "../dto/interface.html-code";
 
 
 export const refreshTokenMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-
 	const refreshToken = req.cookies.refreshToken
 	if (!refreshToken) return res.sendStatus(HttpStatusCode.UNAUTHORIZED)
 

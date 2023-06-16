@@ -54,7 +54,6 @@ exports.MONGO_URL = process.env.MONGO_URL;
 const port = process.env.DEV_PORT || 5001;
 exports.app.use(express_1.default.json());
 exports.app.use((0, cookie_parser_1.default)());
-// app.use(rateInsertLimitMiddleware)
 exports.app.set('trust proxy', true);
 exports.app.use('/blogs', blog_routers_1.blogRouters);
 exports.app.use('/posts', post_routers_1.postRouters);

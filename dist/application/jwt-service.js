@@ -78,7 +78,7 @@ exports.jwtService = {
             const jwtPayload = jsonwebtoken_1.default.decode(tokenPair.refreshToken);
             jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString();
             jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString();
-            yield jwt_repository_1.jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip);
+            yield jwt_repository_1.jwtRepository.updateDeviceSessions(jwtPayload, userAgent, ip);
             return tokenPair;
         });
     },
@@ -101,7 +101,7 @@ exports.jwtService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const result = jsonwebtoken_1.default.verify(token, JWT_SECRET);
-                const devises = yield db_mongo_1.collectionDevicesSessions.find({ userId: result.userId }).toArray();
+                let devises = yield jwt_repository_1.jwtRepository.findAllDeviceSessionByUserId(result.userId);
                 if (!devises) {
                     return null;
                 }
@@ -135,14 +135,14 @@ exports.jwtService = {
                 return null;
             if (tokenDecode.userId !== device.userId)
                 return false;
-            yield jwt_repository_1.jwtRepository.deleteDeviceSession(device.deviceId);
+            yield jwt_repository_1.jwtRepository.deleteDeviceSession(deviceId);
             return true;
         });
     },
     logoutAllDevices(token) {
         return __awaiter(this, void 0, void 0, function* () {
             const tokenDecode = jsonwebtoken_1.default.decode(token);
-            return yield jwt_repository_1.jwtRepository.deleteAllDevicesSessions(tokenDecode.userId);
+            return yield jwt_repository_1.jwtRepository.deleteAllDevicesSessions(tokenDecode.userId, tokenDecode.deviceId);
         });
     }
 };

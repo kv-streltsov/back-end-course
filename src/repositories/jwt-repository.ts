@@ -11,8 +11,14 @@ export const jwtRepository = {
             return error
         }
     },
+    findAllDeviceSessionByUserId: async (userId: string) => {
+        try {
+            return await collectionDevicesSessions.find({}).toArray()
+        } catch (error) {
+            return error
+        }
+    },
     insertDeviceSessions: async (deviceSession: IDevice, userAgent: string, ip: string | string[] | undefined) => {
-
         try {
 
             const result = await collectionDevicesSessions.find({
@@ -47,6 +53,24 @@ export const jwtRepository = {
             return false
         }
     },
+    updateDeviceSessions: async (deviceSession: IDevice, userAgent: string, ip: string | string[] | undefined) => {
+        try {
+            await collectionDevicesSessions.updateOne({
+                userId: deviceSession.userId,
+                deviceId: deviceSession.deviceId
+            }, {
+                $set: {
+                    issued: deviceSession.iat,
+                    expiration: deviceSession.exp
+                }
+            })
+
+            return true
+
+        } catch (error) {
+            return false
+        }
+    },
     deleteDeviceSession: async (deviceId: string) => {
         try {
             await collectionDevicesSessions.deleteOne({deviceId: deviceId})
@@ -55,9 +79,11 @@ export const jwtRepository = {
             return error
         }
     },
-    deleteAllDevicesSessions: async (userId: string) => {
+    deleteAllDevicesSessions: async (userId: string, deviceId: string) => {
         try {
-            await collectionDevicesSessions.deleteMany({userId: userId})
+            await collectionDevicesSessions.deleteMany(
+                {deviceId: {$ne: deviceId}, userId: userId}
+            )
             return true
         } catch (error) {
             return error

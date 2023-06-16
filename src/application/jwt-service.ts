@@ -52,7 +52,7 @@ export const jwtService = {
         jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString()
         jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString()
 
-        await jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip)
+        await jwtRepository.updateDeviceSessions(jwtPayload, userAgent, ip)
 
         return tokenPair
 
@@ -73,8 +73,10 @@ export const jwtService = {
     },
     async getAllDevisesByToken(token: string) {
         try {
+
             const result: any = jwt.verify(token, JWT_SECRET)
-            const devises = await collectionDevicesSessions.find({userId: result.userId}).toArray()
+            let devises = await jwtRepository.findAllDeviceSessionByUserId(result.userId)
+
             if (!devises) {
                 return null
             }
@@ -104,16 +106,16 @@ export const jwtService = {
         const tokenDecode: any = jwt.decode(token)
         const device: any = await jwtRepository.findDeviceSessionById(deviceId)
 
-
         if (!device) return null
         if (tokenDecode.userId !== device.userId) return false
 
-        await jwtRepository.deleteDeviceSession(device.deviceId)
+        await jwtRepository.deleteDeviceSession(deviceId)
         return true
 
     },
     async logoutAllDevices(token: string) {
         const tokenDecode: any = jwt.decode(token)
-        return await jwtRepository.deleteAllDevicesSessions(tokenDecode.userId)
+
+        return await jwtRepository.deleteAllDevicesSessions(tokenDecode.userId, tokenDecode.deviceId)
     }
 }

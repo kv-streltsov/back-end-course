@@ -4,12 +4,37 @@
 
     Expected length: 4
     Received length: 5
-    Received array:
-    [
-    {"deviceId": "5b09fdc2-5ab0-467e-80dc-27587daaa1c1",
-    "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:32.000Z",
-    "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"},
-     {"deviceId": "24ced387-41ad-458e-a024-e7b630c9a09a", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:33.000Z", "title": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0"}, {"deviceId": "10960fff-a05c-478e-be3d-f418fdff2f52", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:33.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"}, {"deviceId": "d150c11f-9678-4963-9e66-3de0ece16ef5", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:33.000Z", "title": "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15"}, {"deviceId": "71022dc4-2432-4b02-ac9b-3840729bf282", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:36.000Z", "title": "axios/1.3.4"}]
+    Received array:  [
+    {
+        "deviceId": "3953d9de-5112-4037-8557-ecfd47dad4ab",
+        "ip": "3.69.49.83",
+        "lastActiveDate": "2023-06-14T05:55:37.000Z",
+        "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"},
+    {
+        "deviceId": "a01fd666-eec9-461e-a636-4a933a45f261",
+        "ip": "3.69.49.83",
+        "lastActiveDate": "2023-06-14T05:55:37.000Z",
+        "title": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0"
+    },
+    {
+        "deviceId": "d19bfbc9-62c8-43b1-bd77-aa7fa740d6a1",
+        "ip": "3.69.49.83",
+        "lastActiveDate": "2023-06-14T05:55:37.000Z",
+        "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
+    },
+    {
+        "deviceId": "ac31f9d9-ab9e-404b-96aa-c51d8d897b71",
+        "ip": "3.69.49.83",
+        "lastActiveDate": "2023-06-14T05:55:37.000Z",
+        "title": "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15"
+    },
+    {
+        "deviceId": "3953d9de-5112-4037-8557-ecfd47dad4ab",
+        "ip": "3.69.49.83",
+        "lastActiveDate": "2023-06-14T05:55:40.000Z",
+        "title": "axios/1.3.4"
+    }
+    ]
 
       323 |
       324 |       expect(devicesList).toBeStrictObjectsArray(securityDeviceSchema);
@@ -28,7 +53,7 @@
 
     Expected length: 4
     Received length: 5
-    Received array:  [{"deviceId": "5b09fdc2-5ab0-467e-80dc-27587daaa1c1", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:32.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"}, {"deviceId": "24ced387-41ad-458e-a024-e7b630c9a09a", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:33.000Z", "title": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0"}, {"deviceId": "10960fff-a05c-478e-be3d-f418fdff2f52", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:33.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"}, {"deviceId": "d150c11f-9678-4963-9e66-3de0ece16ef5", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:33.000Z", "title": "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15"}, {"deviceId": "71022dc4-2432-4b02-ac9b-3840729bf282", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:13:36.000Z", "title": "axios/1.3.4"}]
+    Received array:  [{"deviceId": "3953d9de-5112-4037-8557-ecfd47dad4ab", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:55:37.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"}, {"deviceId": "a01fd666-eec9-461e-a636-4a933a45f261", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:55:37.000Z", "title": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/103.0"}, {"deviceId": "d19bfbc9-62c8-43b1-bd77-aa7fa740d6a1", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:55:37.000Z", "title": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"}, {"deviceId": "ac31f9d9-ab9e-404b-96aa-c51d8d897b71", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:55:37.000Z", "title": "Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15"}, {"deviceId": "3953d9de-5112-4037-8557-ecfd47dad4ab", "ip": "3.69.49.83", "lastActiveDate": "2023-06-14T05:55:40.000Z", "title": "axios/1.3.4"}]
 
       370 |
       371 |       expect(devicesListAfterDelete).toBeStrictObjectsArray(securityDeviceSchema);
@@ -39,24 +64,6 @@
       375 |       //should not contain deleted device
 
       at Object.<anonymous> (src/tests/jest/back/describes/devices/devices-describe.ts:372:27)
-          at runMicrotasks (<anonymous>)
-
-  > Homework 9  Devices  GET -> "/security/devices": should return device list without a device logged out; status 204;  used additional methods: POST => /auth/logout;
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 5
-    Received: 6
-
-      406 |       );
-      407 |
-    > 408 |       expect(devicesListAfterLogout.length + 1).toBe(devicesList.length);
-          |                                                 ^
-      409 |
-      410 |       expect(devicesListAfterLogout).toBeStrictObjectsArray(securityDeviceSchema);
-      411 |       expect(devicesListAfterLogout).toStrictEqual(
-
-      at Object.<anonymous> (src/tests/jest/back/describes/devices/devices-describe.ts:408:49)
           at runMicrotasks (<anonymous>)
 
   > Homework 9  Devices  DELETE -> "/security/devices": should delete all other devices from device list; status 204;  used additional methods: GET => /security/devices;

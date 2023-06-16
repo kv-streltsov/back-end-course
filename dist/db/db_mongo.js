@@ -45,7 +45,6 @@ exports.collectionBlogs = exports.clientMongo.db('back-end-course').collection('
 exports.collectionPosts = exports.clientMongo.db('back-end-course').collection('Posts');
 exports.collectionUsers = exports.clientMongo.db('back-end-course').collection('Users');
 exports.collectionComments = exports.clientMongo.db('back-end-course').collection('Comments');
-//export const collectionExpiredTokens = clientMongo.db('back-end-course').collection('ExpiredTokens')
 exports.collectionRateLimit = exports.clientMongo.db('back-end-course').collection('RateLimit');
 exports.collectionDevicesSessions = exports.clientMongo.db('back-end-course').collection('DevicesSessions');
 function runMongo() {
@@ -69,7 +68,6 @@ function clear_db_mongo() {
             yield exports.collectionPosts.deleteMany({}),
             yield exports.collectionUsers.deleteMany({}),
             yield exports.collectionComments.deleteMany({}),
-            // await collectionExpiredTokens.deleteMany({}),
             yield exports.collectionRateLimit.deleteMany({}),
             yield exports.collectionDevicesSessions.deleteMany({}),
         ];

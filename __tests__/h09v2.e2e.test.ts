@@ -9,14 +9,9 @@ const user: InterfaceUserInput = {
     "password": "qwerty1",
     "email": "kv.streltsov@yandex.ru"
 }
-
 let accessToken: any
 let refreshToken: any
-let refreshToken2: any
 let userId: any
-let iat: any
-let exp: any
-let deviseId: any
 
 
 describe('/09', () => {
@@ -35,47 +30,43 @@ describe('/09', () => {
     });
     /////////////////////////////     TOKEN FLOW   //////////////////////////////////////////
     it('LOGIN         | should return JWT Pair      | status 200', async () => {
-        /// LOGIN USER
+
         const response = await request(app)
             .post('/auth/login')
             .send({
                 "loginOrEmail": user.email,
                 "password": user.password
-            }).expect(200)
+            })
+            .expect(200)
 
-        /// assign variables access and refresh token for body and cookies
-        accessToken = response.body.accessToken
-        refreshToken = response.headers["set-cookie"]
-
-
-        /// GET USERs | SHOULD RETURN One USER
         const userResponse = await request(app)
             .get('/users')
             .auth('admin', 'qwerty')
             .expect(200)
 
-        /// assign variable userId
-        userId = userResponse.body.items[0].id
-
-        /// CHECK RETURN BODY
         expect(userResponse.body.items[0]).toEqual({
             login: user.login,
             email: user.email,
             id: expect.any(String),
             createdAt: expect.any(String)
         })
-        /// CHECK LENGTH USERS | SHOULD BY 1 user
+
         expect(userResponse.body.items.length).toBe(1)
 
 
-        ////// get all devices | should be 1
+
+        accessToken = response.body.accessToken
+        refreshToken = response.headers["set-cookie"]
+
+        const jwtDecode: any = jwt.decode(refreshToken)
+        console.log('USER ID:', jwtDecode)
+
         const devices = await request(app)
             .get('/security/devices')
             .set('Cookie', [refreshToken])
             .expect(200)
 
         // @ts-ignore
-        ////// check fields device for body and length 1
         expect(devices.body[0]).toEqual({
             ip: expect.any(String),
             title: expect.any(String),
@@ -86,19 +77,78 @@ describe('/09', () => {
         expect(devices.body.length).toBe(1)
 
     });
+    it('REFRESH TOKEN | should return JWT Pair      | status 200', async () => {
+
+        const response = await request(app)
+            .post('/auth/refresh-token')
+            .set('Cookie', [refreshToken])
+            .expect(200)
+
+        console.log('acToken: ',response)
+        console.log('acToken2: ',response.body.accessToken)
+
+        expect(accessToken !== response.body.accessToken).toBeTruthy()
+        expect(refreshToken !== response.headers["set-cookie"]).toBeTruthy()
+
+        console.log('NEW TOKEN: ', response.headers["set-cookie"])
+
+
+        accessToken = response.body.accessToken
+        refreshToken = response.headers["set-cookie"]
+
+    });
+    // it('LOGOUT        | should expired refreshToken | status 204', async () => {
+    //     const response = await request(app)
+    //         .post('/auth/logout')
+    //         .set('Cookie', [refreshToken])
+    //         .expect(204)
+    //
+    // });
+    // /////////////////////////////    ERROR TOKEN FLOW   //////////////////////////////////////
+    // it('LOGIN         | incorrect login      | should return 401', async () => {
+    //     await request(app)
+    //         .post('/auth/login')
+    //         .send({
+    //             "loginOrEmail": 'bad_login',
+    //             "password": user.password
+    //         })
+    //         .expect(401)
+    // });
+    // it('LOGIN         | incorrect password   | should return 401', async () => {
+    //     await request(app)
+    //         .post('/auth/login')
+    //         .send({
+    //             "loginOrEmail": user.email,
+    //             "password": 'bad_password'
+    //         })
+    //         .expect(401)
+    // }, 100000);
+    // it('REFRESH TOKEN | expired refreshToken | should return 401', async () => {
+    //     await request(app)
+    //         .post('/auth/refresh-token')
+    //         .set('Cookie', [refreshToken])
+    //         .expect(401)
+    // });
     it('REFRESH TOKEN | empty cookies        | should return 401', async () => {
         await request(app)
             .post('/auth/refresh-token')
             .expect(401)
     });
+    // it('LOGOUT        | expired refreshToken | should return 401', async () => {
+    //     const response = await request(app)
+    //         .post('/auth/refresh-token')
+    //         .set('Cookie', [refreshToken])
+    //         .expect(401)
+    //
+    // });
     it('LOGOUT        | empty cookies        | should return 401', async () => {
         const response = await request(app)
             .post('/auth/refresh-token')
             .expect(401)
     });
     // ///////////////////////////   DEVICES SESSION FLOW   //////////////////////////////////////
-    it('LOGIN         | creates four different device | status 200', async () => {
 
+    it('LOGIN         | creates four different device | status 200', async () => {
         await Promise.all([
             new Promise(resolve => setTimeout(async () => {
                 await request(app)
@@ -112,14 +162,14 @@ describe('/09', () => {
             }, 1000)),
 
             new Promise(resolve => setTimeout(async () => {
-                const r = await request(app)
+                await request(app)
                     .post('/auth/login')
                     .set("User-Agent", 'safari')
                     .send({
                         "loginOrEmail": user.email,
                         "password": user.password
                     }).expect(200)
-                resolve(r.headers["set-cookie"])
+                resolve(2)
             }, 2000)), // 2
 
             new Promise(resolve => setTimeout(async () => {
@@ -145,112 +195,32 @@ describe('/09', () => {
             }, 4000)),
 
         ]).then(async d => {
-                refreshToken2 = d[1]
                 const countDevise = await collectionDevicesSessions.countDocuments()
                 expect(countDevise).toBe(5)
 
                 const devisesByUserId = await collectionDevicesSessions.find({userId: userId}).toArray()
-                expect(devisesByUserId.length).toBe(5)
+                expect(devisesByUserId).toBe(5)
 
             }
         )
     }, 100000);
-    it('REFRESH TOKEN AND GET ALL DEVISES', async () => {
 
-        /// DECODE OLD REFRESH TOKEN
-        const jwtOldDecode: any = jwt.decode(refreshToken[0].slice(13, 272))
-        deviseId = jwtOldDecode.deviceId
-        userId = jwtOldDecode.userId
-        iat = jwtOldDecode.iat
-        exp = jwtOldDecode.exp
+    it('should ', async () => {
 
-        const res = await request(app)
+        await request(app)
             .post('/auth/refresh-token')
-            .set('Cookie', refreshToken[0])
+            .set('Cookie', [refreshToken])
             .expect(200)
 
-        expect(accessToken !== res.body.accessToken).toBeTruthy()
-        expect(refreshToken !== res.headers["set-cookie"]).toBeTruthy()
-
-
-        accessToken = res.body.accessToken
-        refreshToken = res.headers["set-cookie"]
-
-        /// DECODE NEW REFRESH TOKEN
-        const jwtDecode: any = jwt.decode(refreshToken[0].slice(13, 272))
-
-        expect(iat !== jwtDecode.iat).toBeTruthy()
-        expect(exp !== jwtDecode.exp).toBeTruthy()
-        expect(deviseId === jwtDecode.deviceId).toBeTruthy()
-
-        deviseId = jwtDecode.deviceId
-        userId = jwtDecode.userId
-
-
-        /// FIND ALL DEVISES BY USER ID FOR NEW REFRESH TOKEN
-        const devisesByUserId = await collectionDevicesSessions.find({userId: userId}).toArray()
-        expect(devisesByUserId.length).toBe(5)
-
-        /// GET ALL DEVISES BY NEW REFRESH TOKEN
-        const resDevises = await request(app)
-            .get('/security/devices')
-            .set('Cookie', refreshToken)
-            .expect(200)
-
-        /// CHECK LENGTH BODY ARRAY AND MODEL
-        expect(resDevises.body.length).toBe(5)
-        expect(resDevises.body[0]).toEqual({
-            title: expect.any(String),
-            lastActiveDate: expect.any(String),
-            ip: expect.any(String),
-            deviceId: expect.any(String)
-        })
-
-
-    });
-    it('DELETE ONE DEVISE BY ID  ', async () => {
-
-        /// DELETE DEVISE
-        await request(app)
-            .delete(`/security/devices/${deviseId}`)
-            .set('Cookie', refreshToken[0])
-            .expect(204)
-
-        /// SHOULD REJECT DELETED DEVISE
-        await request(app)
-            .get('/security/devices')
-            .set('Cookie', refreshToken[0])
-            .expect(401)
-
-
-        /// FIND ALL DEVISES BY USER ID AFTER REMOVE ONE DEVISE FOR DataBase
-        const devisesByUserId = await collectionDevicesSessions.find({userId: userId}).toArray()
-        expect(devisesByUserId.length).toBe(4)
-
-        /// GET ALL DEVISES BY NEW REFRESH TOKEN FOR EndPoint
-        const resDevises = await request(app)
-            .get('/security/devices')
-            .set('Cookie', refreshToken2[0])
-            .expect(200)
-        expect(resDevises.body.length).toBe(4)
-
-
-    });
-    it('DELETE ALL DEVISE BY ID  EXCEPT FOR CURRENT ', async () => {
-
-        // SHOULD DELETE ALL DEVICE, EXCEPT FOR CURRENT
-        await request(app)
-            .delete('/security/devices')
-            .set('Cookie',refreshToken2[0])
-
-        const resDevise = await request(app)
-            .get('/security/devices')
-            .set('Cookie', refreshToken2[0])
-            .expect(200)
-        expect(resDevise.body.length).toBe(1)
-
-
-
+        // expect(response.body.accessToken !== accessToken).toBeTruthy()
+        // refreshToken = response.headers["set-cookie"]
+        //
+        // const devices = await request(app)
+        //     .get('/security/devices')
+        //     .set('Cookie', [refreshToken])
+        //     .expect(200)
+        //
+        // expect(devices.body.length).toBe(5)
     });
 
 

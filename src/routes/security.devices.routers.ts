@@ -2,8 +2,8 @@ import {Request, Response, Router} from "express";
 import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
 import {jwtService} from "../application/jwt-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
-import {log} from "util";
 import {IDeviceView} from "../dto/interface.device";
+import {RequestWithParams} from "../dto/interface.request";
 
 
 export const securityDevicesRouters = Router({})
@@ -18,6 +18,7 @@ securityDevicesRouters.get('/devices', refreshTokenMiddleware, async (req: Reque
         return
     }
 
+    // @ts-ignore
     const deviceView: IDeviceView[] = result.map(devise => {
         return {
             ip: devise.ip,
@@ -26,7 +27,6 @@ securityDevicesRouters.get('/devices', refreshTokenMiddleware, async (req: Reque
             deviceId: devise.deviceId
         }
     })
-
     res.status(HttpStatusCode.OK).send(deviceView)
 })
 securityDevicesRouters.delete('/devices', refreshTokenMiddleware, async (req: Request, res: Response) => {
@@ -37,8 +37,10 @@ securityDevicesRouters.delete('/devices', refreshTokenMiddleware, async (req: Re
 
 })
 securityDevicesRouters.delete('/devices/:devicesId', refreshTokenMiddleware, async (req: Request, res: Response) => {
+
     const refreshToken = req.cookies.refreshToken
     const result = await jwtService.logoutSpecifiedDevice(refreshToken, req.params.devicesId)
+
     if(result === null){
         res.sendStatus(HttpStatusCode.NOT_FOUND)
         return

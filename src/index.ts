@@ -19,7 +19,6 @@ const port = process.env.DEV_PORT || 5001
 
 app.use(express.json())
 app.use(cookieParser())
-// app.use(rateInsertLimitMiddleware)
 app.set('trust proxy', true)
 
 
