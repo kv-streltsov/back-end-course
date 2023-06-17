@@ -17,7 +17,6 @@ import {
     RequestWithParamsAndQuery,
     RequestWithQuery,
 } from "../dto/interface.request";
-import {InterfaceCommentInput} from "../dto/interface.comment";
 
 export const postRouters = Router({})
 

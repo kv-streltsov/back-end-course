@@ -1,6 +1,5 @@
-import {InterfaceInputUser, InterfaceViewUser} from "../dto/interface.input.user";
-import {collectionDevicesSessions, collectionUsers} from "../db/db_mongo";
-import {IDevice} from "../dto/interface.device";
+import {collectionDevicesSessions, } from "../db/db_mongo";
+import {IDevice, IDeviceView} from "../dto/interface.device";
 
 
 export const jwtRepository = {
@@ -13,7 +12,20 @@ export const jwtRepository = {
     },
     findAllDeviceSessionByUserId: async (userId: string) => {
         try {
-            return await collectionDevicesSessions.find({}).toArray()
+            const allDevises = await collectionDevicesSessions
+                .find(
+                    {userId: userId},
+                    {projection: {_id: 0, expiration: 0,}}).toArray()
+
+            const deviceView: IDeviceView[] = allDevises.map(devise => {
+                return {
+                    ip: devise.ip,
+                    title: devise.userAgent,
+                    lastActiveDate: devise.issued,
+                    deviceId: devise.deviceId
+                }
+            })
+            return deviceView
         } catch (error) {
             return error
         }
@@ -53,7 +65,7 @@ export const jwtRepository = {
             return false
         }
     },
-    updateDeviceSessions: async (deviceSession: IDevice, userAgent: string, ip: string | string[] | undefined) => {
+    updateDeviceSessions: async (deviceSession: IDevice) => {
         try {
             await collectionDevicesSessions.updateOne({
                 userId: deviceSession.userId,

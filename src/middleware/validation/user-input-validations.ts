@@ -1,6 +1,5 @@
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "./input-validation-middleware";
-import {log} from "util";
 import {collectionUsers} from "../../db/db_mongo";
 
 const loginValidation = body('login').isString().trim().notEmpty().isLength({min:3, max:10}).matches('^[a-zA-Z0-9_-]*$')

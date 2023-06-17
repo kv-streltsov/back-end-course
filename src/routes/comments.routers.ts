@@ -4,13 +4,15 @@ import {queryCommentRepository} from "../repositories/query-comment-repository";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {commentService} from "../domain/comment-service";
 import {createCommentValidation} from "../middleware/validation/comments-validations";
+import {RequestWithParams} from "../dto/interface.request";
+import {ICommentId} from "../dto/interface.comment";
 
 
 export const commentsRouter = Router({})
 
 
-commentsRouter.get('/:id', async (req: Request, res: Response) => {
-    const comment = await queryCommentRepository.getCommentById(req.params.id)
+commentsRouter.get('/:id', async (req: RequestWithParams<ICommentId>, res: Response) => {
+    const comment = await queryCommentRepository.getCommentById(req.params.commendId)
     if (comment) {
         return res.status(200).send(comment)
     } else {

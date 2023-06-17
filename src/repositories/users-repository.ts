@@ -1,4 +1,4 @@
-import {InterfaceInputUser, InterfaceViewUser} from "../dto/interface.input.user";
+import {InterfaceViewUser} from "../dto/interface.input.user";
 import {collectionUsers} from "../db/db_mongo";
 
 

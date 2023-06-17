@@ -10,7 +10,7 @@ import {InterfacePaginationQueryParams, SortType} from "../dto/interface.paginat
 import {
     InterfaceId,
     RequestWithBody,
-    RequestWithParams, RequestWithParamsAndBody, RequestWithParamsAndQuery,
+    RequestWithParams, RequestWithParamsAndQuery,
     RequestWithQuery,
 } from "../dto/interface.request";
 import {WithId} from "mongodb";

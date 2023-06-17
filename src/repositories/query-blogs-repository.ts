@@ -1,5 +1,5 @@
 import {collectionBlogs, collectionPosts} from "../db/db_mongo";
-import {InterfaceBlogView, InterfaceGetBlogsWitchQuery} from "../dto/interface.blog";
+import { InterfaceGetBlogsWitchQuery} from "../dto/interface.blog";
 import {WithId} from "mongodb";
 
 const DEFAULT_SORT_FIELD = 'createdAt'

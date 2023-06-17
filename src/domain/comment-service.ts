@@ -1,9 +1,8 @@
 import {commentsRepository} from "../repositories/comments-repository";
 import {InterfaceCommentInput, InterfaceCommentView} from "../dto/interface.comment";
 import {InterfaceUserDb} from "../dto/interface.user";
-import {collectionComments, collectionPosts} from "../db/db_mongo";
+import { collectionPosts} from "../db/db_mongo";
 import {queryCommentRepository} from "../repositories/query-comment-repository";
-import {HttpStatusCode} from "../dto/interface.html-code";
 
 export const commentService = {
     postComment: async (postId: string, user: InterfaceUserDb, comment: InterfaceCommentInput) => {

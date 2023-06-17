@@ -65,7 +65,7 @@ exports.jwtService = {
             return tokenPair;
         });
     },
-    refreshJwt(user, refreshToken, userAgent = 'someDevice', ip) {
+    refreshJwt(user, refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
             const tokenDecode = jsonwebtoken_1.default.decode(refreshToken);
             const tokenPair = {
@@ -78,7 +78,7 @@ exports.jwtService = {
             const jwtPayload = jsonwebtoken_1.default.decode(tokenPair.refreshToken);
             jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString();
             jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString();
-            yield jwt_repository_1.jwtRepository.updateDeviceSessions(jwtPayload, userAgent, ip);
+            yield jwt_repository_1.jwtRepository.updateDeviceSessions(jwtPayload);
             return tokenPair;
         });
     },

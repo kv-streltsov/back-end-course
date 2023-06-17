@@ -3,8 +3,6 @@ import * as dotenv from 'dotenv'
 import {collectionDevicesSessions, collectionUsers} from "../db/db_mongo";
 import {randomUUID} from "crypto";
 import {jwtRepository} from "../repositories/jwt-repository";
-import {format, compareAsc} from 'date-fns'
-import {IDevice, IDeviceDB} from "../dto/interface.device";
 
 dotenv.config()
 
@@ -36,7 +34,7 @@ export const jwtService = {
 
         return tokenPair
     },
-    async refreshJwt(user: any, refreshToken: string, userAgent: string = 'someDevice', ip: string | string[] | undefined) {
+    async refreshJwt(user: any, refreshToken: string) {
 
         const tokenDecode: any = jwt.decode(refreshToken)
         const tokenPair = {
@@ -52,7 +50,7 @@ export const jwtService = {
         jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString()
         jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString()
 
-        await jwtRepository.updateDeviceSessions(jwtPayload, userAgent, ip)
+        await jwtRepository.updateDeviceSessions(jwtPayload)
 
         return tokenPair
 

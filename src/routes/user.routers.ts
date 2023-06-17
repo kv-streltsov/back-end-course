@@ -4,7 +4,7 @@ import {basic_auth} from "../middleware/basic-auth-middleware";
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {usersService} from "../domain/user-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
-import {InterfacePaginationQueryParamsUser, InterfacePaginatorUserView, SortType} from "../dto/interface.pagination";
+import {InterfacePaginationQueryParamsUser, SortType} from "../dto/interface.pagination";
 import {queryUsersRepository} from "../repositories/query-users-repository";
 
 

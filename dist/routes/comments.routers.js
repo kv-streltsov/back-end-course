@@ -18,7 +18,7 @@ const comment_service_1 = require("../domain/comment-service");
 const comments_validations_1 = require("../middleware/validation/comments-validations");
 exports.commentsRouter = (0, express_1.Router)({});
 exports.commentsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const comment = yield query_comment_repository_1.queryCommentRepository.getCommentById(req.params.id);
+    const comment = yield query_comment_repository_1.queryCommentRepository.getCommentById(req.params.commendId);
     if (comment) {
         return res.status(200).send(comment);
     }
