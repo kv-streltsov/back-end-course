@@ -2,15 +2,16 @@ import {MongoClient} from 'mongodb'
 import * as dotenv from 'dotenv'
 import mongoose, {Schema} from "mongoose";
 import {IDeviceDb} from "../dto/interface.device";
-import any = jasmine.any;
 
 
 dotenv.config()
 export const MONGO_URL: string | undefined = process.env.MONGO_URL
+export const MONGOOSE_URL: string | undefined  = process.env.MONGOOSE_URL
 
-if (!MONGO_URL) {
+if (!MONGO_URL  ) {
     throw new Error('!!! Bad URL')
 }
+
 export const clientMongo = new MongoClient(MONGO_URL)
 export const collectionBlogs = clientMongo.db('back-end-course').collection('Blogs')
 export const collectionPosts = clientMongo.db('back-end-course').collection('Posts')
@@ -30,8 +31,13 @@ const devicesSessionsScheme = new Schema<IDeviceDb>({
 export const devicesSessionsModel = mongoose.model('DevicesSessions', devicesSessionsScheme)
 
 export async function runMongo() {
+
+    if (!MONGOOSE_URL) {
+        throw new Error('!!! Bad URL')
+    }
+
     try {
-        await mongoose.connect(MONGO_URL + 'back-end-course')
+        await mongoose!.connect(MONGOOSE_URL)
         await clientMongo.connect() // old
         await clientMongo.db("Back-end-course").command({ping: 1}) // old
         console.log('connected successfully to mongo server')

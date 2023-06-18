@@ -32,12 +32,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db_mongo = exports.runMongo = exports.devicesSessionsModel = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGO_URL = void 0;
+exports.clear_db_mongo = exports.runMongo = exports.devicesSessionsModel = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGOOSE_URL = exports.MONGO_URL = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv = __importStar(require("dotenv"));
 const mongoose_1 = __importStar(require("mongoose"));
 dotenv.config();
 exports.MONGO_URL = process.env.MONGO_URL;
+exports.MONGOOSE_URL = process.env.MONGOOSE_URL;
 if (!exports.MONGO_URL) {
     throw new Error('!!! Bad URL');
 }
@@ -59,8 +60,11 @@ const devicesSessionsScheme = new mongoose_1.Schema({
 exports.devicesSessionsModel = mongoose_1.default.model('DevicesSessions', devicesSessionsScheme);
 function runMongo() {
     return __awaiter(this, void 0, void 0, function* () {
+        if (!exports.MONGOOSE_URL) {
+            throw new Error('!!! Bad URL');
+        }
         try {
-            yield mongoose_1.default.connect(exports.MONGO_URL + 'back-end-course');
+            yield mongoose_1.default.connect(exports.MONGOOSE_URL);
             yield exports.clientMongo.connect(); // old
             yield exports.clientMongo.db("Back-end-course").command({ ping: 1 }); // old
             console.log('connected successfully to mongo server');
