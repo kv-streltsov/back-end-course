@@ -13,7 +13,6 @@ import {securityDevicesRouters} from "./routes/security.devices.routers";
 
 dotenv.config()
 export const app = express()
-
 const port = process.env.DEV_PORT || 5001
 
 app.use(express.json())

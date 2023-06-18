@@ -16,7 +16,7 @@ export interface IDeviceView {
 }
 
 
-export interface IDeviceDB {
+export interface IDeviceDb {
 	_id: any
 	issued: string
 	expiration: string

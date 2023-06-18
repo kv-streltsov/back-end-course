@@ -1,5 +1,8 @@
 import {MongoClient} from 'mongodb'
 import * as dotenv from 'dotenv'
+import mongoose, {Schema} from "mongoose";
+import {IDeviceDb} from "../dto/interface.device";
+import any = jasmine.any;
 
 
 dotenv.config()
@@ -16,10 +19,21 @@ export const collectionComments = clientMongo.db('back-end-course').collection('
 export const collectionRateLimit = clientMongo.db('back-end-course').collection('RateLimit')
 export const collectionDevicesSessions = clientMongo.db('back-end-course').collection('DevicesSessions')
 
+const devicesSessionsScheme = new Schema<IDeviceDb>({
+    issued: String,
+    expiration: String,
+    userId: String,
+    deviceId: String,
+    userAgent: String,
+    ip: String
+})
+export const devicesSessionsModel = mongoose.model('DevicesSessions', devicesSessionsScheme)
+
 export async function runMongo() {
     try {
-        await clientMongo.connect()
-        await clientMongo.db("Back-end-course").command({ping: 1})
+        await mongoose.connect(MONGO_URL + 'back-end-course')
+        await clientMongo.connect() // old
+        await clientMongo.db("Back-end-course").command({ping: 1}) // old
         console.log('connected successfully to mongo server')
 
     } catch {
@@ -36,7 +50,7 @@ export async function clear_db_mongo(): Promise<boolean> {
         await collectionUsers.deleteMany({}),
         await collectionComments.deleteMany({}),
         await collectionRateLimit.deleteMany({}),
-        await collectionDevicesSessions.deleteMany({}),
+        await devicesSessionsModel.deleteMany({}),
     ]
     await Promise.all(asyncArray)
     return true

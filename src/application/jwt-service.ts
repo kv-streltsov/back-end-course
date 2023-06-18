@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
-import {collectionDevicesSessions, collectionUsers} from "../db/db_mongo";
+import {devicesSessionsModel, collectionUsers} from "../db/db_mongo";
 import {randomUUID} from "crypto";
 import {jwtRepository} from "../repositories/jwt-repository";
+import {usersService} from "../domain/user-service";
 
 dotenv.config()
 
@@ -58,7 +59,7 @@ export const jwtService = {
     async getUserIdByToken(token: string) {
         try {
             const result: any = jwt.verify(token, JWT_SECRET)
-            const checkUser = await collectionUsers.findOne({id: result.userId})
+            const checkUser = await usersService.getUserById(result.userId)
             if (!checkUser) {
                 return null
             }
@@ -88,7 +89,7 @@ export const jwtService = {
     async getSpecifiedDeviceByToken(token: string) {
         try {
             const result: any = jwt.verify(token, JWT_SECRET)
-            const devise = await collectionDevicesSessions.findOne({deviceId: result.deviceId})
+            const devise:any = await jwtRepository.findDeviceSessionById(result.deviceId)
             if (!devise) {
                 return null
             }

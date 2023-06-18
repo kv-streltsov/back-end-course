@@ -10,6 +10,7 @@ securityDevicesRouters.get('/devices', refreshTokenMiddleware, async (req: Reque
 
     const refreshToken = req.cookies.refreshToken
     const result = await jwtService.getAllDevisesByToken(refreshToken)
+    console.log('result: ',result)
 
     if (result === null) {
         res.sendStatus(HttpStatusCode.NOT_FOUND)

@@ -1,7 +1,7 @@
 import request from 'supertest'
 import {app} from "../src";
 import {InterfaceUserInput} from "../src/dto/interface.user";
-import {collectionDevicesSessions} from "../src/db/db_mongo";
+import {devicesSessionsModel} from "../src/db/db_mongo";
 import jwt from "jsonwebtoken";
 
 const user: InterfaceUserInput = {
@@ -195,10 +195,10 @@ describe('/09', () => {
             }, 4000)),
 
         ]).then(async d => {
-                const countDevise = await collectionDevicesSessions.countDocuments()
+                const countDevise = await devicesSessionsModel.countDocuments()
                 expect(countDevise).toBe(5)
 
-                const devisesByUserId = await collectionDevicesSessions.find({userId: userId}).toArray()
+                const devisesByUserId = await devicesSessionsModel.find({userId: userId}).toArray()
                 expect(devisesByUserId).toBe(5)
 
             }

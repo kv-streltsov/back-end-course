@@ -1,21 +1,21 @@
-import {collectionDevicesSessions, } from "../db/db_mongo";
+import {devicesSessionsModel} from "../db/db_mongo";
 import {IDevice, IDeviceView} from "../dto/interface.device";
 
 
 export const jwtRepository = {
     findDeviceSessionById: async (deviceId: string) => {
         try {
-            return await collectionDevicesSessions.findOne({deviceId: deviceId})
+            return await devicesSessionsModel.findOne({deviceId: deviceId})
         } catch (error) {
             return error
         }
     },
     findAllDeviceSessionByUserId: async (userId: string) => {
         try {
-            const allDevises = await collectionDevicesSessions
+            const allDevises = await devicesSessionsModel
                 .find(
                     {userId: userId},
-                    {projection: {_id: 0, expiration: 0,}}).toArray()
+                    {projection: {_id: 0, expiration: 0,}}).lean()
 
             const deviceView: IDeviceView[] = allDevises.map(devise => {
                 return {
@@ -33,14 +33,13 @@ export const jwtRepository = {
     insertDeviceSessions: async (deviceSession: IDevice, userAgent: string, ip: string | string[] | undefined) => {
         try {
 
-            const result = await collectionDevicesSessions.find({
+            const result = await devicesSessionsModel.find({
                 ip: ip,
                 userAgent: userAgent,
                 userId: deviceSession.userId
-            }).toArray()
-
+            }).lean()
             if (result.length) {
-                await collectionDevicesSessions.updateOne({userId: deviceSession.userId}, {
+                await devicesSessionsModel.updateOne({userId: deviceSession.userId}, {
                     $set: {
                         issued: deviceSession.iat,
                         expiration: deviceSession.exp,
@@ -50,7 +49,7 @@ export const jwtRepository = {
                 return true
             }
 
-            await collectionDevicesSessions.insertOne({
+            await devicesSessionsModel.create({
                 issued: deviceSession.iat,
                 expiration: deviceSession.exp,
                 userId: deviceSession.userId,
@@ -67,7 +66,7 @@ export const jwtRepository = {
     },
     updateDeviceSessions: async (deviceSession: IDevice) => {
         try {
-            await collectionDevicesSessions.updateOne({
+            await devicesSessionsModel.updateOne({
                 userId: deviceSession.userId,
                 deviceId: deviceSession.deviceId
             }, {
@@ -85,7 +84,7 @@ export const jwtRepository = {
     },
     deleteDeviceSession: async (deviceId: string) => {
         try {
-            await collectionDevicesSessions.deleteOne({deviceId: deviceId})
+            await devicesSessionsModel.deleteOne({deviceId: deviceId})
             return true
         } catch (error) {
             return error
@@ -93,7 +92,7 @@ export const jwtRepository = {
     },
     deleteAllDevicesSessions: async (userId: string, deviceId: string) => {
         try {
-            await collectionDevicesSessions.deleteMany(
+            await devicesSessionsModel.deleteMany(
                 {deviceId: {$ne: deviceId}, userId: userId}
             )
             return true
@@ -101,5 +100,4 @@ export const jwtRepository = {
             return error
         }
     }
-
 }

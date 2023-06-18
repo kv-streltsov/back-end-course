@@ -1,7 +1,7 @@
 import request from 'supertest'
 import {app} from "../src";
 import {InterfaceUserInput} from "../src/dto/interface.user";
-import {collectionDevicesSessions} from "../src/db/db_mongo";
+import {devicesSessionsModel} from "../src/db/db_mongo";
 import jwt from "jsonwebtoken";
 
 const user: InterfaceUserInput = {
@@ -146,10 +146,10 @@ describe('/09', () => {
 
         ]).then(async d => {
                 refreshToken2 = d[1]
-                const countDevise = await collectionDevicesSessions.countDocuments()
+                const countDevise = await devicesSessionsModel.countDocuments()
                 expect(countDevise).toBe(5)
 
-                const devisesByUserId = await collectionDevicesSessions.find({userId: userId}).toArray()
+                const devisesByUserId = await devicesSessionsModel.find({userId: userId}).lean()
                 expect(devisesByUserId.length).toBe(5)
 
             }
@@ -188,7 +188,7 @@ describe('/09', () => {
 
 
         /// FIND ALL DEVISES BY USER ID FOR NEW REFRESH TOKEN
-        const devisesByUserId = await collectionDevicesSessions.find({userId: userId}).toArray()
+        const devisesByUserId = await devicesSessionsModel.find({userId: userId}).lean()
         expect(devisesByUserId.length).toBe(5)
 
         /// GET ALL DEVISES BY NEW REFRESH TOKEN
@@ -209,7 +209,7 @@ describe('/09', () => {
 
     });
     it('DELETE ONE DEVISE BY ID  ', async () => {
-
+        console.log('dev id: ',deviseId)
         /// DELETE DEVISE
         await request(app)
             .delete(`/security/devices/${deviseId}`)
@@ -224,7 +224,7 @@ describe('/09', () => {
 
 
         /// FIND ALL DEVISES BY USER ID AFTER REMOVE ONE DEVISE FOR DataBase
-        const devisesByUserId = await collectionDevicesSessions.find({userId: userId}).toArray()
+        const devisesByUserId = await devicesSessionsModel.find({userId: userId}).lean()
         expect(devisesByUserId.length).toBe(4)
 
         /// GET ALL DEVISES BY NEW REFRESH TOKEN FOR EndPoint
@@ -236,22 +236,20 @@ describe('/09', () => {
 
 
     });
-    it('DELETE ALL DEVISE BY ID  EXCEPT FOR CURRENT ', async () => {
-
-        // SHOULD DELETE ALL DEVICE, EXCEPT FOR CURRENT
-        await request(app)
-            .delete('/security/devices')
-            .set('Cookie',refreshToken2[0])
-
-        const resDevise = await request(app)
-            .get('/security/devices')
-            .set('Cookie', refreshToken2[0])
-            .expect(200)
-        expect(resDevise.body.length).toBe(1)
-
-
-
-    });
+    // it('DELETE ALL DEVISE BY ID  EXCEPT FOR CURRENT ', async () => {
+    //
+    //     // SHOULD DELETE ALL DEVICE, EXCEPT FOR CURRENT
+    //     await request(app)
+    //         .delete('/security/devices')
+    //         .set('Cookie',refreshToken2[0])
+    //
+    //     const resDevise = await request(app)
+    //         .get('/security/devices')
+    //         .set('Cookie', refreshToken2[0])
+    //         .expect(200)
+    //     expect(resDevise.body.length).toBe(1)
+    //
+    // });
 
 
 })

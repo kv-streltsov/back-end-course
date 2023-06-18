@@ -32,9 +32,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db_mongo = exports.runMongo = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGO_URL = void 0;
+exports.clear_db_mongo = exports.runMongo = exports.devicesSessionsModel = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGO_URL = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv = __importStar(require("dotenv"));
+const mongoose_1 = __importStar(require("mongoose"));
 dotenv.config();
 exports.MONGO_URL = process.env.MONGO_URL;
 if (!exports.MONGO_URL) {
@@ -47,11 +48,21 @@ exports.collectionUsers = exports.clientMongo.db('back-end-course').collection('
 exports.collectionComments = exports.clientMongo.db('back-end-course').collection('Comments');
 exports.collectionRateLimit = exports.clientMongo.db('back-end-course').collection('RateLimit');
 exports.collectionDevicesSessions = exports.clientMongo.db('back-end-course').collection('DevicesSessions');
+const devicesSessionsScheme = new mongoose_1.Schema({
+    issued: String,
+    expiration: String,
+    userId: String,
+    deviceId: String,
+    userAgent: String,
+    ip: String
+});
+exports.devicesSessionsModel = mongoose_1.default.model('DevicesSessions', devicesSessionsScheme);
 function runMongo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield exports.clientMongo.connect();
-            yield exports.clientMongo.db("Back-end-course").command({ ping: 1 });
+            yield mongoose_1.default.connect(exports.MONGO_URL + 'back-end-course');
+            yield exports.clientMongo.connect(); // old
+            yield exports.clientMongo.db("Back-end-course").command({ ping: 1 }); // old
             console.log('connected successfully to mongo server');
         }
         catch (_a) {
@@ -69,7 +80,7 @@ function clear_db_mongo() {
             yield exports.collectionUsers.deleteMany({}),
             yield exports.collectionComments.deleteMany({}),
             yield exports.collectionRateLimit.deleteMany({}),
-            yield exports.collectionDevicesSessions.deleteMany({}),
+            yield exports.devicesSessionsModel.deleteMany({}),
         ];
         yield Promise.all(asyncArray);
         return true;
