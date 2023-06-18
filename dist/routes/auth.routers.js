@@ -71,7 +71,6 @@ exports.authRouters.post('/logout', refresh_token_middleware_1.refreshTokenMiddl
 }));
 exports.authRouters.post('/refresh-token', refresh_token_middleware_1.refreshTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const refreshToken = req.cookies.refreshToken;
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const jwtPair = yield jwt_service_1.jwtService.refreshJwt(req.user, refreshToken);
     res.cookie('refreshToken', jwtPair.refreshToken, { httpOnly: true, secure: exports.COOKIE_SECURE });
     return res.status(interface_html_code_1.HttpStatusCode.OK).send({

@@ -47,7 +47,6 @@ authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Re
 authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {
 
     const refreshToken = req.cookies.refreshToken
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
     const jwtPair = await jwtService.refreshJwt(req.user,refreshToken)
 
     res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
