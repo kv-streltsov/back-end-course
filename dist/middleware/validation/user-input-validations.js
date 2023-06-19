@@ -12,10 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUserValidation = void 0;
 const express_validator_1 = require("express-validator");
 const input_validation_middleware_1 = require("./input-validation-middleware");
-const db_mongo_1 = require("../../db/db_mongo");
+const users_repository_1 = require("../../repositories/users-repository");
 const loginValidation = (0, express_validator_1.body)('login').isString().trim().notEmpty().isLength({ min: 3, max: 10 }).matches('^[a-zA-Z0-9_-]*$')
     .custom((login) => __awaiter(void 0, void 0, void 0, function* () {
-    const checkUser = yield db_mongo_1.collectionUsers.findOne({ login: login });
+    const checkUser = yield users_repository_1.usersRepository.findUserByLogin(login);
     if (checkUser === null) {
         return true;
     }
@@ -26,7 +26,7 @@ const loginValidation = (0, express_validator_1.body)('login').isString().trim()
 const passwordValidation = (0, express_validator_1.body)('password').isString().trim().notEmpty().isLength({ min: 6, max: 20 });
 const emailValidation = (0, express_validator_1.body)('email').isString().trim().notEmpty().isEmail()
     .custom((email) => __awaiter(void 0, void 0, void 0, function* () {
-    const checkUser = yield db_mongo_1.collectionUsers.findOne({ email: email });
+    const checkUser = yield users_repository_1.usersRepository.findUserByEmail(email);
     if (checkUser === null) {
         return true;
     }

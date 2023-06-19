@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.queryUsersRepository = exports.paginationHandler = void 0;
-const db_mongo_1 = require("../db/db_mongo");
+const users_scheme_1 = require("../db/schemes/users.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection, searchEmailTerm, searchLoginTerm) => {
     const countItems = (pageNumber - 1) * pageSize;
@@ -44,12 +44,14 @@ exports.paginationHandler = paginationHandler;
 exports.queryUsersRepository = {
     getAllUsers: (pageSize = 10, pageNumber = 1, sortBy = DEFAULT_SORT_FIELD, sortDirection, searchEmailTerm = null, searchLoginTerm = null) => __awaiter(void 0, void 0, void 0, function* () {
         const { countItems, sortField, searchTerm } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection, searchEmailTerm, searchLoginTerm);
-        const count = yield db_mongo_1.collectionUsers.countDocuments(searchTerm);
-        const users = yield db_mongo_1.collectionUsers
-            .find(searchTerm, { projection: { _id: 0, password: 0, salt: 0, confirmation: 0 } })
+        const count = yield users_scheme_1.usersModel.countDocuments(searchTerm);
+        const users = yield users_scheme_1.usersModel
+            .find(searchTerm)
+            .select({ _id: 0, password: 0, salt: 0, confirmation: 0, __v: 0 })
             .sort(sortField)
             .skip(countItems)
-            .limit(pageSize).toArray();
+            .limit(pageSize)
+            .lean();
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,

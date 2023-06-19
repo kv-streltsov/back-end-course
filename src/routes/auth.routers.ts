@@ -5,12 +5,21 @@ import {jwtService} from "../application/jwt-service";
 import {usersService} from "../domain/user-service";
 import {authMiddleware} from "../middleware/jwt-auth-middleware";
 import {RequestWithBody} from "../dto/interface.request";
-import {ICodeConfirm, IEmail, InterfaceUserAuthPost, InterfaceUserInput} from "../dto/interface.user";
+import {
+    ICodeConfirm,
+    IEmail,
+    INewPasswordRecoveryInput,
+    InterfaceUserAuthPost,
+    InterfaceUserInput
+} from "../dto/interface.user";
 import {createUserValidation} from "../middleware/validation/user-input-validations";
 import {emailService} from "../domain/email-service";
 import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
 import * as dotenv from "dotenv";
 import {rateLimitMiddleware} from "../middleware/rate-limit-middleware";
+import {log} from "util";
+import {usersModel} from "../db/schemes/users.scheme";
+import {rateLimitModel} from "../db/schemes/rate.limit.scheme";
 
 dotenv.config()
 export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
@@ -40,14 +49,14 @@ authRouters.post('/logout', refreshTokenMiddleware, async (req: Request, res: Re
 
     const refreshToken = req.cookies.refreshToken
     const result = await jwtService.getSpecifiedDeviceByToken(refreshToken)
-    await jwtService.logoutSpecifiedDevice(req.cookies.refreshToken,result!.deviceId)
+    await jwtService.logoutSpecifiedDevice(req.cookies.refreshToken, result!.deviceId)
 
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/refresh-token', refreshTokenMiddleware, async (req: Request, res: Response) => {
 
     const refreshToken = req.cookies.refreshToken
-    const jwtPair = await jwtService.refreshJwt(req.user,refreshToken)
+    const jwtPair = await jwtService.refreshJwt(req.user, refreshToken)
 
     res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
     return res.status(HttpStatusCode.OK).send({
@@ -80,8 +89,28 @@ authRouters.post('/registration-email-resending', rateLimitMiddleware, async (re
     await emailService.sendMailRegistration(req.body.email, result.data!)
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
-authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
+authRouters.post('/password-recovery', rateLimitMiddleware, async (req: RequestWithBody<IEmail>, res: Response) => {
 
+    const result = await emailService.sendMailPasswordRecovery(req.body.email)
+    if (!result) {
+        res.sendStatus(HttpStatusCode.BAD_REQUEST)
+    }
+    res.sendStatus(HttpStatusCode.NO_CONTENT)
+
+})
+authRouters.post('/new-password', rateLimitMiddleware, async (req: RequestWithBody<INewPasswordRecoveryInput>, res: Response) => {
+
+
+    // 204
+    // Even if current email is not registered (for prevent user's email detection)
+    //
+    // 400
+    // If the inputModel has invalid email (for example 222^gmail.com)
+    //
+    // 429
+    // More than 5 attempts from one IP-address during 10 seconds
+})
+authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
     res.status(200).json({
         "email": req.user.email,
         "login": req.user.login,

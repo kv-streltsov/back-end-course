@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emailService = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const users_repository_1 = require("../repositories/users-repository");
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
@@ -33,6 +34,28 @@ exports.emailService = {
                  </p>`
         };
         return transporter.sendMail(mailOptions);
-    })
+    }),
+    sendMailPasswordRecovery: (email) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!exports.emailService._validatorEmail(email)) {
+            return false;
+        }
+        const passwordRecovery = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+        yield users_repository_1.usersRepository.updateRecoveryCode(email, passwordRecovery);
+        const mailOptions = {
+            from: process.env.EMAIL_ADDRES,
+            to: email,
+            subject: 'Password recovery',
+            html: ` <h1>Password recovery</h1>
+       <p>To finish password recovery please follow the link below:
+          <a href='https://localhost:5001/password-recovery?recoveryCode=${passwordRecovery}'>Password recovery</a>
+      </p>
+    `
+        };
+        return transporter.sendMail(mailOptions);
+    }),
+    _validatorEmail: (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 };
 //# sourceMappingURL=email-service.js.map

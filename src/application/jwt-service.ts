@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
-import {devicesSessionsModel, collectionUsers} from "../db/db_mongo";
 import {randomUUID} from "crypto";
 import {jwtRepository} from "../repositories/jwt-repository";
 import {usersService} from "../domain/user-service";

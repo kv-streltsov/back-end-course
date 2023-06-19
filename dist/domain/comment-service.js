@@ -30,7 +30,7 @@ exports.commentService = {
             createdAt: new Date().toISOString()
         };
         const newComment = yield comments_repository_1.commentsRepository.createComment(Object.assign({}, commentObj));
-        if (newComment.acknowledged) {
+        if (newComment) {
             return {
                 id: commentObj.id,
                 commentatorInfo: commentObj.commentatorInfo,

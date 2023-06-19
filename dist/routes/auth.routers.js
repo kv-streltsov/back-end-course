@@ -100,6 +100,23 @@ exports.authRouters.post('/registration-email-resending', rate_limit_middleware_
     yield email_service_1.emailService.sendMailRegistration(req.body.email, result.data);
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
+exports.authRouters.post('/password-recovery', rate_limit_middleware_1.rateLimitMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield email_service_1.emailService.sendMailPasswordRecovery(req.body.email);
+    if (!result) {
+        res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+    }
+    res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
+}));
+exports.authRouters.post('/new-password', rate_limit_middleware_1.rateLimitMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // 204
+    // Even if current email is not registered (for prevent user's email detection)
+    //
+    // 400
+    // If the inputModel has invalid email (for example 222^gmail.com)
+    //
+    // 429
+    // More than 5 attempts from one IP-address during 10 seconds
+}));
 exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({
         "email": req.user.email,

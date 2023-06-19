@@ -1,7 +1,10 @@
 import {MongoClient} from 'mongodb'
 import * as dotenv from 'dotenv'
-import mongoose, {Schema} from "mongoose";
-import {IDeviceDb} from "../dto/interface.device";
+import mongoose from "mongoose";
+import {devicesSessionsModel} from "./schemes/devices.sessions.scheme";
+import {rateLimitModel} from "./schemes/rate.limit.scheme";
+import {commentsModel} from "./schemes/comments.scheme";
+import {usersModel} from "./schemes/users.scheme";
 
 
 dotenv.config()
@@ -20,15 +23,6 @@ export const collectionComments = clientMongo.db('back-end-course').collection('
 export const collectionRateLimit = clientMongo.db('back-end-course').collection('RateLimit')
 export const collectionDevicesSessions = clientMongo.db('back-end-course').collection('DevicesSessions')
 
-const devicesSessionsScheme = new Schema<IDeviceDb>({
-    issued: String,
-    expiration: String,
-    userId: String,
-    deviceId: String,
-    userAgent: String,
-    ip: String
-})
-export const devicesSessionsModel = mongoose.model('DevicesSessions', devicesSessionsScheme)
 
 export async function runMongo() {
 
@@ -37,7 +31,7 @@ export async function runMongo() {
     }
 
     try {
-        await mongoose!.connect(MONGOOSE_URL)
+        await mongoose.connect(MONGOOSE_URL)
         await clientMongo.connect() // old
         await clientMongo.db("Back-end-course").command({ping: 1}) // old
         console.log('connected successfully to mongo server')
@@ -47,15 +41,14 @@ export async function runMongo() {
         console.log('connect error to mongo server')
     }
 }
-
 export async function clear_db_mongo(): Promise<boolean> {
 
     const asyncArray = [
         await collectionBlogs.deleteMany({}),
         await collectionPosts.deleteMany({}),
-        await collectionUsers.deleteMany({}),
-        await collectionComments.deleteMany({}),
-        await collectionRateLimit.deleteMany({}),
+        await usersModel.deleteMany({}),
+        await commentsModel.deleteMany({}),
+        await rateLimitModel.deleteMany({}),
         await devicesSessionsModel.deleteMany({}),
     ]
     await Promise.all(asyncArray)

@@ -141,7 +141,7 @@ var HttpStatusCode;
     HttpStatusCode[HttpStatusCode["UNAUTHORIZED"] = 401] = "UNAUTHORIZED";
     /**
      * Reserved for future use. The original intention was that this code might be used as part of some form of digital
-     * cash or micro payment scheme, but that has not happened, and this code is not usually used.
+     * cash or micro payment schemes, but that has not happened, and this code is not usually used.
      * Google Developers API uses this status if a particular developer has exceeded the daily limit on requests.
      */
     HttpStatusCode[HttpStatusCode["PAYMENT_REQUIRED"] = 402] = "PAYMENT_REQUIRED";

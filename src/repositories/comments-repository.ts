@@ -1,14 +1,14 @@
 import {InterfaceCommentView} from "../dto/interface.comment";
-import {collectionComments} from "../db/db_mongo";
+import {commentsModel} from "../db/schemes/comments.scheme";
 
 export const commentsRepository = {
     createComment: async (commentObj: InterfaceCommentView) => {
-        return await collectionComments.insertOne(commentObj)
+        return await commentsModel.create(commentObj)
     },
     updateComment: async (commentId: string, comment: string) => {
-        return await collectionComments.updateOne({id: commentId}, {$set: {content: comment}})
+        return commentsModel.updateOne({id: commentId}, {$set: {content: comment}});
     },
     deleteComment: async (commentId: string) => {
-        return await collectionComments.deleteOne({id: commentId})
+        return  commentsModel.deleteOne({id: commentId})
     }
 }

@@ -1,5 +1,5 @@
-import {devicesSessionsModel} from "../db/db_mongo";
 import {IDevice, IDeviceView} from "../dto/interface.device";
+import {devicesSessionsModel} from "../db/schemes/devices.sessions.scheme";
 
 
 export const jwtRepository = {

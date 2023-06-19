@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersService = void 0;
 const users_repository_1 = require("../repositories/users-repository");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const db_mongo_1 = require("../db/db_mongo");
 const crypto_1 = require("crypto");
 exports.usersService = {
     postUser: (login, email, password, confirmAdmin = false) => __awaiter(void 0, void 0, void 0, function* () {
@@ -45,7 +44,7 @@ exports.usersService = {
         });
     }),
     confirmationUser: (code) => __awaiter(void 0, void 0, void 0, function* () {
-        const findUser = yield db_mongo_1.collectionUsers.findOne({ 'confirmation.code': code });
+        const findUser = yield users_repository_1.usersRepository.findUserByConfirmationCode(code);
         if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return {
                 data: null,
@@ -58,16 +57,14 @@ exports.usersService = {
                 isSuccess: false
             };
         }
-        yield db_mongo_1.collectionUsers.updateOne({ 'confirmation.code': code }, {
-            $set: {
-                "confirmation.wasConfirm": true,
-                "confirmation.code": null
-            }
+        yield users_repository_1.usersRepository.updateConfirmationCodee(code, {
+            "confirmation.wasConfirm": true,
+            "confirmation.code": null
         });
         return { data: true, errorsMessages: null, isSuccess: true };
     }),
     reassignConfirmationCode: (email) => __awaiter(void 0, void 0, void 0, function* () {
-        const findUser = yield db_mongo_1.collectionUsers.findOne({ email: email });
+        const findUser = yield users_repository_1.usersRepository.findUserByEmail(email);
         if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return {
                 isSuccess: false,
@@ -81,7 +78,7 @@ exports.usersService = {
             };
         }
         const uuid = (0, crypto_1.randomUUID)();
-        yield db_mongo_1.collectionUsers.updateOne({ email: email }, { $set: { "confirmation.code": uuid } });
+        yield users_repository_1.usersRepository.updateConfirmationCode(email, uuid);
         return {
             data: uuid,
             isSuccess: true,
@@ -89,7 +86,7 @@ exports.usersService = {
         };
     }),
     getUserById: (userId) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionUsers.findOne({ id: userId });
+        return yield users_repository_1.usersRepository.findUserById(userId);
     }),
     checkUser: (loginOrEmail, password) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield users_repository_1.usersRepository.checkUser(loginOrEmail);

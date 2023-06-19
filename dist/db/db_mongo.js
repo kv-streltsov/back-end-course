@@ -31,11 +31,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db_mongo = exports.runMongo = exports.devicesSessionsModel = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGOOSE_URL = exports.MONGO_URL = void 0;
+exports.clear_db_mongo = exports.runMongo = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGOOSE_URL = exports.MONGO_URL = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv = __importStar(require("dotenv"));
-const mongoose_1 = __importStar(require("mongoose"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const devices_sessions_scheme_1 = require("./schemes/devices.sessions.scheme");
+const rate_limit_scheme_1 = require("./schemes/rate.limit.scheme");
+const comments_scheme_1 = require("./schemes/comments.scheme");
+const users_scheme_1 = require("./schemes/users.scheme");
 dotenv.config();
 exports.MONGO_URL = process.env.MONGO_URL;
 exports.MONGOOSE_URL = process.env.MONGOOSE_URL;
@@ -49,15 +56,6 @@ exports.collectionUsers = exports.clientMongo.db('back-end-course').collection('
 exports.collectionComments = exports.clientMongo.db('back-end-course').collection('Comments');
 exports.collectionRateLimit = exports.clientMongo.db('back-end-course').collection('RateLimit');
 exports.collectionDevicesSessions = exports.clientMongo.db('back-end-course').collection('DevicesSessions');
-const devicesSessionsScheme = new mongoose_1.Schema({
-    issued: String,
-    expiration: String,
-    userId: String,
-    deviceId: String,
-    userAgent: String,
-    ip: String
-});
-exports.devicesSessionsModel = mongoose_1.default.model('DevicesSessions', devicesSessionsScheme);
 function runMongo() {
     return __awaiter(this, void 0, void 0, function* () {
         if (!exports.MONGOOSE_URL) {
@@ -81,10 +79,10 @@ function clear_db_mongo() {
         const asyncArray = [
             yield exports.collectionBlogs.deleteMany({}),
             yield exports.collectionPosts.deleteMany({}),
-            yield exports.collectionUsers.deleteMany({}),
-            yield exports.collectionComments.deleteMany({}),
-            yield exports.collectionRateLimit.deleteMany({}),
-            yield exports.devicesSessionsModel.deleteMany({}),
+            yield users_scheme_1.usersModel.deleteMany({}),
+            yield comments_scheme_1.commentsModel.deleteMany({}),
+            yield rate_limit_scheme_1.rateLimitModel.deleteMany({}),
+            yield devices_sessions_scheme_1.devicesSessionsModel.deleteMany({}),
         ];
         yield Promise.all(asyncArray);
         return true;

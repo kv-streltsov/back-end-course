@@ -1,11 +1,11 @@
 import {commentsRepository} from "../repositories/comments-repository";
 import {InterfaceCommentInput, InterfaceCommentView} from "../dto/interface.comment";
-import {InterfaceUserDb} from "../dto/interface.user";
+import {IUserDb} from "../dto/interface.user";
 import { collectionPosts} from "../db/db_mongo";
 import {queryCommentRepository} from "../repositories/query-comment-repository";
 
 export const commentService = {
-    postComment: async (postId: string, user: InterfaceUserDb, comment: InterfaceCommentInput) => {
+    postComment: async (postId: string, user: IUserDb, comment: InterfaceCommentInput) => {
         const findPost = await collectionPosts.findOne({id: postId},)
         if (findPost === null) {
             return null
@@ -23,7 +23,7 @@ export const commentService = {
         }
 
         const newComment = await commentsRepository.createComment({...commentObj})
-        if (newComment.acknowledged) {
+        if (newComment) {
             return {
                 id: commentObj.id,
                 commentatorInfo: commentObj.commentatorInfo,
@@ -33,7 +33,7 @@ export const commentService = {
         }
         return false
     },
-    putComment: async (commentId: string, user: InterfaceUserDb, comment: InterfaceCommentInput) => {
+    putComment: async (commentId: string, user: IUserDb, comment: InterfaceCommentInput) => {
         const checkComment = await queryCommentRepository.getCommentById(commentId)
         if (checkComment === null) {
             return null
@@ -49,7 +49,7 @@ export const commentService = {
             return false
         }
     },
-    deleteComment: async (commentId: string, user: InterfaceUserDb) => {
+    deleteComment: async (commentId: string, user: IUserDb) => {
         const checkComment = await queryCommentRepository.getCommentById(commentId)
         if (checkComment === null) {
             return null

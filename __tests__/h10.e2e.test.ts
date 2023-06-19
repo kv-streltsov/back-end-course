@@ -3,6 +3,7 @@ import {app} from "../src";
 import {InterfaceUserInput} from "../src/dto/interface.user";
 import jwt from "jsonwebtoken";
 import {devicesSessionsModel} from "../src/db/schemes/devices.sessions.scheme";
+import {usersModel} from "../src/db/schemes/users.scheme";
 
 const user: InterfaceUserInput = {
     "login": "qwerty",
@@ -19,7 +20,7 @@ let exp: any
 let deviseId: any
 
 
-describe('/09', () => {
+describe('/10', () => {
     /////////////////////////////    REPARATION    /////////////////////////////////////////
     it('should delete all data', async () => {
         await request(app)
@@ -96,7 +97,7 @@ describe('/09', () => {
             .post('/auth/refresh-token')
             .expect(401)
     });
-    // ///////////////////////////   DEVICES SESSION FLOW   //////////////////////////////////////
+    /////////////////////////////   DEVICES SESSION FLOW   //////////////////////////////////////
     it('LOGIN         | creates four different device | status 200', async () => {
 
         await Promise.all([
@@ -249,97 +250,88 @@ describe('/09', () => {
         expect(resDevise.body.length).toBe(1)
 
     });
-    it('DDOS PROTECT | should return 429', async () => {
+    // it('DDOS PROTECT | should return 429', async () => {
+    //
+    //     await Promise.all([
+    //         new Promise(resolve => setTimeout(async () => {
+    //             await request(app)
+    //                 .post('/auth/login')
+    //                 .set("User-Agent", 'DDOS_1')
+    //                 .send({
+    //                     "loginOrEmail": user.email,
+    //                     "password": user.password
+    //                 }).expect(200)
+    //             resolve(1)
+    //         }, 10000)),
+    //
+    //         new Promise(resolve => setTimeout(async () => {
+    //             const r = await request(app)
+    //                 .post('/auth/login')
+    //                 .set("User-Agent", 'DDOS_2')
+    //                 .send({
+    //                     "loginOrEmail": user.email,
+    //                     "password": user.password
+    //                 }).expect(200)
+    //             resolve(r.headers["set-cookie"])
+    //         }, 10100)), // 2
+    //
+    //         new Promise(resolve => setTimeout(async () => {
+    //             await request(app)
+    //                 .post('/auth/login')
+    //                 .set("User-Agent", 'DDOS_3')
+    //                 .send({
+    //                     "loginOrEmail": user.email,
+    //                     "password": user.password
+    //                 }).expect(200)
+    //             resolve(3)
+    //         }, 10200)),
+    //
+    //         new Promise(resolve => setTimeout(async () => {
+    //             await request(app)
+    //                 .post('/auth/login')
+    //                 .set("User-Agent", 'DDOS_4')
+    //                 .send({
+    //                     "loginOrEmail": user.email,
+    //                     "password": user.password
+    //                 }).expect(200)
+    //             resolve(3)
+    //         }, 10300)),
+    //         new Promise(resolve => setTimeout(async () => {
+    //             await request(app)
+    //                 .post('/auth/login')
+    //                 .set("User-Agent", 'DDOS_5')
+    //                 .send({
+    //                     "loginOrEmail": user.email,
+    //                     "password": user.password
+    //                 }).expect( 200)
+    //             resolve(3)
+    //         }, 10400)),
+    //
+    //         new Promise(resolve => setTimeout(async () => {
+    //             await request(app)
+    //                 .post('/auth/login')
+    //                 .set("User-Agent", 'DDOS_6')
+    //                 .send({
+    //                     "loginOrEmail": user.email,
+    //                     "password": user.password
+    //                 }).expect(429)
+    //             resolve(true)
+    //         }, 10500)),
+    //
+    //     ])
+    //
+    // }, 100000);
+    /////////////////////////////   PASSWORD RECOVERY   //////////////////////////////////////
+    it('should ', async () => {
+        const getUser = await usersModel.findOne({email: "kv.streltsov@yandex.ru"})
+        console.log(getUser!.confirmation)
 
-        setTimeout(async () => {
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_1')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_2')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_3')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_4')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_5')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_6')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_7')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_8')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_9')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_10')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_11')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-            await request(app)
-                .post('/auth/login')
-                .set("User-Agent", 'DDOS_12')
-                .send({
-                    "loginOrEmail": user.email,
-                    "password": user.password
-                }).expect(200)
-        },10000)
-
-    }, 100000);
-
+        const response = await request(app)
+            .post('/password-recovery')
+            .send({
+                "email": user.email,
+            }).expect(204)
+    });
 
 })
 

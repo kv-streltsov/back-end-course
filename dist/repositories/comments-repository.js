@@ -10,16 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentsRepository = void 0;
-const db_mongo_1 = require("../db/db_mongo");
+const comments_scheme_1 = require("../db/schemes/comments.scheme");
 exports.commentsRepository = {
     createComment: (commentObj) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionComments.insertOne(commentObj);
+        return yield comments_scheme_1.commentsModel.create(commentObj);
     }),
     updateComment: (commentId, comment) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionComments.updateOne({ id: commentId }, { $set: { content: comment } });
+        return comments_scheme_1.commentsModel.updateOne({ id: commentId }, { $set: { content: comment } });
     }),
     deleteComment: (commentId) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionComments.deleteOne({ id: commentId });
+        return comments_scheme_1.commentsModel.deleteOne({ id: commentId });
     })
 };
 //# sourceMappingURL=comments-repository.js.map
