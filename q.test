@@ -1,26 +1,28 @@
-  > Homework 8  RefreshToken  POST -> "/auth/refresh-token", "/auth/logout": should return an error if the "refresh" token has become invalid; status 401;
+  > Homework 10  Password recovery  Password recovery flow body validation  POST -> "auth/password-recovery": should return error if passed body is incorrect; status 400;
 
 
 
-    Tested case params:
-     headers: {"cookie":"refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwODM2MjUyZi02Y2Q3LTQwZGYtYmI2MS01NGUyZmM2MDY1NDEiLCJkZXZpY2VJZCI6ImYyZTcyOTc1LWE5NzUtNDkwNS04M2I2LTlhNjlhMjZmY2M2MSIsImlhdCI6MTY4NzA2MTI3NCwiZXhwIjoxNjg3MDYxMjk0fQ.Vj_y4gqupqO3LToxV5Z6h3QODI7hfBSfR5lqT2Kv-Do;"},
-    body: {}
+    Tested endpoint: auth/password-recovery
 
-    Expected status: 401
+    Tested method: POST
 
-     endpoint: auth/refresh-token,
-     method: POST,
-    Received status: 200
+    Expected status: 400
 
-    Description: the 'refresh' token should become invalid after "/auth/refresh-token" request
+    Received status: 400
 
-      49 |       }
-      50 |
-    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
+    Passed body: {"email":"invalid^gmail.cm"}
+
+    Expected data: { errorsMessages: [{ message: Any<String>, field: "email" }] }
+
+    Received data: "Bad Request"
+
+      40 |     }
+      41 |
+    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
          |                      ^
-      52 |         headers,
-      53 |         endpoint,
-      54 |         method,
+      43 |       endpoint: url,
+      44 |       method,
+      45 |     });
 
-      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/refreshToken/refreshToken-describe.ts:257:7)
+      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+      at Object.<anonymous> (src/tests/jest/back/describes/passwordRecovery/password-recovery-body-validation-describe.ts:27:7)

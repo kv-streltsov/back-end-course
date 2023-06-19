@@ -36,8 +36,9 @@ exports.emailService = {
         return transporter.sendMail(mailOptions);
     }),
     sendMailPasswordRecovery: (email) => __awaiter(void 0, void 0, void 0, function* () {
-        if (!exports.emailService._validatorEmail(email)) {
-            return false;
+        const validResult = exports.emailService._validatorEmail(email);
+        if (validResult !== true) {
+            return validResult;
         }
         const passwordRecovery = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
         yield users_repository_1.usersRepository.updateRecoveryCode(email, passwordRecovery);
@@ -51,11 +52,15 @@ exports.emailService = {
       </p>
     `
         };
-        return transporter.sendMail(mailOptions);
+        return true;
     }),
     _validatorEmail: (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+        const result = emailRegex.test(email);
+        if (!result) {
+            return { errorsMessages: [{ message: "Invalid value", field: "email" }] };
+        }
+        return true;
     }
 };
 //# sourceMappingURL=email-service.js.map

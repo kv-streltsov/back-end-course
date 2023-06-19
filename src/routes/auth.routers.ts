@@ -92,8 +92,8 @@ authRouters.post('/registration-email-resending', rateLimitMiddleware, async (re
 })
 authRouters.post('/password-recovery', rateLimitMiddleware, async (req: RequestWithBody<IEmail>, res: Response) => {
     const result = await emailService.sendMailPasswordRecovery(req.body.email)
-    if (!result) {
-        res.sendStatus(HttpStatusCode.BAD_REQUEST)
+    if (result !== true) {
+        res.status(HttpStatusCode.BAD_REQUEST).send(result)
         return
     }
     res.sendStatus(HttpStatusCode.NO_CONTENT)
@@ -102,7 +102,6 @@ authRouters.post('/password-recovery', rateLimitMiddleware, async (req: RequestW
 authRouters.post('/new-password', rateLimitMiddleware, recoveryPasswordValidator, async (req: RequestWithBody<INewPasswordRecoveryInput>, res: Response) => {
     const result = await usersService.recoveryPassword(req.body.newPassword, req.body.recoveryCode)
     if (!result) {
-        console.log(123)
         res.sendStatus(HttpStatusCode.BAD_REQUEST)
         return
     }

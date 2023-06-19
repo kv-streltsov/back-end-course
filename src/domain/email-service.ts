@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import {usersRepository} from "../repositories/users-repository";
+import {InterfaceError} from "../dto/Interface-error";
 
 
 const transporter = nodemailer.createTransport({
@@ -25,10 +26,13 @@ export const emailService = {
         return transporter.sendMail(mailOptions);
 
     },
-    sendMailPasswordRecovery: async (email: string) => {
-        if(!emailService._validatorEmail(email)){
-            return false
+    sendMailPasswordRecovery: async (email: string):Promise<boolean | InterfaceError> => {
+
+        const validResult = emailService._validatorEmail(email)
+        if(validResult !== true){
+            return validResult
         }
+
         const passwordRecovery: number = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 
         await usersRepository.updateRecoveryCode(email,passwordRecovery)
@@ -44,11 +48,16 @@ export const emailService = {
       </p>
     `
         };
-        return transporter.sendMail(mailOptions);
+        return true;
 
     },
-    _validatorEmail: (email: string): boolean => {
+    _validatorEmail: (email: string): boolean | InterfaceError => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email)
+        const result = emailRegex.test(email)
+
+        if(!result){
+            return { errorsMessages: [{ message: "Invalid value", field: "email" }] }
+        }
+        return true
     }
 }

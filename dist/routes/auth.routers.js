@@ -103,8 +103,8 @@ exports.authRouters.post('/registration-email-resending', rate_limit_middleware_
 }));
 exports.authRouters.post('/password-recovery', rate_limit_middleware_1.rateLimitMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield email_service_1.emailService.sendMailPasswordRecovery(req.body.email);
-    if (!result) {
-        res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+    if (result !== true) {
+        res.status(interface_html_code_1.HttpStatusCode.BAD_REQUEST).send(result);
         return;
     }
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
@@ -112,7 +112,6 @@ exports.authRouters.post('/password-recovery', rate_limit_middleware_1.rateLimit
 exports.authRouters.post('/new-password', rate_limit_middleware_1.rateLimitMiddleware, password_recovery_validations_1.recoveryPasswordValidator, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.usersService.recoveryPassword(req.body.newPassword, req.body.recoveryCode);
     if (!result) {
-        console.log(123);
         res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
         return;
     }
