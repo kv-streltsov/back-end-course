@@ -24,8 +24,13 @@ exports.usersRepository = {
     updateConfirmationCode: (email, uuid) => __awaiter(void 0, void 0, void 0, function* () {
         return users_scheme_1.usersModel.updateOne({ email: email }, { $set: { "confirmation.code": uuid } });
     }),
+    // ИСПРАВИТЬ!!!! НИЖЕ
     updateConfirmationCodee: (code, pyload) => __awaiter(void 0, void 0, void 0, function* () {
         return users_scheme_1.usersModel.updateOne({ 'confirmation.code': code }, { $set: pyload });
+    }),
+    updatePassword: (updateData, recoveryCode) => __awaiter(void 0, void 0, void 0, function* () {
+        return users_scheme_1.usersModel
+            .updateOne({ 'confirmation.passwordRecoveryCode': recoveryCode }, { $set: { salt: updateData.salt, password: updateData.passwordHash, 'confirmation.passwordRecoveryCode': null } });
     }),
     findUserById: (id) => __awaiter(void 0, void 0, void 0, function* () {
         return users_scheme_1.usersModel.findOne({ id: id }).lean();

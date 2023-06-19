@@ -20,6 +20,7 @@ import {rateLimitMiddleware} from "../middleware/rate-limit-middleware";
 import {log} from "util";
 import {usersModel} from "../db/schemes/users.scheme";
 import {rateLimitModel} from "../db/schemes/rate.limit.scheme";
+import {recoveryPasswordValidator} from "../middleware/validation/password-recovery-validations";
 
 dotenv.config()
 export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
@@ -90,25 +91,23 @@ authRouters.post('/registration-email-resending', rateLimitMiddleware, async (re
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 })
 authRouters.post('/password-recovery', rateLimitMiddleware, async (req: RequestWithBody<IEmail>, res: Response) => {
-
     const result = await emailService.sendMailPasswordRecovery(req.body.email)
     if (!result) {
         res.sendStatus(HttpStatusCode.BAD_REQUEST)
+        return
     }
     res.sendStatus(HttpStatusCode.NO_CONTENT)
 
 })
-authRouters.post('/new-password', rateLimitMiddleware, async (req: RequestWithBody<INewPasswordRecoveryInput>, res: Response) => {
+authRouters.post('/new-password', rateLimitMiddleware, recoveryPasswordValidator, async (req: RequestWithBody<INewPasswordRecoveryInput>, res: Response) => {
+    const result = await usersService.recoveryPassword(req.body.newPassword, req.body.recoveryCode)
+    if (!result) {
+        console.log(123)
+        res.sendStatus(HttpStatusCode.BAD_REQUEST)
+        return
+    }
+    res.sendStatus(HttpStatusCode.NO_CONTENT)
 
-
-    // 204
-    // Even if current email is not registered (for prevent user's email detection)
-    //
-    // 400
-    // If the inputModel has invalid email (for example 222^gmail.com)
-    //
-    // 429
-    // More than 5 attempts from one IP-address during 10 seconds
 })
 authRouters.get('/me', authMiddleware, async (req: Request, res: Response) => {
     res.status(200).json({

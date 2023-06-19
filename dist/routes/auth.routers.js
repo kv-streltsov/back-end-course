@@ -44,6 +44,7 @@ const email_service_1 = require("../domain/email-service");
 const refresh_token_middleware_1 = require("../middleware/refresh-token-middleware");
 const dotenv = __importStar(require("dotenv"));
 const rate_limit_middleware_1 = require("../middleware/rate-limit-middleware");
+const password_recovery_validations_1 = require("../middleware/validation/password-recovery-validations");
 dotenv.config();
 exports.COOKIE_SECURE = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
 exports.authRouters = (0, express_1.Router)({});
@@ -104,18 +105,18 @@ exports.authRouters.post('/password-recovery', rate_limit_middleware_1.rateLimit
     const result = yield email_service_1.emailService.sendMailPasswordRecovery(req.body.email);
     if (!result) {
         res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+        return;
     }
     res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
-exports.authRouters.post('/new-password', rate_limit_middleware_1.rateLimitMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // 204
-    // Even if current email is not registered (for prevent user's email detection)
-    //
-    // 400
-    // If the inputModel has invalid email (for example 222^gmail.com)
-    //
-    // 429
-    // More than 5 attempts from one IP-address during 10 seconds
+exports.authRouters.post('/new-password', rate_limit_middleware_1.rateLimitMiddleware, password_recovery_validations_1.recoveryPasswordValidator, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.usersService.recoveryPassword(req.body.newPassword, req.body.recoveryCode);
+    if (!result) {
+        console.log(123);
+        res.sendStatus(interface_html_code_1.HttpStatusCode.BAD_REQUEST);
+        return;
+    }
+    res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
 }));
 exports.authRouters.get('/me', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({

@@ -18,6 +18,7 @@ let userId: any
 let iat: any
 let exp: any
 let deviseId: any
+let passwordRecoveryCode: any
 
 
 describe('/10', () => {
@@ -241,7 +242,7 @@ describe('/10', () => {
         // SHOULD DELETE ALL DEVICE, EXCEPT FOR CURRENT
         await request(app)
             .delete('/security/devices')
-            .set('Cookie',refreshToken2[0])
+            .set('Cookie', refreshToken2[0])
 
         const resDevise = await request(app)
             .get('/security/devices')
@@ -322,15 +323,109 @@ describe('/10', () => {
     //
     // }, 100000);
     /////////////////////////////   PASSWORD RECOVERY   //////////////////////////////////////
-    it('should ', async () => {
-        const getUser = await usersModel.findOne({email: "kv.streltsov@yandex.ru"})
-        console.log(getUser!.confirmation)
+    it('SEND RECOVERY CODE ', async () => {
 
-        const response = await request(app)
-            .post('/password-recovery')
+        let findUserOld = await usersModel.findOne({email: user.email})
+        const oldPasswordRecoveryCode = findUserOld!.confirmation.passwordRecoveryCode
+
+        await request(app)
+            .post('/auth/password-recovery')
+            .send({"email": user.email}).expect(204)
+
+        await request(app)
+            .post('/auth/password-recovery')
+            .send({"email": "notexistemail@mail.ru"}).expect(204)
+
+        await request(app)
+            .post('/auth/password-recovery')
+            .send({"email": "incorrectMail.ru"}).expect(400)
+
+        let findUserNew = await usersModel.findOne({email: user.email})
+        const newPasswordRecoveryCode = findUserNew!.confirmation.passwordRecoveryCode
+
+        expect(newPasswordRecoveryCode !== oldPasswordRecoveryCode).toBeTruthy()
+        passwordRecoveryCode = newPasswordRecoveryCode
+
+    }, 100000);
+    it('SEND NEW PASSWORD AND RECOVERY CODE ', async () => {
+        await Promise.all([
+            //INCORRECT LENGTH PASSWORD
+            new Promise(resolve => setTimeout(async () => {
+
+                await request(app)
+                    .post('/auth/login')
+                    .set("User-Agent", 'MozZzila')
+                    .send({
+                        "loginOrEmail": user.email,
+                        "password": user.password
+                    }).expect(200)
+                resolve(1)
+            }, 10000)),
+            //INCORRECT LENGTH RECOVERY CODE
+            new Promise(resolve => setTimeout(async () => {
+
+                await request(app)
+                    .post('/auth/new-password')
+                    .send(
+                        {
+                            "newPassword": "newPass",
+                            "recoveryCode": '12345'
+                        }).expect(400)
+                resolve(2)
+            }, 11000)),
+            //NOT EXIST RECOVERY CODE
+            new Promise(resolve => setTimeout(async () => {
+                await request(app)
+                    .post('/auth/new-password')
+                    .send(
+                        {
+                            "newPassword": "newPass",
+                            "recoveryCode": '000000'
+                        }).expect(400)
+                resolve(3)
+            }, 12000)),
+            //ALL CORRECT
+            new Promise(resolve => setTimeout(async () => {
+                await request(app)
+                    .post('/auth/new-password')
+                    .send(
+                        {
+                            "newPassword": "newPass",
+                            "recoveryCode": passwordRecoveryCode.toString()
+                        }).expect(204)
+                resolve(4)
+            }, 13000)),
+            //USED RECOVERY CODE
+            new Promise(resolve => setTimeout(async () => {
+                await request(app)
+                    .post('/auth/new-password')
+                    .send(
+                        {
+                            "newPassword": "newPass",
+                            "recoveryCode": passwordRecoveryCode.toString()
+                        }).expect(400)
+                resolve(5)
+            }, 14000)),
+        ])
+    }, 100000);
+    it('LOGIN WITH NEW PASSWORD ', async () => {
+
+        ///LOGIN WITH OLD PASSWORD
+        await request(app)
+            .post('/auth/login')
             .send({
-                "email": user.email,
-            }).expect(204)
+                "loginOrEmail": user.email,
+                "password": user.password
+            }).expect(401)
+
+        ///LOGIN WITH NEW PASSWORD
+        await request(app)
+            .post('/auth/login')
+            .send({
+                "loginOrEmail": user.email,
+                "password": "newPass"
+            }).expect(200)
+
     });
 
 })

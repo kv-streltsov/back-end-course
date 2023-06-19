@@ -88,6 +88,11 @@ exports.usersService = {
     getUserById: (userId) => __awaiter(void 0, void 0, void 0, function* () {
         return yield users_repository_1.usersRepository.findUserById(userId);
     }),
+    recoveryPassword: (password, recoveryCode) => __awaiter(void 0, void 0, void 0, function* () {
+        const updatePassword = yield exports.usersService._generatePasswordHash(password);
+        const result = yield users_repository_1.usersRepository.updatePassword(updatePassword, recoveryCode);
+        return result.modifiedCount;
+    }),
     checkUser: (loginOrEmail, password) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield users_repository_1.usersRepository.checkUser(loginOrEmail);
         if (user === null) {
@@ -101,6 +106,11 @@ exports.usersService = {
     }),
     deleteUser: (id) => __awaiter(void 0, void 0, void 0, function* () {
         return yield users_repository_1.usersRepository.deleteUser(id);
+    }),
+    _generatePasswordHash: (password) => __awaiter(void 0, void 0, void 0, function* () {
+        const salt = yield bcrypt_1.default.genSalt(10);
+        const passwordHash = yield exports.usersService._generateHash(password, salt);
+        return { salt, passwordHash };
     }),
     _generateHash: (password, salt) => __awaiter(void 0, void 0, void 0, function* () {
         return yield bcrypt_1.default.hash(password, salt);
