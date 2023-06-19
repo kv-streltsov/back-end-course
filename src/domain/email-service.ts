@@ -48,7 +48,15 @@ export const emailService = {
       </p>
     `
         };
-        return true;
+
+        try {
+            await transporter.sendMail(mailOptions)
+            return true;
+        }
+        catch (e) {
+            return { errorsMessages: [{ message: "ERROR MAIL SEND", field: "500" }] }
+        }
+
 
     },
     _validatorEmail: (email: string): boolean | InterfaceError => {

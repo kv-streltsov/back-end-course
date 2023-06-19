@@ -52,7 +52,13 @@ exports.emailService = {
       </p>
     `
         };
-        return true;
+        try {
+            yield transporter.sendMail(mailOptions);
+            return true;
+        }
+        catch (e) {
+            return { errorsMessages: [{ message: "ERROR MAIL SEND", field: "500" }] };
+        }
     }),
     _validatorEmail: (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

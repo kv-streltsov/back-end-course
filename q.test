@@ -1,28 +1,85 @@
-  > Homework 10  Password recovery  Password recovery flow body validation  POST -> "auth/password-recovery": should return error if passed body is incorrect; status 400;
+  > Homework 10  Password recovery  POST -> "auth/password-recovery": should send email with recovery code; status 204;
 
+    thrown: "no message found after 1 minutes waiting"
 
+      33 |
+      34 | const passwordRecoveryTest = async () =>
+    > 35 |   it(
+         |   ^
+      36 |     getDescription({
+      37 |       method: 'POST',
+      38 |       endpoint: AuthEndpoint.PasswordRecovery,
 
-    Tested endpoint: auth/password-recovery
+      at passwordRecoveryTest (src/tests/jest/back/describes/passwordRecovery/passwordRecovery-describe.ts:35:3)
+      at src/tests/jest/back/describes/passwordRecovery/passwordRecovery-describe.ts:221:5
+      at performPasswordRecoveryDescribe (src/tests/jest/back/describes/passwordRecovery/passwordRecovery-describe.ts:211:3)
+      at src/tests/jest/back/back-v2-10-homework-01/password-recovery.spec.ts:16:34
+      at Object.<anonymous> (src/tests/jest/back/back-v2-10-homework-01/password-recovery.spec.ts:10:1)
 
-    Tested method: POST
+  > Homework 10  Password recovery  POST -> "auth/new-password": should return error if password is incorrect; status 400;
 
-    Expected status: 400
+    expect(received).not.toBeUndefined()
 
-    Received status: 400
+    Received: undefined
 
-    Passed body: {"email":"invalid^gmail.cm"}
+       6 |   getRecoveryCode: (): string => {
+       7 |     const recoveryCode = expect.getState().recoveryCode;
+    >  8 |     expect(recoveryCode).not.toBeUndefined();
+         |                              ^
+       9 |
+      10 |     return recoveryCode;
+      11 |   },
 
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "email" }] }
+      at Object.getRecoveryCode (src/tests/jest/back/testHelpers/jestState/passwordRecoveryState.ts:8:30)
+      at Object.<anonymous> (src/tests/jest/back/describes/passwordRecovery/passwordRecovery-describe.ts:70:50)
 
-    Received data: "Bad Request"
+  > Homework 10  Password recovery  POST -> "auth/new-password": should confirm password recovery; status 204;
 
-      40 |     }
-      41 |
-    > 42 |     expect(response).toBeError(400, incorrectFields, requestBody, {
-         |                      ^
-      43 |       endpoint: url,
-      44 |       method,
-      45 |     });
+    expect(received).not.toBeUndefined()
 
-      at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/passwordRecovery/password-recovery-body-validation-describe.ts:27:7)
+    Received: undefined
+
+       6 |   getRecoveryCode: (): string => {
+       7 |     const recoveryCode = expect.getState().recoveryCode;
+    >  8 |     expect(recoveryCode).not.toBeUndefined();
+         |                              ^
+       9 |
+      10 |     return recoveryCode;
+      11 |   },
+
+      at Object.getRecoveryCode (src/tests/jest/back/testHelpers/jestState/passwordRecoveryState.ts:8:30)
+      at Object.<anonymous> (src/tests/jest/back/describes/passwordRecovery/passwordRecovery-describe.ts:90:50)
+
+  > Homework 10  Password recovery  POST -> "auth/password-recovery": should return status 401 if try to login with old password; status 204;
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 200
+
+      138 |       });
+      139 |
+    > 140 |       expect(status).toBe(401);
+          |                      ^
+      141 |     }
+      142 |   );
+      143 |
+
+      at Object.<anonymous> (src/tests/jest/back/describes/passwordRecovery/passwordRecovery-describe.ts:140:22)
+
+  > Homework 10  Password recovery  POST -> "/auth/login": should sign in user with new password; status 200; content: JWT token;
+
+    expect(received).not.toBeUndefined()
+
+    Received: undefined
+
+      17 |   getNewPassword: (): string => {
+      18 |     const newPassword = expect.getState().newPassword;
+    > 19 |     expect(newPassword).not.toBeUndefined();
+         |                             ^
+      20 |
+      21 |     return newPassword;
+      22 |   },
+
+      at Object.getNewPassword (src/tests/jest/back/testHelpers/jestState/passwordRecoveryState.ts:19:29)
+      at Object.<anonymous> (src/tests/jest/back/describes/passwordRecovery/passwordRecovery-describe.ts:155:49)
