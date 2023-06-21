@@ -4,6 +4,7 @@ import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
+const PROJECTION  = {_id: 0,__v:0 }
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
 
@@ -17,7 +18,6 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
     }
 }
 export const queryBlogsRepository = {
-
     getAllBlogs: async (
         pageNumber: number = 1,
         pageSize: number = 10,
@@ -30,7 +30,8 @@ export const queryBlogsRepository = {
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
 
         const count: number = await blogsModel.countDocuments(findNameTerm)
-        const blogs = await blogsModel.find(findNameTerm, {projection: {_id: 0}})
+        const blogs = await blogsModel.find(findNameTerm)
+            .select(PROJECTION)
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
@@ -48,9 +49,7 @@ export const queryBlogsRepository = {
     },
 
     getBlogById: async (id: string) => {
-        return blogsModel.findOne({id: id}, {
-            projection: {_id: 0},
-        });
+        return blogsModel.findOne({id: id}).select(PROJECTION);
     },
     getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string):Promise<WithId<any>> => {
         const findBlog = await blogsModel.findOne({id: id})
@@ -59,7 +58,8 @@ export const queryBlogsRepository = {
         }
         const count: number = await postsModel.countDocuments({blogId: id})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const posts = await postsModel.find({blogId: id}, {projection: {_id: 0}})
+        const posts = await postsModel.find({blogId: id})
+            .select(PROJECTION)
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)

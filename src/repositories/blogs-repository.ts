@@ -54,7 +54,6 @@ export const blogsRepository = {
         const findBlog = await blogsModel.findOne({id: id})
         if (findBlog === null) return null
 
-        // а если сервер не ответит?
         await blogsModel.updateOne({id: id}, {
             $set: {
                 name: body.name,

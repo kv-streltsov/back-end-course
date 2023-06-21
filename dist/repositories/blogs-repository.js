@@ -42,7 +42,6 @@ exports.blogsRepository = {
         const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
         if (findBlog === null)
             return null;
-        // а если сервер не ответит?
         yield blogs_scheme_1.blogsModel.updateOne({ id: id }, {
             $set: {
                 name: body.name,

@@ -4,6 +4,7 @@ import {InterfaceUserInput} from "../src/dto/interface.user";
 import jwt from "jsonwebtoken";
 import {devicesSessionsModel} from "../src/db/schemes/devices.sessions.scheme";
 import {usersModel} from "../src/db/schemes/users.scheme";
+import {InterfaceBlogView} from "../src/dto/interface.blog";
 
 const user: InterfaceUserInput = {
     "login": "qwerty",
@@ -425,6 +426,115 @@ describe('/10', () => {
                 "loginOrEmail": user.email,
                 "password": "newPass"
             }).expect(200)
+
+    });
+    /////////////////////////////        BLOG FLOW         //////////////////////////////////////
+    it('BLOG', async () => {
+
+
+        const firstBlog = {
+            "name": "firstBlog",
+            "description": "firstBlog description firstBlog description  firstBlog test description",
+            "websiteUrl": "https://www.youtube.com/firstBlog"
+        }
+        const secondBlog = {
+            "name": "secondBlog",
+            "description": "secondBlog test description secondBlog test description test description",
+            "websiteUrl": "https://www.youtube.com/secondBlog"
+        }
+
+
+        // CREATE NEW BLOG
+        const newBlog = await request(app)
+            .post(`/blogs`)
+            .auth('admin', 'qwerty')
+            .send(firstBlog)
+            .expect(201)
+
+        // TO EQUAL NEW BLOG
+        expect(newBlog.body).toEqual<InterfaceBlogView>({
+            id: expect.any(String),
+            createdAt: expect.any(String),
+            description: firstBlog.description,
+            isMembership: false,
+            name: firstBlog.name,
+            websiteUrl: firstBlog.websiteUrl,
+        })
+
+        //GET BLOG BY ID
+        const getBlog = await request(app)
+            .get(`/blogs/${newBlog.body.id}`)
+            .expect(200)
+        // TO EQUAL GOT BLOG
+        expect(getBlog.body).toEqual<InterfaceBlogView>({
+            id: newBlog.body.id,
+            createdAt: newBlog.body.createdAt,
+            description: newBlog.body.description,
+            isMembership: newBlog.body.isMembership,
+            name: newBlog.body.name,
+            websiteUrl: newBlog.body.websiteUrl,
+        })
+
+        // CREATE SECOND BLOG
+        await request(app)
+            .post(`/blogs`)
+            .auth('admin', 'qwerty')
+            .send(secondBlog)
+            .expect(201)
+
+        // GET ALL BLOGS
+        const getAllBlog = await request(app)
+            .get(`/blogs?sortBy=createdAt&pageNumber=1&pageSize=10`)
+            .expect(200)
+        expect(getAllBlog.body).toEqual({
+            pagesCount: 1,
+            page: 1,
+            pageSize: 10,
+            totalCount: 2,
+            items: [
+                {
+                    id: expect.any(String),
+                    createdAt: expect.any(String),
+                    description: secondBlog.description,
+                    isMembership: false,
+                    name: secondBlog.name,
+                    websiteUrl: secondBlog.websiteUrl,
+                },
+                {
+                    id: newBlog.body.id,
+                    createdAt: newBlog.body.createdAt,
+                    description: newBlog.body.description,
+                    isMembership: newBlog.body.isMembership,
+                    name: newBlog.body.name,
+                    websiteUrl: newBlog.body.websiteUrl,
+                },
+            ]
+        })
+
+        // UPDATE FIRST BLOG
+        await request(app)
+            .put(`/blogs/${newBlog.body.id}`)
+            .auth('admin', 'qwerty')
+            .send({
+                "name": "updateBlog",
+                "description": "description updateBlog",
+                "websiteUrl": "https://updateBlog.ru"
+            })
+            .expect(204)
+
+        const updateBlog = await request(app)
+            .get(`/blogs/${newBlog.body.id}`)
+            .expect(200)
+        // TO EQUAL UPDATE BLOG
+        expect(updateBlog.body).toEqual<InterfaceBlogView>({
+            id: newBlog.body.id,
+            createdAt: newBlog.body.createdAt,
+            description: "description updateBlog",
+            isMembership: newBlog.body.isMembership,
+            name: "updateBlog",
+            websiteUrl: "https://updateBlog.ru",
+        })
+
 
     });
 

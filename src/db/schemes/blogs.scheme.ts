@@ -7,7 +7,7 @@ const blogsScheme = new Schema<IBlogDb>({
     description: String,
     websiteUrl: String,
     createdAt: String,
-    isMembership: String
+    isMembership: Boolean
 })
 
 export const blogsModel = mongoose.model('Blogs', blogsScheme, 'Blogs')

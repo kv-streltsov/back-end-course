@@ -13,6 +13,7 @@ exports.queryBlogsRepository = exports.paginationHandler = void 0;
 const posts_scheme_1 = require("../db/schemes/posts.scheme");
 const blogs_scheme_1 = require("../db/schemes/blogs.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
+const PROJECTION = { _id: 0, __v: 0 };
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};
@@ -28,7 +29,8 @@ exports.queryBlogsRepository = {
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
         const findNameTerm = searchNameTerm ? { name: { $regex: searchNameTerm, $options: 'i' } } : {};
         const count = yield blogs_scheme_1.blogsModel.countDocuments(findNameTerm);
-        const blogs = yield blogs_scheme_1.blogsModel.find(findNameTerm, { projection: { _id: 0 } })
+        const blogs = yield blogs_scheme_1.blogsModel.find(findNameTerm)
+            .select(PROJECTION)
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
@@ -42,9 +44,7 @@ exports.queryBlogsRepository = {
         };
     }),
     getBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return blogs_scheme_1.blogsModel.findOne({ id: id }, {
-            projection: { _id: 0 },
-        });
+        return blogs_scheme_1.blogsModel.findOne({ id: id }).select(PROJECTION);
     }),
     getPostsInBlog: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, id) => __awaiter(void 0, void 0, void 0, function* () {
         const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
@@ -53,7 +53,8 @@ exports.queryBlogsRepository = {
         }
         const count = yield posts_scheme_1.postsModel.countDocuments({ blogId: id });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const posts = yield posts_scheme_1.postsModel.find({ blogId: id }, { projection: { _id: 0 } })
+        const posts = yield posts_scheme_1.postsModel.find({ blogId: id })
+            .select(PROJECTION)
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
