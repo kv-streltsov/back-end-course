@@ -10,10 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsRepository = void 0;
-const db_mongo_1 = require("../db/db_mongo");
+const posts_scheme_1 = require("../db/schemes/posts.scheme");
+const blogs_scheme_1 = require("../db/schemes/blogs.scheme");
 exports.postsRepository = {
     postPost: (body) => __awaiter(void 0, void 0, void 0, function* () {
-        const findBlogName = yield db_mongo_1.collectionBlogs.findOne({ id: body.blogId });
+        const findBlogName = yield blogs_scheme_1.blogsModel.findOne({ id: body.blogId });
         if (findBlogName) {
             const createData = {
                 id: new Date().getTime().toString(),
@@ -21,16 +22,16 @@ exports.postsRepository = {
                 blogName: findBlogName.name
             };
             const newPost = Object.assign(Object.assign({}, createData), body);
-            yield db_mongo_1.collectionPosts.insertOne(newPost);
+            yield posts_scheme_1.postsModel.create(newPost);
             return Object.assign(Object.assign({}, createData), body);
         }
         return undefined;
     }),
     putPost: (body, id) => __awaiter(void 0, void 0, void 0, function* () {
-        const findPost = yield db_mongo_1.collectionPosts.findOne({ id: id });
+        const findPost = yield posts_scheme_1.postsModel.findOne({ id: id });
         if (findPost === null)
             return null;
-        yield db_mongo_1.collectionPosts.updateOne({ id: id }, {
+        yield posts_scheme_1.postsModel.updateOne({ id: id }, {
             $set: {
                 title: body.title,
                 shortDescription: body.shortDescription,
@@ -41,7 +42,7 @@ exports.postsRepository = {
         return true;
     }),
     deletePost: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        const deletePost = yield db_mongo_1.collectionPosts.deleteOne({ id: id });
+        const deletePost = yield posts_scheme_1.postsModel.deleteOne({ id: id });
         if (deletePost.deletedCount) {
             return true;
         }

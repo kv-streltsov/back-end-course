@@ -11,11 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentService = void 0;
 const comments_repository_1 = require("../repositories/comments-repository");
-const db_mongo_1 = require("../db/db_mongo");
 const query_comment_repository_1 = require("../repositories/query-comment-repository");
+const query_posts_repository_1 = require("../repositories/query-posts-repository");
 exports.commentService = {
     postComment: (postId, user, comment) => __awaiter(void 0, void 0, void 0, function* () {
-        const findPost = yield db_mongo_1.collectionPosts.findOne({ id: postId });
+        const findPost = yield query_posts_repository_1.queryPostsRepository.getPostById(postId);
         if (findPost === null) {
             return null;
         }

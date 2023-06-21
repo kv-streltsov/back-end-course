@@ -10,7 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
-const db_mongo_1 = require("../db/db_mongo");
+const posts_scheme_1 = require("../db/schemes/posts.scheme");
+const blogs_scheme_1 = require("../db/schemes/blogs.scheme");
 exports.blogsRepository = {
     postBlog: (body) => __awaiter(void 0, void 0, void 0, function* () {
         const createData = {
@@ -19,11 +20,11 @@ exports.blogsRepository = {
             isMembership: false
         };
         const newBlog = Object.assign(Object.assign({}, createData), body);
-        yield db_mongo_1.collectionBlogs.insertOne(newBlog);
+        yield blogs_scheme_1.blogsModel.create(newBlog);
         return Object.assign(Object.assign({}, createData), body);
     }),
     postPostInBlog: (id, body) => __awaiter(void 0, void 0, void 0, function* () {
-        const findBlogName = yield db_mongo_1.collectionBlogs.findOne({ id: id });
+        const findBlogName = yield blogs_scheme_1.blogsModel.findOne({ id: id });
         if (findBlogName) {
             const createData = {
                 id: new Date().getTime().toString(),
@@ -32,17 +33,17 @@ exports.blogsRepository = {
                 blogId: id
             };
             const newPost = Object.assign(Object.assign({}, createData), body);
-            yield db_mongo_1.collectionPosts.insertOne(newPost);
+            yield posts_scheme_1.postsModel.create(newPost);
             return Object.assign(Object.assign({}, createData), body);
         }
         return undefined;
     }),
     putBlog: (body, id) => __awaiter(void 0, void 0, void 0, function* () {
-        const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: id });
+        const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
         if (findBlog === null)
             return null;
         // а если сервер не ответит?
-        yield db_mongo_1.collectionBlogs.updateOne({ id: id }, {
+        yield blogs_scheme_1.blogsModel.updateOne({ id: id }, {
             $set: {
                 name: body.name,
                 description: body.description,
@@ -52,7 +53,7 @@ exports.blogsRepository = {
         return true;
     }),
     deleteBlog: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        const deleteBlog = yield db_mongo_1.collectionBlogs.deleteOne({ id: id });
+        const deleteBlog = yield blogs_scheme_1.blogsModel.deleteOne({ id: id });
         if (deleteBlog.deletedCount) {
             return true;
         }

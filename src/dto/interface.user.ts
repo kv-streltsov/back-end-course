@@ -1,5 +1,5 @@
 import {ObjectId} from "mongodb";
-import exp from "constants";
+import exp from "constants"
 
 export interface InterfaceUserAuthPost {
     loginOrEmail: string

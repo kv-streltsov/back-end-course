@@ -35,27 +35,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clear_db_mongo = exports.runMongo = exports.collectionDevicesSessions = exports.collectionRateLimit = exports.collectionComments = exports.collectionUsers = exports.collectionPosts = exports.collectionBlogs = exports.clientMongo = exports.MONGOOSE_URL = exports.MONGO_URL = void 0;
-const mongodb_1 = require("mongodb");
+exports.clear_db_mongo = exports.runMongo = exports.MONGOOSE_URL = exports.MONGO_URL = void 0;
 const dotenv = __importStar(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const devices_sessions_scheme_1 = require("./schemes/devices.sessions.scheme");
 const rate_limit_scheme_1 = require("./schemes/rate.limit.scheme");
 const comments_scheme_1 = require("./schemes/comments.scheme");
 const users_scheme_1 = require("./schemes/users.scheme");
+const posts_scheme_1 = require("./schemes/posts.scheme");
+const blogs_scheme_1 = require("./schemes/blogs.scheme");
 dotenv.config();
 exports.MONGO_URL = process.env.MONGO_URL;
 exports.MONGOOSE_URL = process.env.MONGOOSE_URL;
 if (!exports.MONGO_URL) {
     throw new Error('!!! Bad URL');
 }
-exports.clientMongo = new mongodb_1.MongoClient(exports.MONGO_URL);
-exports.collectionBlogs = exports.clientMongo.db('back-end-course').collection('Blogs');
-exports.collectionPosts = exports.clientMongo.db('back-end-course').collection('Posts');
-exports.collectionUsers = exports.clientMongo.db('back-end-course').collection('Users');
-exports.collectionComments = exports.clientMongo.db('back-end-course').collection('Comments');
-exports.collectionRateLimit = exports.clientMongo.db('back-end-course').collection('RateLimit');
-exports.collectionDevicesSessions = exports.clientMongo.db('back-end-course').collection('DevicesSessions');
 function runMongo() {
     return __awaiter(this, void 0, void 0, function* () {
         if (!exports.MONGOOSE_URL) {
@@ -63,12 +57,10 @@ function runMongo() {
         }
         try {
             yield mongoose_1.default.connect(exports.MONGOOSE_URL);
-            yield exports.clientMongo.connect(); // old
-            yield exports.clientMongo.db("Back-end-course").command({ ping: 1 }); // old
             console.log('connected successfully to mongo server');
         }
         catch (_a) {
-            yield exports.clientMongo.close();
+            yield mongoose_1.default.disconnect();
             console.log('connect error to mongo server');
         }
     });
@@ -77,8 +69,8 @@ exports.runMongo = runMongo;
 function clear_db_mongo() {
     return __awaiter(this, void 0, void 0, function* () {
         const asyncArray = [
-            yield exports.collectionBlogs.deleteMany({}),
-            yield exports.collectionPosts.deleteMany({}),
+            yield blogs_scheme_1.blogsModel.deleteMany({}),
+            yield posts_scheme_1.postsModel.deleteMany({}),
             yield users_scheme_1.usersModel.deleteMany({}),
             yield comments_scheme_1.commentsModel.deleteMany({}),
             yield rate_limit_scheme_1.rateLimitModel.deleteMany({}),

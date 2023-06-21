@@ -30,4 +30,13 @@ export interface InterfaceGetBlogsWitchQuery {
     items?:WithId<any>[]
 }
 
+export interface IBlogDb {
+    id: string
+    name: string
+    description: string
+    websiteUrl: string
+    createdAt: string
+    isMembership: boolean // default false
+}
+
 

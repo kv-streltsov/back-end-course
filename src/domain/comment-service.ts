@@ -1,12 +1,12 @@
 import {commentsRepository} from "../repositories/comments-repository";
 import {InterfaceCommentInput, InterfaceCommentView} from "../dto/interface.comment";
 import {IUserDb} from "../dto/interface.user";
-import { collectionPosts} from "../db/db_mongo";
 import {queryCommentRepository} from "../repositories/query-comment-repository";
+import {queryPostsRepository} from "../repositories/query-posts-repository";
 
 export const commentService = {
     postComment: async (postId: string, user: IUserDb, comment: InterfaceCommentInput) => {
-        const findPost = await collectionPosts.findOne({id: postId},)
+        const findPost = await queryPostsRepository.getPostById(postId)
         if (findPost === null) {
             return null
         }

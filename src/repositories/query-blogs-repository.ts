@@ -1,6 +1,7 @@
-import {collectionBlogs, collectionPosts} from "../db/db_mongo";
-import { InterfaceGetBlogsWitchQuery} from "../dto/interface.blog";
+import {InterfaceGetBlogsWitchQuery} from "../dto/interface.blog";
 import {WithId} from "mongodb";
+import {postsModel} from "../db/schemes/posts.scheme";
+import {blogsModel} from "../db/schemes/blogs.scheme";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
 
@@ -28,12 +29,12 @@ export const queryBlogsRepository = {
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
 
-        const count: number = await collectionBlogs.countDocuments(findNameTerm)
-        const blogs = await collectionBlogs.find(findNameTerm, {projection: {_id: 0}})
+        const count: number = await blogsModel.countDocuments(findNameTerm)
+        const blogs = await blogsModel.find(findNameTerm, {projection: {_id: 0}})
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
-            .toArray()
+            .lean()
 
         return {
             pagesCount: Math.ceil(count / pageSize),
@@ -47,23 +48,22 @@ export const queryBlogsRepository = {
     },
 
     getBlogById: async (id: string) => {
-        return await collectionBlogs.findOne({id: id}, {
+        return blogsModel.findOne({id: id}, {
             projection: {_id: 0},
         });
     },
     getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string):Promise<WithId<any>> => {
-        const findBlog = await collectionBlogs.findOne({id: id})
+        const findBlog = await blogsModel.findOne({id: id})
         if (findBlog === null) {
             return null
         }
-        const count: number = await collectionPosts.countDocuments({blogId: id})
+        const count: number = await postsModel.countDocuments({blogId: id})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const posts = await collectionPosts.find({blogId: id}, {projection: {_id: 0}})
+        const posts = await postsModel.find({blogId: id}, {projection: {_id: 0}})
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
-            .toArray()
-
+            .lean()
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,

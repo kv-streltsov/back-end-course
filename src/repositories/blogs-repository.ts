@@ -1,7 +1,8 @@
 import {InterfaceBlog, InterfaceBlogInput, InterfaceBlogView} from "../dto/interface.blog";
-import {collectionBlogs, collectionPosts} from "../db/db_mongo";
-import { InterfacePostInBlog, InterfacePostView} from "../dto/interface.post";
+import {InterfacePostInBlog, InterfacePostView} from "../dto/interface.post";
 import {WithId} from "mongodb";
+import {postsModel} from "../db/schemes/posts.scheme";
+import {blogsModel} from "../db/schemes/blogs.scheme";
 
 
 export const blogsRepository = {
@@ -17,15 +18,15 @@ export const blogsRepository = {
             ...createData,
             ...body
         }
-        await collectionBlogs.insertOne(newBlog)
+        await blogsModel.create(newBlog)
         return {
             ...createData,
             ...body
         }
 
     },
-    postPostInBlog: async (id: string, body: InterfacePostInBlog):Promise<InterfacePostView | undefined> => {
-        const findBlogName:WithId<any> = await collectionBlogs.findOne({id: id})
+    postPostInBlog: async (id: string, body: InterfacePostInBlog): Promise<InterfacePostView | undefined> => {
+        const findBlogName: WithId<any> = await blogsModel.findOne({id: id})
 
         if (findBlogName) {
             const createData = {
@@ -39,7 +40,7 @@ export const blogsRepository = {
                 ...body
             }
 
-            await collectionPosts.insertOne(newPost)
+            await postsModel.create(newPost)
             return {
                 ...createData,
                 ...body
@@ -50,11 +51,11 @@ export const blogsRepository = {
     },
     putBlog: async (body: InterfaceBlog, id: string): Promise<boolean | null> => {
 
-        const findBlog = await collectionBlogs.findOne({id: id})
+        const findBlog = await blogsModel.findOne({id: id})
         if (findBlog === null) return null
 
         // а если сервер не ответит?
-        await collectionBlogs.updateOne({id: id}, {
+        await blogsModel.updateOne({id: id}, {
             $set: {
                 name: body.name,
                 description: body.description,
@@ -67,7 +68,7 @@ export const blogsRepository = {
     },
     deleteBlog: async (id: string): Promise<boolean | null> => {
 
-        const deleteBlog = await collectionBlogs.deleteOne({id: id})
+        const deleteBlog = await blogsModel.deleteOne({id: id})
         if (deleteBlog.deletedCount) {
             return true
         } else return null

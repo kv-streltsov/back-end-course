@@ -10,7 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.queryBlogsRepository = exports.paginationHandler = void 0;
-const db_mongo_1 = require("../db/db_mongo");
+const posts_scheme_1 = require("../db/schemes/posts.scheme");
+const blogs_scheme_1 = require("../db/schemes/blogs.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     const countItems = (pageNumber - 1) * pageSize;
@@ -26,12 +27,12 @@ exports.queryBlogsRepository = {
     getAllBlogs: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, searchNameTerm = null) => __awaiter(void 0, void 0, void 0, function* () {
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
         const findNameTerm = searchNameTerm ? { name: { $regex: searchNameTerm, $options: 'i' } } : {};
-        const count = yield db_mongo_1.collectionBlogs.countDocuments(findNameTerm);
-        const blogs = yield db_mongo_1.collectionBlogs.find(findNameTerm, { projection: { _id: 0 } })
+        const count = yield blogs_scheme_1.blogsModel.countDocuments(findNameTerm);
+        const blogs = yield blogs_scheme_1.blogsModel.find(findNameTerm, { projection: { _id: 0 } })
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
-            .toArray();
+            .lean();
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,
@@ -41,22 +42,22 @@ exports.queryBlogsRepository = {
         };
     }),
     getBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield db_mongo_1.collectionBlogs.findOne({ id: id }, {
+        return blogs_scheme_1.blogsModel.findOne({ id: id }, {
             projection: { _id: 0 },
         });
     }),
     getPostsInBlog: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, id) => __awaiter(void 0, void 0, void 0, function* () {
-        const findBlog = yield db_mongo_1.collectionBlogs.findOne({ id: id });
+        const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
         if (findBlog === null) {
             return null;
         }
-        const count = yield db_mongo_1.collectionPosts.countDocuments({ blogId: id });
+        const count = yield posts_scheme_1.postsModel.countDocuments({ blogId: id });
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const posts = yield db_mongo_1.collectionPosts.find({ blogId: id }, { projection: { _id: 0 } })
+        const posts = yield posts_scheme_1.postsModel.find({ blogId: id }, { projection: { _id: 0 } })
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
-            .toArray();
+            .lean();
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,

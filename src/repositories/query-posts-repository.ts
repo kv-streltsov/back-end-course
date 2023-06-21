@@ -1,4 +1,4 @@
-import {collectionPosts} from "../db/db_mongo";
+import {postsModel} from "../db/schemes/posts.scheme";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
 
@@ -21,13 +21,13 @@ export const queryPostsRepository = {
         sortBy: string = DEFAULT_SORT_FIELD
     ) => {
 
-        const count = await collectionPosts.countDocuments({})
+        const count = await postsModel.countDocuments({})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const posts = await collectionPosts.find({}, {projection: {_id: 0}})
+        const posts = await postsModel.find({}, {projection: {_id: 0}})
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
-            .toArray()
+            .lean()
 
         return {
             pagesCount: Math.ceil(count / pageSize),
@@ -39,7 +39,7 @@ export const queryPostsRepository = {
 
     },
     getPostById: async (id: string) => {
-        return await collectionPosts.findOne({id: id}, {
+        return  postsModel.findOne({id: id}, {
             projection: {_id: 0},
         })
     }
