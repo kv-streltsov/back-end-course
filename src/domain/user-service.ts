@@ -3,9 +3,9 @@ import bcrypt from "bcrypt";
 import {randomUUID} from "crypto";
 import {IResultUserService} from "../dto/interface.user.service.contract";
 
-export const usersService = {
 
-    postUser: async (login: string, email: string, password: string, confirmAdmin: boolean = false) => {
+class UsersServiceClass {
+    async postUser(login: string, email: string, password: string, confirmAdmin: boolean = false) {
         const salt: string = await bcrypt.genSalt(10)
         const passwordHash: string = await usersService._generateHash(password, salt)
 
@@ -34,8 +34,9 @@ export const usersService = {
 
             }, uuid
         })
-    },
-    confirmationUser: async (code: string): Promise<IResultUserService<boolean>> => {
+    }
+
+    async  confirmationUser  (code: string): Promise<IResultUserService<boolean>>  {
         const findUser = await usersRepository.findUserByConfirmationCode(code)
         if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return {
@@ -54,8 +55,9 @@ export const usersService = {
             "confirmation.code": null
         })
         return {data: true, errorsMessages: null, isSuccess: true}
-    },
-    reassignConfirmationCode: async (email: string): Promise<IResultUserService<string>> => {
+    }
+
+    async reassignConfirmationCode(email: string): Promise<IResultUserService<string>> {
         const findUser = await usersRepository.findUserByEmail(email)
         if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return {
@@ -69,6 +71,7 @@ export const usersService = {
                 data: null
             }
         }
+
         const uuid: string = randomUUID()
         await usersRepository.updateConfirmationCode(email, uuid)
         return {
@@ -77,37 +80,46 @@ export const usersService = {
             errorsMessages: null
         }
 
-    },
-    getUserById: async (userId: string) => {
+    }
+
+    async getUserById(userId: string) {
         return await usersRepository.findUserById(userId)
-    },
-    recoveryPassword: async (password: string, recoveryCode: string) => {
+    }
+
+    async recoveryPassword(password: string, recoveryCode: string) {
         const updatePassword = await usersService._generatePasswordHash(password)
-        const result = await usersRepository.updatePassword(updatePassword,recoveryCode)
+        const result = await usersRepository.updatePassword(updatePassword, recoveryCode)
         return result.modifiedCount
-    },
-    checkUser: async (loginOrEmail: string, password: string) => {
+    }
+
+    async checkUser(loginOrEmail: string, password: string) {
         const user = await usersRepository.checkUser(loginOrEmail)
         if (user === null) {
             return null
         }
 
-        const passwordHash: string = await usersService._generateHash(password, user.salt)
+        const passwordHash: string = await this._generateHash(password, user.salt)
 
         if (passwordHash !== user.password) {
             return false
         }
         return user
-    },
-    deleteUser: async (id: string) => {
+    }
+
+    async deleteUser(id: string) {
         return await usersRepository.deleteUser(id)
-    },
-    _generatePasswordHash: async (password: string) => {
+    }
+
+    async _generatePasswordHash(password: string) {
         const salt: string = await bcrypt.genSalt(10)
-        const passwordHash: string = await usersService._generateHash(password, salt)
+        const passwordHash: string = await this._generateHash(password, salt)
         return {salt, passwordHash}
-    },
-    _generateHash: async (password: string, salt: string) => {
+    }
+
+    async _generateHash(password: string, salt: string) {
         return await bcrypt.hash(password, salt)
     }
 }
+
+export const usersService = new UsersServiceClass()
+

@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export const emailService = {
-    sendMailRegistration: async (email: string, uuid: string) => {
+class emailServiceClass {
+    async sendMailRegistration(email: string, uuid: string) {
         const mailOptions = {
             from: process.env.EMAIL_ADDRES,
             to: email,
@@ -25,17 +25,18 @@ export const emailService = {
         };
         return transporter.sendMail(mailOptions);
 
-    },
-    sendMailPasswordRecovery: async (email: string):Promise<boolean | InterfaceError> => {
+    }
+
+    async sendMailPasswordRecovery(email: string): Promise<boolean | InterfaceError> {
 
         const validResult = emailService._validatorEmail(email)
-        if(validResult !== true){
+        if (validResult !== true) {
             return validResult
         }
 
         const passwordRecovery: number = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 
-        await usersRepository.updateRecoveryCode(email,passwordRecovery)
+        await usersRepository.updateRecoveryCode(email, passwordRecovery)
 
         const mailOptions = {
             from: process.env.EMAIL_ADDRES,
@@ -52,20 +53,22 @@ export const emailService = {
         try {
             await transporter.sendMail(mailOptions)
             return true;
-        }
-        catch (e) {
-            return { errorsMessages: [{ message: "ERROR MAIL SEND", field: "500" }] }
+        } catch (e) {
+            return {errorsMessages: [{message: "ERROR MAIL SEND", field: "500"}]}
         }
 
 
-    },
-    _validatorEmail: (email: string): boolean | InterfaceError => {
+    }
+
+    _validatorEmail(email: string): boolean | InterfaceError {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const result = emailRegex.test(email)
 
-        if(!result){
-            return { errorsMessages: [{ message: "Invalid value", field: "email" }] }
+        if (!result) {
+            return {errorsMessages: [{message: "Invalid value", field: "email"}]}
         }
         return true
     }
 }
+
+export const emailService = new emailServiceClass()

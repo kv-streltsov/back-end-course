@@ -22,45 +22,49 @@ const transporter = nodemailer_1.default.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
-exports.emailService = {
-    sendMailRegistration: (email, uuid) => __awaiter(void 0, void 0, void 0, function* () {
-        const mailOptions = {
-            from: process.env.EMAIL_ADDRES,
-            to: email,
-            subject: 'registration confirm',
-            html: `<h1>Thank for your registration</h1>
+class emailServiceClass {
+    sendMailRegistration(email, uuid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const mailOptions = {
+                from: process.env.EMAIL_ADDRES,
+                to: email,
+                subject: 'registration confirm',
+                html: `<h1>Thank for your registration</h1>
                  <p>To finish registration please follow the link below:
                     <a href='http://localhost:5001/auth/registration-confirmation?code=${uuid}'>complete registration</a>
                  </p>`
-        };
-        return transporter.sendMail(mailOptions);
-    }),
-    sendMailPasswordRecovery: (email) => __awaiter(void 0, void 0, void 0, function* () {
-        const validResult = exports.emailService._validatorEmail(email);
-        if (validResult !== true) {
-            return validResult;
-        }
-        const passwordRecovery = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-        yield users_repository_1.usersRepository.updateRecoveryCode(email, passwordRecovery);
-        const mailOptions = {
-            from: process.env.EMAIL_ADDRES,
-            to: email,
-            subject: 'Password recovery',
-            html: ` <h1>Password recovery</h1>
+            };
+            return transporter.sendMail(mailOptions);
+        });
+    }
+    sendMailPasswordRecovery(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const validResult = exports.emailService._validatorEmail(email);
+            if (validResult !== true) {
+                return validResult;
+            }
+            const passwordRecovery = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+            yield users_repository_1.usersRepository.updateRecoveryCode(email, passwordRecovery);
+            const mailOptions = {
+                from: process.env.EMAIL_ADDRES,
+                to: email,
+                subject: 'Password recovery',
+                html: ` <h1>Password recovery</h1>
        <p>To finish password recovery please follow the link below:
           <a href='https://localhost:5001/password-recovery?recoveryCode=${passwordRecovery}'>Password recovery</a>
       </p>
     `
-        };
-        try {
-            yield transporter.sendMail(mailOptions);
-            return true;
-        }
-        catch (e) {
-            return { errorsMessages: [{ message: "ERROR MAIL SEND", field: "500" }] };
-        }
-    }),
-    _validatorEmail: (email) => {
+            };
+            try {
+                yield transporter.sendMail(mailOptions);
+                return true;
+            }
+            catch (e) {
+                return { errorsMessages: [{ message: "ERROR MAIL SEND", field: "500" }] };
+            }
+        });
+    }
+    _validatorEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const result = emailRegex.test(email);
         if (!result) {
@@ -68,5 +72,6 @@ exports.emailService = {
         }
         return true;
     }
-};
+}
+exports.emailService = new emailServiceClass();
 //# sourceMappingURL=email-service.js.map
