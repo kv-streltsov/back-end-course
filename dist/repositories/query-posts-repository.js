@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.queryPostsRepository = exports.paginationHandler = void 0;
 const posts_scheme_1 = require("../db/schemes/posts.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
+const PROJECTION = { _id: 0, __v: 0 };
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};
@@ -26,7 +27,8 @@ exports.queryPostsRepository = {
     getAllPosts: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) => __awaiter(void 0, void 0, void 0, function* () {
         const count = yield posts_scheme_1.postsModel.countDocuments({});
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const posts = yield posts_scheme_1.postsModel.find({}, { projection: { _id: 0 } })
+        const posts = yield posts_scheme_1.postsModel.find({})
+            .select(PROJECTION)
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
@@ -40,9 +42,7 @@ exports.queryPostsRepository = {
         };
     }),
     getPostById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return posts_scheme_1.postsModel.findOne({ id: id }, {
-            projection: { _id: 0 },
-        });
+        return posts_scheme_1.postsModel.findOne({ id: id }).select(PROJECTION);
     })
 };
 //# sourceMappingURL=query-posts-repository.js.map

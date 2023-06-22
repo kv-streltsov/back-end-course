@@ -57,7 +57,9 @@ export const jwtService = {
     },
     async getUserIdByToken(token: string) {
         try {
+
             const result: any = jwt.verify(token, JWT_SECRET)
+
             const checkUser = await usersService.getUserById(result.userId)
             if (!checkUser) {
                 return null

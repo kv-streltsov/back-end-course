@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import {devicesSessionsModel} from "../src/db/schemes/devices.sessions.scheme";
 import {usersModel} from "../src/db/schemes/users.scheme";
 import {InterfaceBlogView} from "../src/dto/interface.blog";
+import {InterfacePostInput} from "../src/dto/interface.post";
 
 const user: InterfaceUserInput = {
     "login": "qwerty",
@@ -20,6 +21,9 @@ let iat: any
 let exp: any
 let deviseId: any
 let passwordRecoveryCode: any
+
+let blogId: any
+let postId: any
 
 
 describe('/10', () => {
@@ -451,6 +455,8 @@ describe('/10', () => {
             .send(firstBlog)
             .expect(201)
 
+        blogId = newBlog.body.id
+
         // TO EQUAL NEW BLOG
         expect(newBlog.body).toEqual<InterfaceBlogView>({
             id: expect.any(String),
@@ -535,7 +541,147 @@ describe('/10', () => {
             websiteUrl: "https://updateBlog.ru",
         })
 
+        // DELETE SECOND BLOG
+        // await request(app).delete(`/blogs/${}`)
 
+
+    });
+    /////////////////////////////        POST FLOW         //////////////////////////////////////
+    it('POST ', async () => {
+
+        const firstPost:InterfacePostInput = {
+            title: 'it test first post',
+            blogId: blogId,
+            content: 'first post content',
+            shortDescription: 'shortDescription first post'
+        }
+        const secondPost:InterfacePostInput = {
+            title: 'it test second post',
+            blogId: blogId,
+            content: 'second post content',
+            shortDescription: 'shortDescription second post'
+        }
+
+        // CREATE POSTS
+        const createdFirstPost = await request(app)
+            .post('/posts')
+            .auth('admin','qwerty')
+            .send(firstPost)
+            .expect(201)
+
+        expect(createdFirstPost.body).toEqual({
+            id: expect.any(String),
+            createdAt: expect.any(String),
+            blogName: 'updateBlog',
+            title: firstPost.title,
+            blogId: blogId,
+            content: firstPost.content,
+            shortDescription: firstPost.shortDescription
+        })
+
+
+
+        // CREATE POST FOR BLOG
+        const secondBlog = await request(app)
+            .post(`/blogs/${blogId}/posts`)
+            .auth('admin','qwerty')
+            .send(secondPost)
+            .expect(201)
+
+        // GET ALL POSTS
+        const allPosts = await request(app)
+            .get(`/posts`)
+            .expect(200)
+
+        expect(allPosts.body).toEqual(
+            {
+                pagesCount: 1,
+                page: 1,
+                pageSize: 10,
+                totalCount: 2,
+                items: [
+                    {
+                        id: expect.any(String),
+                        title: 'it test second post',
+                        shortDescription: 'shortDescription second post',
+                        content: 'second post content',
+                        blogId: blogId,
+                        blogName: 'updateBlog',
+                        createdAt: expect.any(String)
+                    },
+                    {
+                        id: expect.any(String),
+                        title: 'it test first post',
+                        shortDescription: 'shortDescription first post',
+                        content: 'first post content',
+                        blogId: blogId,
+                        blogName: 'updateBlog',
+                        createdAt:expect.any(String)
+                    }
+                ]
+            }
+        )
+
+        // UPDATE POST
+        await request(app)
+            .put(`/posts/${createdFirstPost.body.id}`)
+            .auth('admin','qwerty')
+            .send( {
+                title: 'update post',
+                blogId: blogId,
+                content: 'update post content',
+                shortDescription: 'shortDescription update post'
+            })
+            .expect(204)
+
+        // GET POST BY ID
+        const updatePost = await request(app)
+            .get(`/posts/${createdFirstPost.body.id}`)
+            .expect(200)
+
+
+        expect(updatePost.body).toEqual({
+            id: createdFirstPost.body.id,
+            title: 'update post',
+            shortDescription: 'shortDescription update post',
+            content: 'update post content',
+            blogId: blogId,
+            blogName: 'updateBlog',
+            createdAt: expect.any(String)
+        })
+
+        // DELETE SECOND POST
+        await request(app)
+            .delete(`/posts/${secondBlog.body.id}`)
+            .auth('admin','qwerty')
+            .expect(204)
+
+
+        // GET ALL POSTS AFTER DELETE
+        const allPostsAfterDelete = await request(app)
+            .get(`/posts`)
+            .expect(200)
+
+        expect(allPostsAfterDelete.body).toEqual(
+            {
+                pagesCount: 1,
+                page: 1,
+                pageSize: 10,
+                totalCount: 1,
+                items: expect.any(Object)
+            }
+        )
+
+        postId = createdFirstPost.body.id
+
+
+    });
+    it('COMMENT', async () => {
+        await request(app)
+            .post(`/posts/${postId}/comments`)
+            .auth('admin','qwerty')
+            .send({"content":"bla bla bla first comment"})
+            .expect(201)
     });
 
 })
