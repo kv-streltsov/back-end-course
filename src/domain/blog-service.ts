@@ -1,21 +1,25 @@
-import {InterfaceBlog, InterfaceBlogInput, InterfaceBlogView} from "../dto/interface.blog";
+import {InterfaceBlog, InterfaceBlogInput} from "../dto/interface.blog";
 import {blogsRepository} from "../repositories/blogs-repository";
 import {InterfacePostInBlog} from "../dto/interface.post";
 
+class BlogsServiceClass {
 
-export const blogsService = {
-
-    postBlog: async (body: InterfaceBlogInput) => {
+    async postBlog(body: InterfaceBlogInput) {
         return blogsRepository.postBlog(body)
-    },
-    postPostInBlog: async (id:string, body:InterfacePostInBlog) => {
-        return blogsRepository.postPostInBlog(id, body)
-    },
-    putBlog: async (body: InterfaceBlog, id: string): Promise<boolean | null> => {
-        return blogsRepository.putBlog(body, id)
-    },
-    deleteBlog: async (id: string): Promise<boolean | null> => {
-        return blogsRepository.deleteBlog(id)
     }
 
+    async postPostInBlog(id: string, body: InterfacePostInBlog) {
+        return blogsRepository.postPostInBlog(id, body)
+    }
+
+    async putBlog(body: InterfaceBlog, id: string): Promise<boolean | null> {
+        return blogsRepository.putBlog(body, id)
+    }
+
+    async deleteBlog(id: string): Promise<boolean | null> {
+        return blogsRepository.deleteBlog(id)
+    }
 }
+
+export const blogsService = new BlogsServiceClass()
+

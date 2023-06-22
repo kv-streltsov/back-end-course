@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.queryCommentRepository = exports.paginationHandler = void 0;
 const comments_scheme_1 = require("../db/schemes/comments.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
+const PROJECTION = { _id: 0, __v: 0 };
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};
@@ -29,7 +30,8 @@ exports.queryCommentRepository = {
             return null;
         }
         const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const comments = yield comments_scheme_1.commentsModel.find({ postId: postId }, { projection: { _id: 0, postId: 0 } })
+        const comments = yield comments_scheme_1.commentsModel.find({ postId: postId })
+            .select(PROJECTION)
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
@@ -43,8 +45,7 @@ exports.queryCommentRepository = {
         };
     }),
     getCommentById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return comments_scheme_1.commentsModel.findOne({ id: id }, { projection: { _id: 0, postId: 0 },
-        });
+        return comments_scheme_1.commentsModel.findOne({ id: id }).select(PROJECTION);
     })
 };
 //# sourceMappingURL=query-comment-repository.js.map

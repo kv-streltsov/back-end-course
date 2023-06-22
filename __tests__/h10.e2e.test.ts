@@ -677,11 +677,39 @@ describe('/10', () => {
 
     });
     it('COMMENT', async () => {
-        await request(app)
+        const newComment = await request(app)
             .post(`/posts/${postId}/comments`)
-            .auth('admin','qwerty')
+            .set('Authorization', `Bearer ${accessToken}`)
             .send({"content":"bla bla bla first comment"})
             .expect(201)
+
+        const getNewComment = await request(app)
+            .get(`/posts/${postId}/comments`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .expect(200)
+
+        expect(getNewComment.body).toEqual(
+            {
+                pagesCount: 1,
+                page: 1,
+                pageSize: 10,
+                totalCount: 1,
+                items: [
+                    {
+                        id:expect.any(String),
+                        postId: postId,
+                        content: 'bla bla bla first comment',
+                        commentatorInfo: expect.any(Object),
+                        createdAt: expect.any(String)
+                    }
+                ]
+            }
+        )
+        expect(getNewComment.body.items[0].commentatorInfo).toEqual({
+            "userId": expect.any(String),
+            "userLogin": "qwerty"
+        })
+
     });
 
 })
