@@ -21,69 +21,85 @@ import {
 export const postRouters = Router({})
 
 
+class PostController {
+    // GETs
+    async getAllPosts(req: RequestWithQuery<InterfacePaginationQueryParams>, res: Response) {
 
-
-
-
-
-postRouters.get('/', async (req: RequestWithQuery<InterfacePaginationQueryParams>, res: Response) => {
-
-    const posts = await queryPostsRepository.getAllPosts(
-        req.query?.pageNumber && Number(req.query.pageNumber),
-        req.query?.pageSize && Number(req.query.pageSize),
-        req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
-        req.query?.sortBy && req.query.sortBy,
-    )
-    if (posts !== null) {
-        res.status(HttpStatusCode.OK).send(posts)
-    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
-})
-postRouters.get('/:id', async (req: RequestWithParams<InterfaceId>, res: Response) => {
-    const findPost = await queryPostsRepository.getPostById(req.params.id)
-    if (findPost !== null) {
-        res.status(HttpStatusCode.OK).send(findPost)
-    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
-})
-postRouters.get('/:postId/comments', async (req: RequestWithParamsAndQuery<InterfacePostId, InterfacePaginationQueryParams>, res: Response) => {
-    const comments = await queryCommentRepository.getCommentsByPostId(
-        req.params.postId,
-        req.query?.pageNumber && Number(req.query.pageNumber),
-        req.query?.pageSize && Number(req.query.pageSize),
-        req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
-        req.query?.sortBy && req.query.sortBy,
-    )
-
-    if (comments !== null) {
-        res.status(HttpStatusCode.OK).send(comments)
-    } else {
-        res.sendStatus(HttpStatusCode.NOT_FOUND)
+        const posts = await queryPostsRepository.getAllPosts(
+            req.query?.pageNumber && Number(req.query.pageNumber),
+            req.query?.pageSize && Number(req.query.pageSize),
+            req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
+            req.query?.sortBy && req.query.sortBy,
+        )
+        if (posts !== null) {
+            res.status(HttpStatusCode.OK).send(posts)
+        } else res.sendStatus(HttpStatusCode.NOT_FOUND)
     }
 
-})
-
-postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, async (req: Request, res: Response) => {
-    const createdComment = await commentService.postComment(req.params.postId, req.user, req.body)
-    if (createdComment) {
-        res.status(201).send(createdComment)
-    } else {
-        res.sendStatus(HttpStatusCode.NOT_FOUND)
+    async getPostById(req: RequestWithParams<InterfaceId>, res: Response) {
+        const findPost = await queryPostsRepository.getPostById(req.params.id)
+        if (findPost !== null) {
+            res.status(HttpStatusCode.OK).send(findPost)
+        } else res.sendStatus(HttpStatusCode.NOT_FOUND)
     }
 
-})
-postRouters.post('/', basic_auth, createPostValidation, async (req: RequestWithBody<InterfacePostInput>, res: Response) => {
-    const createdPost: InterfacePostView | undefined = await postsService.postPost(req.body)
-    res.status(HttpStatusCode.CREATED).send(createdPost)
-})
-postRouters.put('/:id', basic_auth, updatePostValidation, async (req: RequestWithParamsAndBody<any, InterfacePostView>, res: Response) => {
-    const postPost: boolean | null = await postsService.putPost(req.body, req.params.id)
-    if (postPost !== null) {
-        res.sendStatus(HttpStatusCode.NO_CONTENT)
-    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
-})
-postRouters.delete('/:id', basic_auth, async (req: RequestWithParams<{id:string}>, res: Response) => {
-    const deletePost: boolean | null = await postsService.deletePost(req.params.id)
-    if (deletePost !== null) {
-        res.sendStatus(HttpStatusCode.NO_CONTENT)
-    } else res.sendStatus(HttpStatusCode.NOT_FOUND)
+    async getCommentsByPostId(req: RequestWithParamsAndQuery<InterfacePostId, InterfacePaginationQueryParams>, res: Response) {
+        const comments = await queryCommentRepository.getCommentsByPostId(
+            req.params.postId,
+            req.query?.pageNumber && Number(req.query.pageNumber),
+            req.query?.pageSize && Number(req.query.pageSize),
+            req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
+            req.query?.sortBy && req.query.sortBy,
+        )
 
-})
+        if (comments !== null) {
+            res.status(HttpStatusCode.OK).send(comments)
+        } else {
+            res.sendStatus(HttpStatusCode.NOT_FOUND)
+        }
+
+    }
+
+    // POSTs
+    async postCommentByPostId(req: Request, res: Response) {
+        const createdComment = await commentService.postComment(req.params.postId, req.user, req.body)
+        if (createdComment) {
+            res.status(201).send(createdComment)
+        } else {
+            res.sendStatus(HttpStatusCode.NOT_FOUND)
+        }
+
+    }
+
+    async postPost(req: RequestWithBody<InterfacePostInput>, res: Response) {
+        const createdPost: InterfacePostView | undefined = await postsService.postPost(req.body)
+        res.status(HttpStatusCode.CREATED).send(createdPost)
+    }
+
+    async putPostById(req: RequestWithParamsAndBody<any, InterfacePostView>, res: Response) {
+        const postPost: boolean | null = await postsService.putPost(req.body, req.params.id)
+        if (postPost !== null) {
+            res.sendStatus(HttpStatusCode.NO_CONTENT)
+        } else res.sendStatus(HttpStatusCode.NOT_FOUND)
+    }
+
+    async deletePostById (req: RequestWithParams<{ id: string }>, res: Response) {
+        const deletePost: boolean | null = await postsService.deletePost(req.params.id)
+        if (deletePost !== null) {
+            res.sendStatus(HttpStatusCode.NO_CONTENT)
+        } else res.sendStatus(HttpStatusCode.NOT_FOUND)
+
+    }
+}
+
+
+
+
+const postController = new PostController()
+postRouters.get('/', postController.getAllPosts)
+postRouters.get('/:id', postController.getPostById)
+postRouters.get('/:postId/comments', postController.getCommentsByPostId)
+postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, postController.postCommentByPostId)
+postRouters.post('/', basic_auth, createPostValidation, postController.postPost)
+postRouters.put('/:id', basic_auth, updatePostValidation, postController.putPostById)
+postRouters.delete('/:id', basic_auth,postController.deletePostById)
