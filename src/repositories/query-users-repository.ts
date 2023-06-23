@@ -34,7 +34,7 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
     }
 }
 
-class QueryUsersRepositoryClass {
+export class QueryUsersRepositoryClass {
     async getAllUsers(
         pageSize: number = 10,
         pageNumber: number = 1,
@@ -72,5 +72,4 @@ class QueryUsersRepositoryClass {
     }
 }
 
-export const queryUsersRepository = new QueryUsersRepositoryClass()
 

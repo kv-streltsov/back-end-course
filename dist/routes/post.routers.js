@@ -14,20 +14,24 @@ const express_1 = require("express");
 const basic_auth_middleware_1 = require("../middleware/basic-auth-middleware");
 const posts_validation_1 = require("../middleware/validation/posts-validation");
 const post_service_1 = require("../domain/post-service");
-const query_posts_repository_1 = require("../repositories/query-posts-repository");
 const interface_html_code_1 = require("../dto/interface.html-code");
 const interface_pagination_1 = require("../dto/interface.pagination");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
 const comment_service_1 = require("../domain/comment-service");
 const comments_validations_1 = require("../middleware/validation/comments-validations");
+const query_posts_repository_1 = require("../repositories/query-posts-repository");
 const query_comment_repository_1 = require("../repositories/query-comment-repository");
 exports.postRouters = (0, express_1.Router)({});
 class PostController {
+    constructor() {
+        this.queryPostsRepository = new query_posts_repository_1.QueryPostsRepositoryClass;
+        this.queryCommentRepository = new query_comment_repository_1.QueryCommentRepositoryClass;
+    }
     // GETs
     getAllPosts(req, res) {
         var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function* () {
-            const posts = yield query_posts_repository_1.queryPostsRepository.getAllPosts(((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirection) === 'asc' ? interface_pagination_1.SortType.asc : interface_pagination_1.SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy);
+            const posts = yield this.queryPostsRepository.getAllPosts(((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirection) === 'asc' ? interface_pagination_1.SortType.asc : interface_pagination_1.SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy);
             if (posts !== null) {
                 res.status(interface_html_code_1.HttpStatusCode.OK).send(posts);
             }
@@ -37,7 +41,7 @@ class PostController {
     }
     getPostById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const findPost = yield query_posts_repository_1.queryPostsRepository.getPostById(req.params.id);
+            const findPost = yield this.queryPostsRepository.getPostById(req.params.id);
             if (findPost !== null) {
                 res.status(interface_html_code_1.HttpStatusCode.OK).send(findPost);
             }
@@ -48,7 +52,7 @@ class PostController {
     getCommentsByPostId(req, res) {
         var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function* () {
-            const comments = yield query_comment_repository_1.queryCommentRepository.getCommentsByPostId(req.params.postId, ((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirection) === 'asc' ? interface_pagination_1.SortType.asc : interface_pagination_1.SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy);
+            const comments = yield this.queryCommentRepository.getCommentsByPostId(req.params.postId, ((_a = req.query) === null || _a === void 0 ? void 0 : _a.pageNumber) && Number(req.query.pageNumber), ((_b = req.query) === null || _b === void 0 ? void 0 : _b.pageSize) && Number(req.query.pageSize), ((_c = req.query) === null || _c === void 0 ? void 0 : _c.sortDirection) === 'asc' ? interface_pagination_1.SortType.asc : interface_pagination_1.SortType.desc, ((_d = req.query) === null || _d === void 0 ? void 0 : _d.sortBy) && req.query.sortBy);
             if (comments !== null) {
                 res.status(interface_html_code_1.HttpStatusCode.OK).send(comments);
             }
@@ -97,9 +101,9 @@ class PostController {
     }
 }
 const postController = new PostController();
-exports.postRouters.get('/', postController.getAllPosts);
-exports.postRouters.get('/:id', postController.getPostById);
-exports.postRouters.get('/:postId/comments', postController.getCommentsByPostId);
+exports.postRouters.get('/', postController.getAllPosts.bind(postController));
+exports.postRouters.get('/:id', postController.getPostById.bind(postController));
+exports.postRouters.get('/:postId/comments', postController.getCommentsByPostId.bind(postController));
 exports.postRouters.post('/:postId/comments', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, postController.postCommentByPostId);
 exports.postRouters.post('/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostValidation, postController.postPost);
 exports.postRouters.put('/:id', basic_auth_middleware_1.basic_auth, posts_validation_1.updatePostValidation, postController.putPostById);

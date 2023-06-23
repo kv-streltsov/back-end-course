@@ -48,6 +48,8 @@ const JWT_REFRESH_EXPIRES = process.env.JWT_REFRESH_EXPIRES;
 if (!JWT_SECRET || !JWT_REFRESH_EXPIRES || !JWT_ACCESS_EXPIRES) {
     throw new Error('not found something jwt env');
 }
+class JwtServiceClass {
+}
 exports.jwtService = {
     createJwt(user, userAgent = 'someDevice', ip) {
         return __awaiter(this, void 0, void 0, function* () {

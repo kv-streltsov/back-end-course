@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.queryCommentRepository = exports.paginationHandler = void 0;
+exports.QueryCommentRepositoryClass = exports.paginationHandler = void 0;
 const comments_scheme_1 = require("../db/schemes/comments.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const PROJECTION = { _id: 0, __v: 0 };
@@ -52,5 +52,5 @@ class QueryCommentRepositoryClass {
         });
     }
 }
-exports.queryCommentRepository = new QueryCommentRepositoryClass();
+exports.QueryCommentRepositoryClass = QueryCommentRepositoryClass;
 //# sourceMappingURL=query-comment-repository.js.map

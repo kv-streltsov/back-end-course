@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.usersRepository = void 0;
+exports.UsersRepositoryClass = void 0;
 const users_scheme_1 = require("../db/schemes/users.scheme");
 class UsersRepositoryClass {
     postUser(createdUser) {
@@ -27,13 +27,12 @@ class UsersRepositoryClass {
             yield users_scheme_1.usersModel.updateOne({ email: email }, { $set: { "confirmation.passwordRecoveryCode": recoveryCode } });
         });
     }
-    updateConfirmationCode(email, uuid) {
+    updateConfirmationCodeByEmail(email, uuid) {
         return __awaiter(this, void 0, void 0, function* () {
             return users_scheme_1.usersModel.updateOne({ email: email }, { $set: { "confirmation.code": uuid } });
         });
     }
-    // ИСПРАВИТЬ!!!! НИЖЕ
-    updateConfirmationCodee(code, pyload) {
+    updateConfirmationCode(code, pyload) {
         return __awaiter(this, void 0, void 0, function* () {
             return users_scheme_1.usersModel.updateOne({ 'confirmation.code': code }, { $set: pyload });
         });
@@ -76,5 +75,5 @@ class UsersRepositoryClass {
         });
     }
 }
-exports.usersRepository = new UsersRepositoryClass();
+exports.UsersRepositoryClass = UsersRepositoryClass;
 //# sourceMappingURL=users-repository.js.map

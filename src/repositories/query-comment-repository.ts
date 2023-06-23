@@ -14,7 +14,7 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
     }
 }
 
-class QueryCommentRepositoryClass {
+export class QueryCommentRepositoryClass {
     async getCommentsByPostId(
         postId: string,
         pageNumber: number = 1,
@@ -49,4 +49,3 @@ class QueryCommentRepositoryClass {
 }
 }
 
-export const queryCommentRepository = new QueryCommentRepositoryClass()

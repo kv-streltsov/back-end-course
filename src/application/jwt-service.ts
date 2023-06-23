@@ -14,6 +14,10 @@ if (!JWT_SECRET || !JWT_REFRESH_EXPIRES || !JWT_ACCESS_EXPIRES) {
     throw new Error('not found something jwt env')
 }
 
+class JwtServiceClass {
+
+}
+
 export const jwtService = {
     async createJwt(user: any, userAgent: string = 'someDevice', ip: string | string[] | undefined) {
 

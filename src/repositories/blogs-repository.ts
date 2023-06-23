@@ -4,7 +4,7 @@ import {WithId} from "mongodb";
 import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
 
-class BlogsRepositoryClass {
+export class BlogsRepositoryClass {
 
     async postBlog(body: InterfaceBlogInput): Promise<InterfaceBlogView> {
 
@@ -74,4 +74,3 @@ class BlogsRepositoryClass {
 
 }
 
-export const blogsRepository = new BlogsRepositoryClass()

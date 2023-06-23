@@ -12,15 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.usersService = void 0;
+exports.usersService = exports.UsersServiceClass = void 0;
 const users_repository_1 = require("../repositories/users-repository");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = require("crypto");
 class UsersServiceClass {
+    constructor() {
+        this.usersRepository = new users_repository_1.UsersRepositoryClass();
+    }
     postUser(login, email, password, confirmAdmin = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const salt = yield bcrypt_1.default.genSalt(10);
-            const passwordHash = yield exports.usersService._generateHash(password, salt);
+            const passwordHash = yield this._generateHash(password, salt);
             const uuid = (0, crypto_1.randomUUID)(); //
             const createdUser = {
                 login: login,
@@ -34,7 +37,7 @@ class UsersServiceClass {
                 id: (0, crypto_1.randomUUID)(),
                 createdAt: new Date().toISOString()
             };
-            yield users_repository_1.usersRepository.postUser(Object.assign({}, createdUser));
+            yield this.usersRepository.postUser(Object.assign({}, createdUser));
             return ({
                 createdUser: {
                     id: createdUser.id,
@@ -47,7 +50,7 @@ class UsersServiceClass {
     }
     confirmationUser(code) {
         return __awaiter(this, void 0, void 0, function* () {
-            const findUser = yield users_repository_1.usersRepository.findUserByConfirmationCode(code);
+            const findUser = yield this.usersRepository.findUserByConfirmationCode(code);
             if (findUser === null || findUser.confirmation.wasConfirm === true) {
                 return {
                     data: null,
@@ -60,7 +63,7 @@ class UsersServiceClass {
                     isSuccess: false
                 };
             }
-            yield users_repository_1.usersRepository.updateConfirmationCodee(code, {
+            yield this.usersRepository.updateConfirmationCode(code, {
                 "confirmation.wasConfirm": true,
                 "confirmation.code": null
             });
@@ -69,7 +72,7 @@ class UsersServiceClass {
     }
     reassignConfirmationCode(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const findUser = yield users_repository_1.usersRepository.findUserByEmail(email);
+            const findUser = yield this.usersRepository.findUserByEmail(email);
             if (findUser === null || findUser.confirmation.wasConfirm === true) {
                 return {
                     isSuccess: false,
@@ -83,7 +86,7 @@ class UsersServiceClass {
                 };
             }
             const uuid = (0, crypto_1.randomUUID)();
-            yield users_repository_1.usersRepository.updateConfirmationCode(email, uuid);
+            yield this.usersRepository.updateConfirmationCodeByEmail(email, uuid);
             return {
                 data: uuid,
                 isSuccess: true,
@@ -93,19 +96,19 @@ class UsersServiceClass {
     }
     getUserById(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield users_repository_1.usersRepository.findUserById(userId);
+            return yield this.usersRepository.findUserById(userId);
         });
     }
     recoveryPassword(password, recoveryCode) {
         return __awaiter(this, void 0, void 0, function* () {
-            const updatePassword = yield exports.usersService._generatePasswordHash(password);
-            const result = yield users_repository_1.usersRepository.updatePassword(updatePassword, recoveryCode);
+            const updatePassword = yield this._generatePasswordHash(password);
+            const result = yield this.usersRepository.updatePassword(updatePassword, recoveryCode);
             return result.modifiedCount;
         });
     }
     checkUser(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_repository_1.usersRepository.checkUser(loginOrEmail);
+            const user = yield this.usersRepository.checkUser(loginOrEmail);
             if (user === null) {
                 return null;
             }
@@ -118,7 +121,7 @@ class UsersServiceClass {
     }
     deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield users_repository_1.usersRepository.deleteUser(id);
+            return yield this.usersRepository.deleteUser(id);
         });
     }
     _generatePasswordHash(password) {
@@ -134,5 +137,6 @@ class UsersServiceClass {
         });
     }
 }
+exports.UsersServiceClass = UsersServiceClass;
 exports.usersService = new UsersServiceClass();
 //# sourceMappingURL=user-service.js.map

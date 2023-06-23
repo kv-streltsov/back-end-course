@@ -19,7 +19,7 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
 }
 
 
-class QueryBlogsRepositoryClass {
+export class QueryBlogsRepositoryClass {
     async getAllBlogs(
         pageNumber: number = 1,
         pageSize: number = 10,
@@ -77,4 +77,3 @@ class QueryBlogsRepositoryClass {
     }
 }
 
-export const queryBlogsRepository = new QueryBlogsRepositoryClass

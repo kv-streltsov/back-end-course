@@ -13,9 +13,10 @@ exports.createUserValidation = void 0;
 const express_validator_1 = require("express-validator");
 const input_validation_middleware_1 = require("./input-validation-middleware");
 const users_repository_1 = require("../../repositories/users-repository");
+const usersRepository = new users_repository_1.UsersRepositoryClass;
 const loginValidation = (0, express_validator_1.body)('login').isString().trim().notEmpty().isLength({ min: 3, max: 10 }).matches('^[a-zA-Z0-9_-]*$')
     .custom((login) => __awaiter(void 0, void 0, void 0, function* () {
-    const checkUser = yield users_repository_1.usersRepository.findUserByLogin(login);
+    const checkUser = yield usersRepository.findUserByLogin(login);
     if (checkUser === null) {
         return true;
     }
@@ -26,7 +27,7 @@ const loginValidation = (0, express_validator_1.body)('login').isString().trim()
 const passwordValidation = (0, express_validator_1.body)('password').isString().trim().notEmpty().isLength({ min: 6, max: 20 });
 const emailValidation = (0, express_validator_1.body)('email').isString().trim().notEmpty().isEmail()
     .custom((email) => __awaiter(void 0, void 0, void 0, function* () {
-    const checkUser = yield users_repository_1.usersRepository.findUserByEmail(email);
+    const checkUser = yield usersRepository.findUserByEmail(email);
     if (checkUser === null) {
         return true;
     }

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.queryUsersRepository = exports.paginationHandler = void 0;
+exports.QueryUsersRepositoryClass = exports.paginationHandler = void 0;
 const users_scheme_1 = require("../db/schemes/users.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection, searchEmailTerm, searchLoginTerm) => {
@@ -63,5 +63,5 @@ class QueryUsersRepositoryClass {
         });
     }
 }
-exports.queryUsersRepository = new QueryUsersRepositoryClass();
+exports.QueryUsersRepositoryClass = QueryUsersRepositoryClass;
 //# sourceMappingURL=query-users-repository.js.map

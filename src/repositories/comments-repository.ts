@@ -1,7 +1,7 @@
 import {InterfaceCommentView} from "../dto/interface.comment";
 import {commentsModel} from "../db/schemes/comments.scheme";
 
-class CommentsRepositoryClass {
+export class CommentsRepositoryClass {
     async createComment(commentObj: InterfaceCommentView) {
         return await commentsModel.create(commentObj)
     }
@@ -16,4 +16,3 @@ class CommentsRepositoryClass {
 
 }
 
-export const commentsRepository = new CommentsRepositoryClass()

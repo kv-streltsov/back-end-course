@@ -1,13 +1,14 @@
 import {InterfaceViewUser} from "../dto/interface.input.user";
 import {usersModel} from "../db/schemes/users.scheme";
 import {readdirSync} from "fs";
+import {emailService} from "../domain/email-service";
 
 export interface IUpdatePassword {
     salt: string,
     passwordHash: string
 }
 
-class UsersRepositoryClass {
+export class UsersRepositoryClass {
     async postUser(createdUser: InterfaceViewUser) {
         return await usersModel.create(createdUser)
     }
@@ -20,12 +21,11 @@ class UsersRepositoryClass {
         await usersModel.updateOne({email: email}, {$set: {"confirmation.passwordRecoveryCode": recoveryCode}})
     }
 
-    async updateConfirmationCode(email: string, uuid: string) {
+    async updateConfirmationCodeByEmail(email: string, uuid: string) {
         return usersModel.updateOne({email: email}, {$set: {"confirmation.code": uuid}})
     }
 
-    // ИСПРАВИТЬ!!!! НИЖЕ
-    async updateConfirmationCodee(code: string, pyload: any) {
+    async updateConfirmationCode(code: string, pyload: any) {
         return usersModel.updateOne({'confirmation.code': code}, {$set: pyload})
     }
 
@@ -62,5 +62,3 @@ class UsersRepositoryClass {
         return usersModel.deleteOne({id: id})
     }
 }
-
-export const usersRepository = new UsersRepositoryClass()

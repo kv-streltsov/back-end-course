@@ -44,8 +44,6 @@ class SecurityDevicesController {
     }
 }
 
-
-
 const securityDevicesController = new SecurityDevicesController()
 securityDevicesRouters.get('/devices', refreshTokenMiddleware, securityDevicesController.getSecurityDevices)
 securityDevicesRouters.delete('/devices', refreshTokenMiddleware, securityDevicesController.deleteSecurityDevicesExceptCurrent)

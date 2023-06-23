@@ -1,6 +1,8 @@
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "./input-validation-middleware";
-import {usersRepository} from "../../repositories/users-repository";
+import {UsersRepositoryClass} from "../../repositories/users-repository";
+
+const usersRepository = new UsersRepositoryClass
 
 const loginValidation = body('login').isString().trim().notEmpty().isLength({min:3, max:10}).matches('^[a-zA-Z0-9_-]*$')
     .custom(async login => {

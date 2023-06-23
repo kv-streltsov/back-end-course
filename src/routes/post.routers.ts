@@ -3,13 +3,11 @@ import {basic_auth} from "../middleware/basic-auth-middleware";
 import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
 import {createPostValidation, updatePostValidation} from "../middleware/validation/posts-validation";
 import {postsService} from "../domain/post-service";
-import {queryPostsRepository} from "../repositories/query-posts-repository";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {InterfacePaginationQueryParams, SortType} from "../dto/interface.pagination";
 import {authMiddleware} from "../middleware/jwt-auth-middleware";
 import {commentService} from "../domain/comment-service";
 import {createCommentValidation} from "../middleware/validation/comments-validations";
-import {queryCommentRepository} from "../repositories/query-comment-repository";
 import {
     InterfaceId,
     InterfacePostId, RequestWithBody,
@@ -17,15 +15,27 @@ import {
     RequestWithParamsAndQuery,
     RequestWithQuery,
 } from "../dto/interface.request";
+import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
+import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
 
 export const postRouters = Router({})
 
 
 class PostController {
+    private queryCommentRepository: QueryCommentRepositoryClass
+    private queryPostsRepository: QueryPostsRepositoryClass
+
+    constructor() {
+        this.queryPostsRepository = new QueryPostsRepositoryClass
+        this.queryCommentRepository = new QueryCommentRepositoryClass
+
+    }
+
+
     // GETs
     async getAllPosts(req: RequestWithQuery<InterfacePaginationQueryParams>, res: Response) {
 
-        const posts = await queryPostsRepository.getAllPosts(
+        const posts = await this.queryPostsRepository.getAllPosts(
             req.query?.pageNumber && Number(req.query.pageNumber),
             req.query?.pageSize && Number(req.query.pageSize),
             req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
@@ -37,14 +47,14 @@ class PostController {
     }
 
     async getPostById(req: RequestWithParams<InterfaceId>, res: Response) {
-        const findPost = await queryPostsRepository.getPostById(req.params.id)
+        const findPost = await this.queryPostsRepository.getPostById(req.params.id)
         if (findPost !== null) {
             res.status(HttpStatusCode.OK).send(findPost)
         } else res.sendStatus(HttpStatusCode.NOT_FOUND)
     }
 
     async getCommentsByPostId(req: RequestWithParamsAndQuery<InterfacePostId, InterfacePaginationQueryParams>, res: Response) {
-        const comments = await queryCommentRepository.getCommentsByPostId(
+        const comments = await this.queryCommentRepository.getCommentsByPostId(
             req.params.postId,
             req.query?.pageNumber && Number(req.query.pageNumber),
             req.query?.pageSize && Number(req.query.pageSize),
@@ -83,7 +93,7 @@ class PostController {
         } else res.sendStatus(HttpStatusCode.NOT_FOUND)
     }
 
-    async deletePostById (req: RequestWithParams<{ id: string }>, res: Response) {
+    async deletePostById(req: RequestWithParams<{ id: string }>, res: Response) {
         const deletePost: boolean | null = await postsService.deletePost(req.params.id)
         if (deletePost !== null) {
             res.sendStatus(HttpStatusCode.NO_CONTENT)
@@ -92,14 +102,11 @@ class PostController {
     }
 }
 
-
-
-
 const postController = new PostController()
-postRouters.get('/', postController.getAllPosts)
-postRouters.get('/:id', postController.getPostById)
-postRouters.get('/:postId/comments', postController.getCommentsByPostId)
+postRouters.get('/', postController.getAllPosts.bind(postController))
+postRouters.get('/:id', postController.getPostById.bind(postController))
+postRouters.get('/:postId/comments', postController.getCommentsByPostId.bind(postController))
 postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, postController.postCommentByPostId)
 postRouters.post('/', basic_auth, createPostValidation, postController.postPost)
 postRouters.put('/:id', basic_auth, updatePostValidation, postController.putPostById)
-postRouters.delete('/:id', basic_auth,postController.deletePostById)
+postRouters.delete('/:id', basic_auth, postController.deletePostById)

@@ -17,37 +17,52 @@ const interface_html_code_1 = require("../dto/interface.html-code");
 const comment_service_1 = require("../domain/comment-service");
 const comments_validations_1 = require("../middleware/validation/comments-validations");
 exports.commentsRouter = (0, express_1.Router)({});
-exports.commentsRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const comment = yield query_comment_repository_1.queryCommentRepository.getCommentById(req.params.commendId);
-    if (comment) {
-        return res.status(200).send(comment);
+class CommentController {
+    constructor() {
+        this.queryCommentRepository = new query_comment_repository_1.QueryCommentRepositoryClass;
     }
-    else {
-        return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+    getCommentById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const comment = yield this.queryCommentRepository.getCommentById(req.params.commendId);
+            if (comment) {
+                return res.status(200).send(comment);
+            }
+            else {
+                return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+            }
+        });
     }
-}));
-exports.commentsRouter.put('/:id', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield comment_service_1.commentService.putComment(req.params.id, req.user, req.body);
-    if (result === 'forbidden') {
-        return res.sendStatus(interface_html_code_1.HttpStatusCode.FORBIDDEN);
+    putCommentById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield comment_service_1.commentService.putComment(req.params.id, req.user, req.body);
+            if (result === 'forbidden') {
+                return res.sendStatus(interface_html_code_1.HttpStatusCode.FORBIDDEN);
+            }
+            if (result === true) {
+                return res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
+            }
+            else {
+                return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+            }
+        });
     }
-    if (result === true) {
-        return res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
+    deleteCommentById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield comment_service_1.commentService.deleteComment(req.params.id, req.user);
+            if (result === 'forbidden') {
+                return res.sendStatus(interface_html_code_1.HttpStatusCode.FORBIDDEN);
+            }
+            if (result === true) {
+                return res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
+            }
+            else {
+                return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+            }
+        });
     }
-    else {
-        return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
-    }
-}));
-exports.commentsRouter.delete('/:id', jwt_auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield comment_service_1.commentService.deleteComment(req.params.id, req.user);
-    if (result === 'forbidden') {
-        return res.sendStatus(interface_html_code_1.HttpStatusCode.FORBIDDEN);
-    }
-    if (result === true) {
-        return res.sendStatus(interface_html_code_1.HttpStatusCode.NO_CONTENT);
-    }
-    else {
-        return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
-    }
-}));
+}
+const commentController = new CommentController();
+exports.commentsRouter.get('/:id', commentController.getCommentById);
+exports.commentsRouter.put('/:id', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, commentController.putCommentById);
+exports.commentsRouter.delete('/:id', jwt_auth_middleware_1.authMiddleware, commentController.deleteCommentById);
 //# sourceMappingURL=comments.routers.js.map

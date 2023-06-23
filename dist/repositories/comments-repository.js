@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentsRepository = void 0;
+exports.CommentsRepositoryClass = void 0;
 const comments_scheme_1 = require("../db/schemes/comments.scheme");
 class CommentsRepositoryClass {
     createComment(commentObj) {
@@ -28,5 +28,5 @@ class CommentsRepositoryClass {
         });
     }
 }
-exports.commentsRepository = new CommentsRepositoryClass();
+exports.CommentsRepositoryClass = CommentsRepositoryClass;
 //# sourceMappingURL=comments-repository.js.map

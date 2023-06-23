@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsRepository = void 0;
+exports.PostsRepositoryClass = void 0;
 const posts_scheme_1 = require("../db/schemes/posts.scheme");
 const blogs_scheme_1 = require("../db/schemes/blogs.scheme");
-class postsRepositoryClass {
+class PostsRepositoryClass {
     postPost(body) {
         return __awaiter(this, void 0, void 0, function* () {
             const findBlogName = yield blogs_scheme_1.blogsModel.findOne({ id: body.blogId });
@@ -56,5 +56,5 @@ class postsRepositoryClass {
         });
     }
 }
-exports.postsRepository = new postsRepositoryClass;
+exports.PostsRepositoryClass = PostsRepositoryClass;
 //# sourceMappingURL=posts-repository.js.map

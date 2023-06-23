@@ -2,7 +2,7 @@ import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
 import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
 
-class postsRepositoryClass {
+export class PostsRepositoryClass {
     async postPost(body: InterfacePostInput): Promise<InterfacePostView | undefined> {
 
         const findBlogName = await blogsModel.findOne({id: body.blogId})
@@ -51,5 +51,4 @@ class postsRepositoryClass {
     }
 }
 
-export const postsRepository = new postsRepositoryClass
 

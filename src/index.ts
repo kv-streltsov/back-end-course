@@ -7,7 +7,6 @@ import {runMongo} from "./db/db_mongo";
 import {userRouters} from "./routes/user.routers";
 import {authRouters} from "./routes/auth.routers";
 import {commentsRouter} from "./routes/comments.routers";
-import {emailRouters} from "./routes/email.routers";
 import cookieParser from "cookie-parser";
 import {securityDevicesRouters} from "./routes/security.devices.routers";
 
@@ -25,7 +24,6 @@ app.use('/posts', postRouters)
 app.use('/users', userRouters)
 app.use('/comments', commentsRouter)
 app.use('/auth', authRouters)
-app.use('/send', emailRouters)
 app.use('/security', securityDevicesRouters)
 app.use('/testing/all-data', testingRouter)
 

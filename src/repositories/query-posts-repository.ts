@@ -1,6 +1,6 @@
 import {postsModel} from "../db/schemes/posts.scheme";
 
-const DEFAULT_SORT_FIELD = 'createdAt'
+const DEFAULT_SORT_FIELD: string = 'createdAt'
 const PROJECTION = {_id: 0, __v: 0}
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
@@ -14,7 +14,7 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
     }
 }
 
-class QueryPostsRepositoryClass {
+export class QueryPostsRepositoryClass {
     async getAllPosts(
         pageNumber: number = 1,
         pageSize: number = 10,
@@ -46,5 +46,4 @@ class QueryPostsRepositoryClass {
     }
 }
 
-export const queryPostsRepository = new QueryPostsRepositoryClass()
 

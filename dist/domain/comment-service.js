@@ -11,12 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentService = void 0;
 const comments_repository_1 = require("../repositories/comments-repository");
-const query_comment_repository_1 = require("../repositories/query-comment-repository");
 const query_posts_repository_1 = require("../repositories/query-posts-repository");
+const query_comment_repository_1 = require("../repositories/query-comment-repository");
 class CommentServiceClass {
+    constructor() {
+        this.commentsRepository = new comments_repository_1.CommentsRepositoryClass;
+        this.queryPostsRepository = new query_posts_repository_1.QueryPostsRepositoryClass;
+        this.queryCommentRepository = new query_comment_repository_1.QueryCommentRepositoryClass;
+    }
     postComment(postId, user, comment) {
         return __awaiter(this, void 0, void 0, function* () {
-            const findPost = yield query_posts_repository_1.queryPostsRepository.getPostById(postId);
+            const findPost = yield this.queryPostsRepository.getPostById(postId);
             if (findPost === null) {
                 return null;
             }
@@ -30,7 +35,7 @@ class CommentServiceClass {
                 content: comment.content,
                 createdAt: new Date().toISOString()
             };
-            const newComment = yield comments_repository_1.commentsRepository.createComment(Object.assign({}, commentObj));
+            const newComment = yield this.commentsRepository.createComment(Object.assign({}, commentObj));
             if (newComment) {
                 return {
                     id: commentObj.id,
@@ -44,14 +49,14 @@ class CommentServiceClass {
     }
     putComment(commentId, user, comment) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkComment = yield query_comment_repository_1.queryCommentRepository.getCommentById(commentId);
+            const checkComment = yield this.queryCommentRepository.getCommentById(commentId);
             if (checkComment === null) {
                 return null;
             }
             if (checkComment.commentatorInfo.userId !== user.id) {
                 return 'forbidden';
             }
-            const result = yield comments_repository_1.commentsRepository.updateComment(commentId, comment.content);
+            const result = yield this.commentsRepository.updateComment(commentId, comment.content);
             if (result.matchedCount === 1) {
                 return true;
             }
@@ -62,14 +67,14 @@ class CommentServiceClass {
     }
     deleteComment(commentId, user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkComment = yield query_comment_repository_1.queryCommentRepository.getCommentById(commentId);
+            const checkComment = yield this.queryCommentRepository.getCommentById(commentId);
             if (checkComment === null) {
                 return null;
             }
             if (checkComment.commentatorInfo.userId !== user.id) {
                 return 'forbidden';
             }
-            const result = yield comments_repository_1.commentsRepository.deleteComment(commentId);
+            const result = yield this.commentsRepository.deleteComment(commentId);
             if (result.deletedCount === 1) {
                 return true;
             }

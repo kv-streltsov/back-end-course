@@ -23,6 +23,9 @@ const transporter = nodemailer_1.default.createTransport({
     }
 });
 class emailServiceClass {
+    constructor() {
+        this.usersRepository = new users_repository_1.UsersRepositoryClass();
+    }
     sendMailRegistration(email, uuid) {
         return __awaiter(this, void 0, void 0, function* () {
             const mailOptions = {
@@ -44,7 +47,7 @@ class emailServiceClass {
                 return validResult;
             }
             const passwordRecovery = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-            yield users_repository_1.usersRepository.updateRecoveryCode(email, passwordRecovery);
+            yield this.usersRepository.updateRecoveryCode(email, passwordRecovery);
             const mailOptions = {
                 from: process.env.EMAIL_ADDRES,
                 to: email,

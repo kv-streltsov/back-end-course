@@ -45,7 +45,6 @@ const db_mongo_1 = require("./db/db_mongo");
 const user_routers_1 = require("./routes/user.routers");
 const auth_routers_1 = require("./routes/auth.routers");
 const comments_routers_1 = require("./routes/comments.routers");
-const email_routers_1 = require("./routes/email.routers");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const security_devices_routers_1 = require("./routes/security.devices.routers");
 dotenv.config();
@@ -59,7 +58,6 @@ exports.app.use('/posts', post_routers_1.postRouters);
 exports.app.use('/users', user_routers_1.userRouters);
 exports.app.use('/comments', comments_routers_1.commentsRouter);
 exports.app.use('/auth', auth_routers_1.authRouters);
-exports.app.use('/send', email_routers_1.emailRouters);
 exports.app.use('/security', security_devices_routers_1.securityDevicesRouters);
 exports.app.use('/testing/all-data', testing_router_1.testingRouter);
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {

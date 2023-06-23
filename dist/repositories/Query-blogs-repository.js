@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.queryBlogsRepository = exports.paginationHandler = void 0;
+exports.QueryBlogsRepositoryClass = exports.paginationHandler = void 0;
 const posts_scheme_1 = require("../db/schemes/posts.scheme");
 const blogs_scheme_1 = require("../db/schemes/blogs.scheme");
 const DEFAULT_SORT_FIELD = 'createdAt';
@@ -74,5 +74,5 @@ class QueryBlogsRepositoryClass {
         });
     }
 }
-exports.queryBlogsRepository = new QueryBlogsRepositoryClass;
+exports.QueryBlogsRepositoryClass = QueryBlogsRepositoryClass;
 //# sourceMappingURL=query-blogs-repository.js.map

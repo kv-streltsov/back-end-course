@@ -9,24 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsService = void 0;
+exports.postsService = exports.PostsServiceClass = void 0;
 const posts_repository_1 = require("../repositories/posts-repository");
 class PostsServiceClass {
+    constructor() {
+        this.postsRepository = new posts_repository_1.PostsRepositoryClass();
+    }
     postPost(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            return posts_repository_1.postsRepository.postPost(body);
+            return this.postsRepository.postPost(body);
         });
     }
     putPost(body, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return posts_repository_1.postsRepository.putPost(body, id);
+            return this.postsRepository.putPost(body, id);
         });
     }
     deletePost(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return posts_repository_1.postsRepository.deletePost(id);
+            return this.postsRepository.deletePost(id);
         });
     }
 }
+exports.PostsServiceClass = PostsServiceClass;
 exports.postsService = new PostsServiceClass();
 //# sourceMappingURL=post-service.js.map

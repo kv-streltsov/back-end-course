@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
-import {usersRepository} from "../repositories/users-repository";
 import {InterfaceError} from "../dto/Interface-error";
+import {UsersRepositoryClass} from "../repositories/users-repository";
 
 
 const transporter = nodemailer.createTransport({
@@ -12,6 +12,11 @@ const transporter = nodemailer.createTransport({
 });
 
 class emailServiceClass {
+    private usersRepository: UsersRepositoryClass
+    constructor() {
+        this.usersRepository = new UsersRepositoryClass()
+    }
+
     async sendMailRegistration(email: string, uuid: string) {
         const mailOptions = {
             from: process.env.EMAIL_ADDRES,
@@ -36,7 +41,7 @@ class emailServiceClass {
 
         const passwordRecovery: number = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 
-        await usersRepository.updateRecoveryCode(email, passwordRecovery)
+        await this.usersRepository.updateRecoveryCode(email, passwordRecovery)
 
         const mailOptions = {
             from: process.env.EMAIL_ADDRES,

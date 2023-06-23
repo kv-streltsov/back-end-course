@@ -1,12 +1,22 @@
-import {commentsRepository} from "../repositories/comments-repository";
 import {InterfaceCommentInput, InterfaceCommentView} from "../dto/interface.comment";
 import {IUserDb} from "../dto/interface.user";
-import {queryCommentRepository} from "../repositories/query-comment-repository";
-import {queryPostsRepository} from "../repositories/query-posts-repository";
+import {CommentsRepositoryClass} from "../repositories/comments-repository";
+import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
+import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
 
 class CommentServiceClass {
+
+    private commentsRepository: CommentsRepositoryClass
+    private queryPostsRepository: QueryPostsRepositoryClass
+    private queryCommentRepository: QueryCommentRepositoryClass
+
+    constructor() {
+        this.commentsRepository = new CommentsRepositoryClass
+        this.queryPostsRepository = new QueryPostsRepositoryClass
+        this.queryCommentRepository = new QueryCommentRepositoryClass
+    }
     async postComment(postId: string, user: IUserDb, comment: InterfaceCommentInput) {
-        const findPost = await queryPostsRepository.getPostById(postId)
+        const findPost = await this.queryPostsRepository.getPostById(postId)
         if (findPost === null) {
             return null
         }
@@ -22,7 +32,7 @@ class CommentServiceClass {
             createdAt: new Date().toISOString()
         }
 
-        const newComment = await commentsRepository.createComment({...commentObj})
+        const newComment = await this.commentsRepository.createComment({...commentObj})
         if (newComment) {
             return {
                 id: commentObj.id,
@@ -34,7 +44,7 @@ class CommentServiceClass {
         return false
     }
     async putComment(commentId: string, user: IUserDb, comment: InterfaceCommentInput) {
-        const checkComment = await queryCommentRepository.getCommentById(commentId)
+        const checkComment = await this.queryCommentRepository.getCommentById(commentId)
 
         if (checkComment === null) {
             return null
@@ -44,7 +54,7 @@ class CommentServiceClass {
             return 'forbidden'
         }
 
-        const result = await commentsRepository.updateComment(commentId, comment.content)
+        const result = await this.commentsRepository.updateComment(commentId, comment.content)
         if (result.matchedCount === 1) {
             return true
         } else {
@@ -52,7 +62,7 @@ class CommentServiceClass {
         }
     }
     async deleteComment(commentId: string, user: IUserDb) {
-        const checkComment = await queryCommentRepository.getCommentById(commentId)
+        const checkComment = await this.queryCommentRepository.getCommentById(commentId)
         if (checkComment === null) {
             return null
         }
@@ -60,7 +70,7 @@ class CommentServiceClass {
             return 'forbidden'
         }
 
-        const result = await commentsRepository.deleteComment(commentId)
+        const result = await this.commentsRepository.deleteComment(commentId)
         if (result.deletedCount === 1) {
             return true
         } else {

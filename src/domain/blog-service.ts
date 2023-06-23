@@ -1,23 +1,28 @@
 import {InterfaceBlog, InterfaceBlogInput} from "../dto/interface.blog";
-import {blogsRepository} from "../repositories/blogs-repository";
+import {BlogsRepositoryClass} from "../repositories/blogs-repository";
 import {InterfacePostInBlog} from "../dto/interface.post";
 
 class BlogsServiceClass {
+    private blogsRepository: BlogsRepositoryClass
+
+    constructor() {
+        this.blogsRepository = new BlogsRepositoryClass()
+    }
 
     async postBlog(body: InterfaceBlogInput) {
-        return blogsRepository.postBlog(body)
+        return this.blogsRepository.postBlog(body)
     }
 
     async postPostInBlog(id: string, body: InterfacePostInBlog) {
-        return blogsRepository.postPostInBlog(id, body)
+        return this.blogsRepository.postPostInBlog(id, body)
     }
 
     async putBlog(body: InterfaceBlog, id: string): Promise<boolean | null> {
-        return blogsRepository.putBlog(body, id)
+        return this.blogsRepository.putBlog(body, id)
     }
 
     async deleteBlog(id: string): Promise<boolean | null> {
-        return blogsRepository.deleteBlog(id)
+        return this.blogsRepository.deleteBlog(id)
     }
 }
 

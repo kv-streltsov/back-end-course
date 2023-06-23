@@ -12,24 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsService = void 0;
 const blogs_repository_1 = require("../repositories/blogs-repository");
 class BlogsServiceClass {
+    constructor() {
+        this.blogsRepository = new blogs_repository_1.BlogsRepositoryClass();
+    }
     postBlog(body) {
         return __awaiter(this, void 0, void 0, function* () {
-            return blogs_repository_1.blogsRepository.postBlog(body);
+            return this.blogsRepository.postBlog(body);
         });
     }
     postPostInBlog(id, body) {
         return __awaiter(this, void 0, void 0, function* () {
-            return blogs_repository_1.blogsRepository.postPostInBlog(id, body);
+            return this.blogsRepository.postPostInBlog(id, body);
         });
     }
     putBlog(body, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return blogs_repository_1.blogsRepository.putBlog(body, id);
+            return this.blogsRepository.putBlog(body, id);
         });
     }
     deleteBlog(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return blogs_repository_1.blogsRepository.deleteBlog(id);
+            return this.blogsRepository.deleteBlog(id);
         });
     }
 }
