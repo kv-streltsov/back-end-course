@@ -4,10 +4,9 @@ import {WithId} from "mongodb";
 import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
 
+class BlogsRepositoryClass {
 
-export const blogsRepository = {
-
-    postBlog: async (body: InterfaceBlogInput): Promise<InterfaceBlogView> => {
+    async postBlog(body: InterfaceBlogInput): Promise<InterfaceBlogView> {
 
         const createData = {
             id: new Date().getTime().toString(),
@@ -24,8 +23,8 @@ export const blogsRepository = {
             ...body
         }
 
-    },
-    postPostInBlog: async (id: string, body: InterfacePostInBlog): Promise<InterfacePostView | undefined> => {
+    }
+    async postPostInBlog(id: string, body: InterfacePostInBlog): Promise<InterfacePostView | undefined> {
         const findBlogName: WithId<any> = await blogsModel.findOne({id: id})
 
         if (findBlogName) {
@@ -48,8 +47,8 @@ export const blogsRepository = {
         }
         return undefined
 
-    },
-    putBlog: async (body: InterfaceBlog, id: string): Promise<boolean | null> => {
+    }
+    async putBlog(body: InterfaceBlog, id: string): Promise<boolean | null> {
 
         const findBlog = await blogsModel.findOne({id: id})
         if (findBlog === null) return null
@@ -64,8 +63,8 @@ export const blogsRepository = {
 
         return true
 
-    },
-    deleteBlog: async (id: string): Promise<boolean | null> => {
+    }
+    async deleteBlog(id: string): Promise<boolean | null> {
 
         const deleteBlog = await blogsModel.deleteOne({id: id})
         if (deleteBlog.deletedCount) {
@@ -74,3 +73,5 @@ export const blogsRepository = {
     }
 
 }
+
+export const blogsRepository = new BlogsRepositoryClass()

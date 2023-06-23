@@ -33,16 +33,16 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
         searchTerm
     }
 }
-export const queryUsersRepository = {
 
-    getAllUsers: async (
+class QueryUsersRepositoryClass {
+    async getAllUsers(
         pageSize: number = 10,
         pageNumber: number = 1,
         sortBy: string = DEFAULT_SORT_FIELD,
         sortDirection: number,
         searchEmailTerm: string | null = null,
         searchLoginTerm: string | null = null
-    ) => {
+    ) {
 
         const {
             countItems,
@@ -54,7 +54,7 @@ export const queryUsersRepository = {
 
         const users = await usersModel
             .find(searchTerm)
-            .select( {_id: 0, password: 0, salt: 0, confirmation:0, __v:0})
+            .select({_id: 0, password: 0, salt: 0, confirmation: 0, __v: 0})
             .sort(sortField)
             .skip(countItems)
             .limit(pageSize)
@@ -70,7 +70,7 @@ export const queryUsersRepository = {
 
 
     }
-
-
 }
+
+export const queryUsersRepository = new QueryUsersRepositoryClass()
 

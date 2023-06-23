@@ -23,29 +23,34 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     };
 };
 exports.paginationHandler = paginationHandler;
-exports.queryCommentRepository = {
-    getCommentsByPostId: (postId, pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) => __awaiter(void 0, void 0, void 0, function* () {
-        const count = yield comments_scheme_1.commentsModel.countDocuments({ postId: postId });
-        if (count === 0) {
-            return null;
-        }
-        const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const comments = yield comments_scheme_1.commentsModel.find({ postId: postId })
-            .select(PROJECTION)
-            .skip(countItems)
-            .sort(sortField)
-            .limit(pageSize)
-            .lean();
-        return {
-            pagesCount: Math.ceil(count / pageSize),
-            page: pageNumber,
-            pageSize,
-            totalCount: count,
-            items: comments
-        };
-    }),
-    getCommentById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return comments_scheme_1.commentsModel.findOne({ id: id }).select(PROJECTION);
-    })
-};
+class QueryCommentRepositoryClass {
+    getCommentsByPostId(postId, pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const count = yield comments_scheme_1.commentsModel.countDocuments({ postId: postId });
+            if (count === 0) {
+                return null;
+            }
+            const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
+            const comments = yield comments_scheme_1.commentsModel.find({ postId: postId })
+                .select(PROJECTION)
+                .skip(countItems)
+                .sort(sortField)
+                .limit(pageSize)
+                .lean();
+            return {
+                pagesCount: Math.ceil(count / pageSize),
+                page: pageNumber,
+                pageSize,
+                totalCount: count,
+                items: comments
+            };
+        });
+    }
+    getCommentById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return comments_scheme_1.commentsModel.findOne({ id: id }).select(PROJECTION);
+        });
+    }
+}
+exports.queryCommentRepository = new QueryCommentRepositoryClass();
 //# sourceMappingURL=query-comment-repository.js.map

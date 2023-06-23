@@ -1,7 +1,7 @@
 import {postsModel} from "../db/schemes/posts.scheme";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
-const PROJECTION  = {_id: 0,__v:0 }
+const PROJECTION = {_id: 0, __v: 0}
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
     const countItems = (pageNumber - 1) * pageSize;
@@ -13,14 +13,14 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
         sortField
     }
 }
-export const queryPostsRepository = {
 
-    getAllPosts: async (
+class QueryPostsRepositoryClass {
+    async getAllPosts(
         pageNumber: number = 1,
         pageSize: number = 10,
         sortDirection: number,
         sortBy: string = DEFAULT_SORT_FIELD
-    ) => {
+    ) {
 
         const count = await postsModel.countDocuments({})
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
@@ -39,11 +39,12 @@ export const queryPostsRepository = {
             items: posts
         }
 
-    },
-    getPostById: async (id: string) => {
-        return  postsModel.findOne({id: id}).select(PROJECTION)
     }
 
-
+    async getPostById(id: string) {
+        return postsModel.findOne({id: id}).select(PROJECTION)
+    }
 }
+
+export const queryPostsRepository = new QueryPostsRepositoryClass()
 

@@ -1,7 +1,7 @@
 import {commentsModel} from "../db/schemes/comments.scheme";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
-const PROJECTION  = {_id: 0,__v:0 }
+const PROJECTION = {_id: 0, __v: 0}
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
     const countItems = (pageNumber - 1) * pageSize;
@@ -13,17 +13,17 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
         sortField
     }
 }
-export const queryCommentRepository = {
 
-    getCommentsByPostId: async (
+class QueryCommentRepositoryClass {
+    async getCommentsByPostId(
         postId: string,
         pageNumber: number = 1,
         pageSize: number = 10,
         sortDirection: number,
         sortBy: string = DEFAULT_SORT_FIELD
-    ) => {
+    ) {
         const count: number = await commentsModel.countDocuments({postId: postId})
-        if(count === 0){
+        if (count === 0) {
             return null
         }
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
@@ -42,11 +42,11 @@ export const queryCommentRepository = {
             items: comments
         }
 
-    },
-    getCommentById: async (id: string) => {
-        return commentsModel.findOne({id: id}).select(PROJECTION)
     }
 
-
+    async getCommentById (id: string)  {
+    return commentsModel.findOne({id: id}).select(PROJECTION)
+}
 }
 
+export const queryCommentRepository = new QueryCommentRepositoryClass()

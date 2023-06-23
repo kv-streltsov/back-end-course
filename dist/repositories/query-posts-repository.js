@@ -23,26 +23,31 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     };
 };
 exports.paginationHandler = paginationHandler;
-exports.queryPostsRepository = {
-    getAllPosts: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) => __awaiter(void 0, void 0, void 0, function* () {
-        const count = yield posts_scheme_1.postsModel.countDocuments({});
-        const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const posts = yield posts_scheme_1.postsModel.find({})
-            .select(PROJECTION)
-            .skip(countItems)
-            .sort(sortField)
-            .limit(pageSize)
-            .lean();
-        return {
-            pagesCount: Math.ceil(count / pageSize),
-            page: pageNumber,
-            pageSize,
-            totalCount: count,
-            items: posts
-        };
-    }),
-    getPostById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return posts_scheme_1.postsModel.findOne({ id: id }).select(PROJECTION);
-    })
-};
+class QueryPostsRepositoryClass {
+    getAllPosts(pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const count = yield posts_scheme_1.postsModel.countDocuments({});
+            const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
+            const posts = yield posts_scheme_1.postsModel.find({})
+                .select(PROJECTION)
+                .skip(countItems)
+                .sort(sortField)
+                .limit(pageSize)
+                .lean();
+            return {
+                pagesCount: Math.ceil(count / pageSize),
+                page: pageNumber,
+                pageSize,
+                totalCount: count,
+                items: posts
+            };
+        });
+    }
+    getPostById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return posts_scheme_1.postsModel.findOne({ id: id }).select(PROJECTION);
+        });
+    }
+}
+exports.queryPostsRepository = new QueryPostsRepositoryClass();
 //# sourceMappingURL=query-posts-repository.js.map

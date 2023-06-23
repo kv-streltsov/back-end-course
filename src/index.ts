@@ -27,8 +27,6 @@ app.use('/comments', commentsRouter)
 app.use('/auth', authRouters)
 app.use('/send', emailRouters)
 app.use('/security', securityDevicesRouters)
-
-
 app.use('/testing/all-data', testingRouter)
 
 

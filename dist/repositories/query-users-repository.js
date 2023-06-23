@@ -41,24 +41,27 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection, searchEm
     };
 };
 exports.paginationHandler = paginationHandler;
-exports.queryUsersRepository = {
-    getAllUsers: (pageSize = 10, pageNumber = 1, sortBy = DEFAULT_SORT_FIELD, sortDirection, searchEmailTerm = null, searchLoginTerm = null) => __awaiter(void 0, void 0, void 0, function* () {
-        const { countItems, sortField, searchTerm } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection, searchEmailTerm, searchLoginTerm);
-        const count = yield users_scheme_1.usersModel.countDocuments(searchTerm);
-        const users = yield users_scheme_1.usersModel
-            .find(searchTerm)
-            .select({ _id: 0, password: 0, salt: 0, confirmation: 0, __v: 0 })
-            .sort(sortField)
-            .skip(countItems)
-            .limit(pageSize)
-            .lean();
-        return {
-            pagesCount: Math.ceil(count / pageSize),
-            page: pageNumber,
-            pageSize,
-            totalCount: count,
-            items: users
-        };
-    })
-};
+class QueryUsersRepositoryClass {
+    getAllUsers(pageSize = 10, pageNumber = 1, sortBy = DEFAULT_SORT_FIELD, sortDirection, searchEmailTerm = null, searchLoginTerm = null) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { countItems, sortField, searchTerm } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection, searchEmailTerm, searchLoginTerm);
+            const count = yield users_scheme_1.usersModel.countDocuments(searchTerm);
+            const users = yield users_scheme_1.usersModel
+                .find(searchTerm)
+                .select({ _id: 0, password: 0, salt: 0, confirmation: 0, __v: 0 })
+                .sort(sortField)
+                .skip(countItems)
+                .limit(pageSize)
+                .lean();
+            return {
+                pagesCount: Math.ceil(count / pageSize),
+                page: pageNumber,
+                pageSize,
+                totalCount: count,
+                items: users
+            };
+        });
+    }
+}
+exports.queryUsersRepository = new QueryUsersRepositoryClass();
 //# sourceMappingURL=query-users-repository.js.map

@@ -7,45 +7,60 @@ export interface IUpdatePassword {
     passwordHash: string
 }
 
-export const usersRepository = {
-
-    postUser: async (createdUser: InterfaceViewUser) => {
+class UsersRepositoryClass {
+    async postUser(createdUser: InterfaceViewUser) {
         return await usersModel.create(createdUser)
-    },
-    checkUser: async (loginOrEmail: string) => {
-        return await usersModel.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
-    },
+    }
 
-    updateRecoveryCode: async (email: string, recoveryCode: number) => {
+    async checkUser(loginOrEmail: string) {
+        return await usersModel.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
+    }
+
+    async updateRecoveryCode(email: string, recoveryCode: number) {
         await usersModel.updateOne({email: email}, {$set: {"confirmation.passwordRecoveryCode": recoveryCode}})
-    },
-    updateConfirmationCode: async (email: string, uuid: string) => {
+    }
+
+    async updateConfirmationCode(email: string, uuid: string) {
         return usersModel.updateOne({email: email}, {$set: {"confirmation.code": uuid}})
-    },
+    }
+
     // ИСПРАВИТЬ!!!! НИЖЕ
-    updateConfirmationCodee: async (code: string, pyload: any) => {
+    async updateConfirmationCodee(code: string, pyload: any) {
         return usersModel.updateOne({'confirmation.code': code}, {$set: pyload})
-    },
-    updatePassword: async (updateData: IUpdatePassword, recoveryCode: string) => {
+    }
+
+    async updatePassword(updateData: IUpdatePassword, recoveryCode: string) {
         return usersModel
             .updateOne(
                 {'confirmation.passwordRecoveryCode': recoveryCode},
-                {$set: {salt: updateData.salt, password: updateData.passwordHash,'confirmation.passwordRecoveryCode': null}})
-    },
-    findUserById: async (id: string) => {
-        return usersModel.findOne({id: id}).lean()
-    },
-    findUserByLogin: async (login: string) => {
-        return usersModel.findOne({login: login}).lean()
-    },
-    findUserByEmail: async (email: string) => {
-        return usersModel.findOne({email: email}).lean()
-    },
-    findUserByConfirmationCode: async (code: string) => {
-        return usersModel.findOne({'confirmation.code': code}).lean()
-    },
-    deleteUser: async (id: string) => {
-        return usersModel.deleteOne({id: id})
+                {
+                    $set: {
+                        salt: updateData.salt,
+                        password: updateData.passwordHash,
+                        'confirmation.passwordRecoveryCode': null
+                    }
+                })
     }
 
+    async findUserById(id: string) {
+        return usersModel.findOne({id: id}).lean()
+    }
+
+    async findUserByLogin(login: string) {
+        return usersModel.findOne({login: login}).lean()
+    }
+
+    async findUserByEmail(email: string) {
+        return usersModel.findOne({email: email}).lean()
+    }
+
+    async findUserByConfirmationCode(code: string) {
+        return usersModel.findOne({'confirmation.code': code}).lean()
+    }
+
+    async deleteUser(id: string) {
+        return usersModel.deleteOne({id: id})
+    }
 }
+
+export const usersRepository = new UsersRepositoryClass()

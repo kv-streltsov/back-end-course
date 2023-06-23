@@ -2,10 +2,8 @@ import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
 import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
 
-
-export const postsRepository = {
-
-    postPost: async (body: InterfacePostInput): Promise<InterfacePostView | undefined> => {
+class postsRepositoryClass {
+    async postPost(body: InterfacePostInput): Promise<InterfacePostView | undefined> {
 
         const findBlogName = await blogsModel.findOne({id: body.blogId})
 
@@ -29,8 +27,8 @@ export const postsRepository = {
         return undefined
 
 
-    },
-    putPost: async (body: InterfacePostInput, id: string): Promise<boolean | null> => {
+    }
+    async putPost(body: InterfacePostInput, id: string): Promise<boolean | null> {
 
         const findPost = await postsModel.findOne({id: id})
         if (findPost === null) return null
@@ -44,14 +42,14 @@ export const postsRepository = {
             }
         })
         return true
-    },
-    deletePost: async (id: string): Promise<boolean | null> => {
+    }
+    async deletePost(id: string): Promise<boolean | null> {
         const deletePost = await postsModel.deleteOne({id: id})
         if (deletePost.deletedCount) {
             return true
         } else return null
     }
-
-
 }
+
+export const postsRepository = new postsRepositoryClass
 

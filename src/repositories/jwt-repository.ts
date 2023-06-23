@@ -2,15 +2,15 @@ import {IDevice, IDeviceView} from "../dto/interface.device";
 import {devicesSessionsModel} from "../db/schemes/devices.sessions.scheme";
 
 
-export const jwtRepository = {
-    findDeviceSessionById: async (deviceId: string) => {
+class JwtRepositoryClass {
+    async findDeviceSessionById(deviceId: string) {
         try {
             return await devicesSessionsModel.findOne({deviceId: deviceId})
         } catch (error) {
             return error
         }
-    },
-    findAllDeviceSessionByUserId: async (userId: string) => {
+    }
+    async findAllDeviceSessionByUserId(userId: string) {
         try {
             const allDevises = await devicesSessionsModel
                 .find(
@@ -29,8 +29,8 @@ export const jwtRepository = {
         } catch (error) {
             return error
         }
-    },
-    insertDeviceSessions: async (deviceSession: IDevice, userAgent: string, ip: string | string[] | undefined) => {
+    }
+    async insertDeviceSessions(deviceSession: IDevice, userAgent: string, ip: string | string[] | undefined) {
         try {
 
             const result = await devicesSessionsModel.find({
@@ -63,8 +63,8 @@ export const jwtRepository = {
         } catch (error) {
             return false
         }
-    },
-    updateDeviceSessions: async (deviceSession: IDevice) => {
+    }
+    async updateDeviceSessions(deviceSession: IDevice) {
         try {
             await devicesSessionsModel.updateOne({
                 userId: deviceSession.userId,
@@ -81,23 +81,24 @@ export const jwtRepository = {
         } catch (error) {
             return false
         }
-    },
-    deleteDeviceSession: async (deviceId: string) => {
+    }
+    async deleteDeviceSession(deviceId: string) {
         try {
             await devicesSessionsModel.deleteOne({deviceId: deviceId})
             return true
         } catch (error) {
             return error
         }
-    },
-    deleteAllDevicesSessions: async (userId: string, deviceId: string) => {
+    }
+    async deleteAllDevicesSessions(userId: string, deviceId: string) {
         try {
-            await devicesSessionsModel.deleteMany(
-                {deviceId: {$ne: deviceId}, userId: userId}
-            )
+            await devicesSessionsModel.deleteMany({deviceId: {$ne: deviceId}, userId: userId})
             return true
-        } catch (error) {
+        } catch
+            (error) {
             return error
         }
     }
 }
+
+export const jwtRepository= new JwtRepositoryClass()

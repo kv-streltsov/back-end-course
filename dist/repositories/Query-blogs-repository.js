@@ -24,48 +24,55 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     };
 };
 exports.paginationHandler = paginationHandler;
-exports.queryBlogsRepository = {
-    getAllBlogs: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, searchNameTerm = null) => __awaiter(void 0, void 0, void 0, function* () {
-        const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const findNameTerm = searchNameTerm ? { name: { $regex: searchNameTerm, $options: 'i' } } : {};
-        const count = yield blogs_scheme_1.blogsModel.countDocuments(findNameTerm);
-        const blogs = yield blogs_scheme_1.blogsModel.find(findNameTerm)
-            .select(PROJECTION)
-            .sort(sortField)
-            .skip(countItems)
-            .limit(pageSize)
-            .lean();
-        return {
-            pagesCount: Math.ceil(count / pageSize),
-            page: pageNumber,
-            pageSize,
-            totalCount: count,
-            items: blogs
-        };
-    }),
-    getBlogById: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        return blogs_scheme_1.blogsModel.findOne({ id: id }).select(PROJECTION);
-    }),
-    getPostsInBlog: (pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, id) => __awaiter(void 0, void 0, void 0, function* () {
-        const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
-        if (findBlog === null) {
-            return null;
-        }
-        const count = yield posts_scheme_1.postsModel.countDocuments({ blogId: id });
-        const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
-        const posts = yield posts_scheme_1.postsModel.find({ blogId: id })
-            .select(PROJECTION)
-            .sort(sortField)
-            .skip(countItems)
-            .limit(pageSize)
-            .lean();
-        return {
-            pagesCount: Math.ceil(count / pageSize),
-            page: pageNumber,
-            pageSize,
-            totalCount: count,
-            items: posts
-        };
-    }),
-};
+class QueryBlogsRepositoryClass {
+    getAllBlogs(pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, searchNameTerm = null) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
+            const findNameTerm = searchNameTerm ? { name: { $regex: searchNameTerm, $options: 'i' } } : {};
+            const count = yield blogs_scheme_1.blogsModel.countDocuments(findNameTerm);
+            const blogs = yield blogs_scheme_1.blogsModel.find(findNameTerm)
+                .select(PROJECTION)
+                .sort(sortField)
+                .skip(countItems)
+                .limit(pageSize)
+                .lean();
+            return {
+                pagesCount: Math.ceil(count / pageSize),
+                page: pageNumber,
+                pageSize,
+                totalCount: count,
+                items: blogs
+            };
+        });
+    }
+    getBlogById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return blogs_scheme_1.blogsModel.findOne({ id: id }).select(PROJECTION);
+        });
+    }
+    getPostsInBlog(pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
+            if (findBlog === null) {
+                return null;
+            }
+            const count = yield posts_scheme_1.postsModel.countDocuments({ blogId: id });
+            const { countItems, sortField } = (0, exports.paginationHandler)(pageNumber, pageSize, sortBy, sortDirection);
+            const posts = yield posts_scheme_1.postsModel.find({ blogId: id })
+                .select(PROJECTION)
+                .sort(sortField)
+                .skip(countItems)
+                .limit(pageSize)
+                .lean();
+            return {
+                pagesCount: Math.ceil(count / pageSize),
+                page: pageNumber,
+                pageSize,
+                totalCount: count,
+                items: posts
+            };
+        });
+    }
+}
+exports.queryBlogsRepository = new QueryBlogsRepositoryClass;
 //# sourceMappingURL=query-blogs-repository.js.map

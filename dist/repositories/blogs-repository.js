@@ -12,52 +12,61 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
 const posts_scheme_1 = require("../db/schemes/posts.scheme");
 const blogs_scheme_1 = require("../db/schemes/blogs.scheme");
-exports.blogsRepository = {
-    postBlog: (body) => __awaiter(void 0, void 0, void 0, function* () {
-        const createData = {
-            id: new Date().getTime().toString(),
-            createdAt: new Date().toISOString(),
-            isMembership: false
-        };
-        const newBlog = Object.assign(Object.assign({}, createData), body);
-        yield blogs_scheme_1.blogsModel.create(newBlog);
-        return Object.assign(Object.assign({}, createData), body);
-    }),
-    postPostInBlog: (id, body) => __awaiter(void 0, void 0, void 0, function* () {
-        const findBlogName = yield blogs_scheme_1.blogsModel.findOne({ id: id });
-        if (findBlogName) {
+class BlogsRepositoryClass {
+    postBlog(body) {
+        return __awaiter(this, void 0, void 0, function* () {
             const createData = {
                 id: new Date().getTime().toString(),
                 createdAt: new Date().toISOString(),
-                blogName: findBlogName.name,
-                blogId: id
+                isMembership: false
             };
-            const newPost = Object.assign(Object.assign({}, createData), body);
-            yield posts_scheme_1.postsModel.create(newPost);
+            const newBlog = Object.assign(Object.assign({}, createData), body);
+            yield blogs_scheme_1.blogsModel.create(newBlog);
             return Object.assign(Object.assign({}, createData), body);
-        }
-        return undefined;
-    }),
-    putBlog: (body, id) => __awaiter(void 0, void 0, void 0, function* () {
-        const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
-        if (findBlog === null)
-            return null;
-        yield blogs_scheme_1.blogsModel.updateOne({ id: id }, {
-            $set: {
-                name: body.name,
-                description: body.description,
-                websiteUrl: body.websiteUrl
-            }
         });
-        return true;
-    }),
-    deleteBlog: (id) => __awaiter(void 0, void 0, void 0, function* () {
-        const deleteBlog = yield blogs_scheme_1.blogsModel.deleteOne({ id: id });
-        if (deleteBlog.deletedCount) {
+    }
+    postPostInBlog(id, body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const findBlogName = yield blogs_scheme_1.blogsModel.findOne({ id: id });
+            if (findBlogName) {
+                const createData = {
+                    id: new Date().getTime().toString(),
+                    createdAt: new Date().toISOString(),
+                    blogName: findBlogName.name,
+                    blogId: id
+                };
+                const newPost = Object.assign(Object.assign({}, createData), body);
+                yield posts_scheme_1.postsModel.create(newPost);
+                return Object.assign(Object.assign({}, createData), body);
+            }
+            return undefined;
+        });
+    }
+    putBlog(body, id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const findBlog = yield blogs_scheme_1.blogsModel.findOne({ id: id });
+            if (findBlog === null)
+                return null;
+            yield blogs_scheme_1.blogsModel.updateOne({ id: id }, {
+                $set: {
+                    name: body.name,
+                    description: body.description,
+                    websiteUrl: body.websiteUrl
+                }
+            });
             return true;
-        }
-        else
-            return null;
-    })
-};
+        });
+    }
+    deleteBlog(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const deleteBlog = yield blogs_scheme_1.blogsModel.deleteOne({ id: id });
+            if (deleteBlog.deletedCount) {
+                return true;
+            }
+            else
+                return null;
+        });
+    }
+}
+exports.blogsRepository = new BlogsRepositoryClass();
 //# sourceMappingURL=blogs-repository.js.map

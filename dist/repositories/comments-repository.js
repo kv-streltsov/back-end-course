@@ -11,15 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentsRepository = void 0;
 const comments_scheme_1 = require("../db/schemes/comments.scheme");
-exports.commentsRepository = {
-    createComment: (commentObj) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield comments_scheme_1.commentsModel.create(commentObj);
-    }),
-    updateComment: (commentId, comment) => __awaiter(void 0, void 0, void 0, function* () {
-        return comments_scheme_1.commentsModel.updateOne({ id: commentId }, { $set: { content: comment } });
-    }),
-    deleteComment: (commentId) => __awaiter(void 0, void 0, void 0, function* () {
-        return comments_scheme_1.commentsModel.deleteOne({ id: commentId });
-    })
-};
+class CommentsRepositoryClass {
+    createComment(commentObj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield comments_scheme_1.commentsModel.create(commentObj);
+        });
+    }
+    updateComment(commentId, comment) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return comments_scheme_1.commentsModel.updateOne({ id: commentId }, { $set: { content: comment } });
+        });
+    }
+    deleteComment(commentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return comments_scheme_1.commentsModel.deleteOne({ id: commentId });
+        });
+    }
+}
+exports.commentsRepository = new CommentsRepositoryClass();
 //# sourceMappingURL=comments-repository.js.map

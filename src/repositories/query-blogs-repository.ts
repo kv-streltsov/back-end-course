@@ -4,7 +4,7 @@ import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
-const PROJECTION  = {_id: 0,__v:0 }
+const PROJECTION = {_id: 0, __v: 0}
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
 
@@ -17,14 +17,16 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
         sortField
     }
 }
-export const queryBlogsRepository = {
-    getAllBlogs: async (
+
+
+class QueryBlogsRepositoryClass {
+    async getAllBlogs(
         pageNumber: number = 1,
         pageSize: number = 10,
         sortDirection: number,
         sortBy: string = DEFAULT_SORT_FIELD,
         searchNameTerm: string | null = null
-    ):Promise<InterfaceGetBlogsWitchQuery> => {
+    ): Promise<InterfaceGetBlogsWitchQuery> {
 
         const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
         const findNameTerm = searchNameTerm ? {name: {$regex: searchNameTerm, $options: 'i'}} : {}
@@ -46,12 +48,13 @@ export const queryBlogsRepository = {
         }
 
 
-    },
+    }
 
-    getBlogById: async (id: string) => {
+    async getBlogById(id: string) {
         return blogsModel.findOne({id: id}).select(PROJECTION);
-    },
-    getPostsInBlog: async (pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string):Promise<WithId<any>> => {
+    }
+
+    async getPostsInBlog(pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string): Promise<WithId<any>> {
         const findBlog = await blogsModel.findOne({id: id})
         if (findBlog === null) {
             return null
@@ -71,6 +74,7 @@ export const queryBlogsRepository = {
             totalCount: count,
             items: posts
         }
-    },
-
+    }
 }
+
+export const queryBlogsRepository = new QueryBlogsRepositoryClass
