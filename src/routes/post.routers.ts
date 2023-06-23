@@ -21,6 +21,11 @@ import {
 export const postRouters = Router({})
 
 
+
+
+
+
+
 postRouters.get('/', async (req: RequestWithQuery<InterfacePaginationQueryParams>, res: Response) => {
 
     const posts = await queryPostsRepository.getAllPosts(
