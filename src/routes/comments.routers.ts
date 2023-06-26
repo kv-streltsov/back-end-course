@@ -73,8 +73,7 @@ class CommentController {
     }
 
     async putLikeStatus(req: RequestWithParamsAndBody<{ commentId: string }, ILike>, res: Response) {
-        const result = await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
-
+        await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
         res.sendStatus(204)
     }
 }

@@ -21,6 +21,15 @@ export class LikeStatusRepositoryClass {
             return err
         }
     }
+    async deleteLike(userId: string, commentId: string) {
+        try {
+            await likesStatusModel.deleteOne({userId: userId, commentId: commentId})
+            return true
+        } catch (err) {
+            console.log(`update like status`, err)
+            return err
+        }
+    }
 
     async checkLikeExist(userId: string, commentId: string) {
         try {

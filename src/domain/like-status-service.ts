@@ -9,12 +9,18 @@ export class LikeStatusServiceClass {
 
 
     async putLikeStatus(userId: string, commentId: string, likeStatus: string) {
+
         const checkLikeExist = await this.checkLikeExist(userId, commentId)
+
+        if(likeStatus === 'None' && checkLikeExist){
+            return await this.likeStatusRepository.deleteLike(userId, commentId)
+        }
 
         if(checkLikeExist === null){
             return await this.likeStatusRepository.createLike(userId, commentId, likeStatus)
         }
-        if(!checkLikeExist){
+        if(checkLikeExist){
+            console.log(123123123)
             return await this.likeStatusRepository.updateLike(userId, commentId, likeStatus)
         }
 
@@ -23,6 +29,7 @@ export class LikeStatusServiceClass {
     async checkLikeExist(userId: string, commentId: string){
         return await this.likeStatusRepository.checkLikeExist(userId, commentId)
     }
+    likeStatusValidator(likeStatus:string){}
 
 }
 
