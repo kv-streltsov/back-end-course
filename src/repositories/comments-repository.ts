@@ -1,8 +1,8 @@
-import {InterfaceCommentView} from "../dto/interface.comment";
+import {ICommentDb} from "../dto/interface.comment";
 import {commentsModel} from "../db/schemes/comments.scheme";
 
 export class CommentsRepositoryClass {
-    async createComment(commentObj: InterfaceCommentView) {
+    async createComment(commentObj: ICommentDb) {
         return await commentsModel.create(commentObj)
     }
 

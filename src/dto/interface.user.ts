@@ -15,6 +15,10 @@ export interface InterfaceUserInput {
 export interface IUuid {
     uuid: string
 }
+
+export interface IUserId {
+    id: string
+}
 export interface IUserDb {
     _id: ObjectId
     login: string

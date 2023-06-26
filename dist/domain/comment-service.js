@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentService = void 0;
+exports.CommentServiceClass = void 0;
 const comments_repository_1 = require("../repositories/comments-repository");
 const query_posts_repository_1 = require("../repositories/query-posts-repository");
 const query_comment_repository_1 = require("../repositories/query-comment-repository");
@@ -84,5 +84,6 @@ class CommentServiceClass {
         });
     }
 }
-exports.commentService = new CommentServiceClass();
+exports.CommentServiceClass = CommentServiceClass;
+// export const commentService = new CommentServiceClass()
 //# sourceMappingURL=comment-service.js.map

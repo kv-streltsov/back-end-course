@@ -44,6 +44,7 @@ const comments_scheme_1 = require("./schemes/comments.scheme");
 const users_scheme_1 = require("./schemes/users.scheme");
 const posts_scheme_1 = require("./schemes/posts.scheme");
 const blogs_scheme_1 = require("./schemes/blogs.scheme");
+const likes_scheme_1 = require("./schemes/likes.scheme");
 dotenv.config();
 exports.MONGO_URL = process.env.MONGO_URL;
 exports.MONGOOSE_URL = process.env.MONGOOSE_URL;
@@ -75,6 +76,7 @@ function clear_db_mongo() {
             yield comments_scheme_1.commentsModel.deleteMany({}),
             yield rate_limit_scheme_1.rateLimitModel.deleteMany({}),
             yield devices_sessions_scheme_1.devicesSessionsModel.deleteMany({}),
+            yield likes_scheme_1.likesStatusModel.deleteMany({}),
         ];
         yield Promise.all(asyncArray);
         return true;

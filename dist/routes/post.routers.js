@@ -17,15 +17,16 @@ const post_service_1 = require("../domain/post-service");
 const interface_html_code_1 = require("../dto/interface.html-code");
 const interface_pagination_1 = require("../dto/interface.pagination");
 const jwt_auth_middleware_1 = require("../middleware/jwt-auth-middleware");
-const comment_service_1 = require("../domain/comment-service");
 const comments_validations_1 = require("../middleware/validation/comments-validations");
 const query_posts_repository_1 = require("../repositories/query-posts-repository");
 const query_comment_repository_1 = require("../repositories/query-comment-repository");
+const comment_service_1 = require("../domain/comment-service");
 exports.postRouters = (0, express_1.Router)({});
 class PostController {
     constructor() {
         this.queryPostsRepository = new query_posts_repository_1.QueryPostsRepositoryClass;
         this.queryCommentRepository = new query_comment_repository_1.QueryCommentRepositoryClass;
+        this.commentService = new comment_service_1.CommentServiceClass;
     }
     // GETs
     getAllPosts(req, res) {
@@ -64,7 +65,7 @@ class PostController {
     // POSTs
     postCommentByPostId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const createdComment = yield comment_service_1.commentService.postComment(req.params.postId, req.user, req.body);
+            const createdComment = yield this.commentService.postComment(req.params.postId, req.user, req.body);
             if (createdComment) {
                 res.status(201).send(createdComment);
             }
@@ -104,7 +105,7 @@ const postController = new PostController();
 exports.postRouters.get('/', postController.getAllPosts.bind(postController));
 exports.postRouters.get('/:id', postController.getPostById.bind(postController));
 exports.postRouters.get('/:postId/comments', postController.getCommentsByPostId.bind(postController));
-exports.postRouters.post('/:postId/comments', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, postController.postCommentByPostId);
+exports.postRouters.post('/:postId/comments', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, postController.postCommentByPostId.bind(postController));
 exports.postRouters.post('/', basic_auth_middleware_1.basic_auth, posts_validation_1.createPostValidation, postController.postPost);
 exports.postRouters.put('/:id', basic_auth_middleware_1.basic_auth, posts_validation_1.updatePostValidation, postController.putPostById);
 exports.postRouters.delete('/:id', basic_auth_middleware_1.basic_auth, postController.deletePostById);

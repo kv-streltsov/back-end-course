@@ -45,7 +45,7 @@ export class QueryCommentRepositoryClass {
     }
 
     async getCommentById (id: string)  {
-    return commentsModel.findOne({id: id}).select(PROJECTION)
+    return commentsModel.findOne({id: id}).select(PROJECTION).lean()
 }
 }
 

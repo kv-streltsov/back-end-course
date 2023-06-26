@@ -1,10 +1,10 @@
-import {InterfaceCommentInput, InterfaceCommentView} from "../dto/interface.comment";
+import {ICommentDb, InterfaceCommentInput} from "../dto/interface.comment";
 import {IUserDb} from "../dto/interface.user";
 import {CommentsRepositoryClass} from "../repositories/comments-repository";
 import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
 import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
 
-class CommentServiceClass {
+export class CommentServiceClass {
 
     private commentsRepository: CommentsRepositoryClass
     private queryPostsRepository: QueryPostsRepositoryClass
@@ -15,13 +15,15 @@ class CommentServiceClass {
         this.queryPostsRepository = new QueryPostsRepositoryClass
         this.queryCommentRepository = new QueryCommentRepositoryClass
     }
+
     async postComment(postId: string, user: IUserDb, comment: InterfaceCommentInput) {
+
         const findPost = await this.queryPostsRepository.getPostById(postId)
         if (findPost === null) {
             return null
         }
 
-        const commentObj: InterfaceCommentView = {
+        const commentObj: ICommentDb = {
             id: new Date().getTime().toString(),
             postId: postId,
             commentatorInfo: {
@@ -43,6 +45,7 @@ class CommentServiceClass {
         }
         return false
     }
+
     async putComment(commentId: string, user: IUserDb, comment: InterfaceCommentInput) {
         const checkComment = await this.queryCommentRepository.getCommentById(commentId)
 
@@ -61,6 +64,7 @@ class CommentServiceClass {
             return false
         }
     }
+
     async deleteComment(commentId: string, user: IUserDb) {
         const checkComment = await this.queryCommentRepository.getCommentById(commentId)
         if (checkComment === null) {
@@ -79,4 +83,4 @@ class CommentServiceClass {
     }
 }
 
-export const commentService = new CommentServiceClass()
+// export const commentService = new CommentServiceClass()

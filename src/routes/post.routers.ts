@@ -6,7 +6,6 @@ import {postsService} from "../domain/post-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {InterfacePaginationQueryParams, SortType} from "../dto/interface.pagination";
 import {authMiddleware} from "../middleware/jwt-auth-middleware";
-import {commentService} from "../domain/comment-service";
 import {createCommentValidation} from "../middleware/validation/comments-validations";
 import {
     InterfaceId,
@@ -17,6 +16,7 @@ import {
 } from "../dto/interface.request";
 import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
 import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
+import {CommentServiceClass} from "../domain/comment-service";
 
 export const postRouters = Router({})
 
@@ -24,10 +24,12 @@ export const postRouters = Router({})
 class PostController {
     private queryCommentRepository: QueryCommentRepositoryClass
     private queryPostsRepository: QueryPostsRepositoryClass
+    private commentService: CommentServiceClass
 
     constructor() {
         this.queryPostsRepository = new QueryPostsRepositoryClass
         this.queryCommentRepository = new QueryCommentRepositoryClass
+        this.commentService =  new CommentServiceClass
 
     }
 
@@ -72,7 +74,7 @@ class PostController {
 
     // POSTs
     async postCommentByPostId(req: Request, res: Response) {
-        const createdComment = await commentService.postComment(req.params.postId, req.user, req.body)
+        const createdComment = await this.commentService.postComment(req.params.postId, req.user, req.body)
         if (createdComment) {
             res.status(201).send(createdComment)
         } else {
@@ -106,7 +108,7 @@ const postController = new PostController()
 postRouters.get('/', postController.getAllPosts.bind(postController))
 postRouters.get('/:id', postController.getPostById.bind(postController))
 postRouters.get('/:postId/comments', postController.getCommentsByPostId.bind(postController))
-postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, postController.postCommentByPostId)
+postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, postController.postCommentByPostId.bind(postController))
 postRouters.post('/', basic_auth, createPostValidation, postController.postPost)
 postRouters.put('/:id', basic_auth, updatePostValidation, postController.putPostById)
 postRouters.delete('/:id', basic_auth, postController.deletePostById)

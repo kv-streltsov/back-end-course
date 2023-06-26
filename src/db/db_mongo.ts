@@ -6,6 +6,7 @@ import {commentsModel} from "./schemes/comments.scheme";
 import {usersModel} from "./schemes/users.scheme";
 import {postsModel} from "./schemes/posts.scheme";
 import {blogsModel} from "./schemes/blogs.scheme";
+import {likesStatusModel} from "./schemes/likes.scheme";
 
 
 dotenv.config()
@@ -41,6 +42,7 @@ export async function clear_db_mongo(): Promise<boolean> {
         await commentsModel.deleteMany({}),
         await rateLimitModel.deleteMany({}),
         await devicesSessionsModel.deleteMany({}),
+        await likesStatusModel.deleteMany({}),
     ]
     await Promise.all(asyncArray)
     return true

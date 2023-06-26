@@ -6,6 +6,8 @@ import {devicesSessionsModel} from "../src/db/schemes/devices.sessions.scheme";
 import {usersModel} from "../src/db/schemes/users.scheme";
 import {InterfaceBlogView} from "../src/dto/interface.blog";
 import {InterfacePostInput} from "../src/dto/interface.post";
+import {QueryLikeStatusRepositoryClass} from "../src/repositories/query-like-status-repository";
+import {likesStatusModel} from "../src/db/schemes/likes.scheme";
 
 const user: InterfaceUserInput = {
     "login": "qwerty",
@@ -24,6 +26,8 @@ let passwordRecoveryCode: any
 
 let blogId: any
 let postId: any
+
+let commentId: any
 
 
 describe('/10', () => {
@@ -549,13 +553,13 @@ describe('/10', () => {
     /////////////////////////////        POST FLOW         //////////////////////////////////////
     it('POST ', async () => {
 
-        const firstPost:InterfacePostInput = {
+        const firstPost: InterfacePostInput = {
             title: 'it test first post',
             blogId: blogId,
             content: 'first post content',
             shortDescription: 'shortDescription first post'
         }
-        const secondPost:InterfacePostInput = {
+        const secondPost: InterfacePostInput = {
             title: 'it test second post',
             blogId: blogId,
             content: 'second post content',
@@ -565,7 +569,7 @@ describe('/10', () => {
         // CREATE POSTS
         const createdFirstPost = await request(app)
             .post('/posts')
-            .auth('admin','qwerty')
+            .auth('admin', 'qwerty')
             .send(firstPost)
             .expect(201)
 
@@ -580,11 +584,10 @@ describe('/10', () => {
         })
 
 
-
         // CREATE POST FOR BLOG
         const secondBlog = await request(app)
             .post(`/blogs/${blogId}/posts`)
-            .auth('admin','qwerty')
+            .auth('admin', 'qwerty')
             .send(secondPost)
             .expect(201)
 
@@ -616,7 +619,7 @@ describe('/10', () => {
                         content: 'first post content',
                         blogId: blogId,
                         blogName: 'updateBlog',
-                        createdAt:expect.any(String)
+                        createdAt: expect.any(String)
                     }
                 ]
             }
@@ -625,8 +628,8 @@ describe('/10', () => {
         // UPDATE POST
         await request(app)
             .put(`/posts/${createdFirstPost.body.id}`)
-            .auth('admin','qwerty')
-            .send( {
+            .auth('admin', 'qwerty')
+            .send({
                 title: 'update post',
                 blogId: blogId,
                 content: 'update post content',
@@ -653,7 +656,7 @@ describe('/10', () => {
         // DELETE SECOND POST
         await request(app)
             .delete(`/posts/${secondBlog.body.id}`)
-            .auth('admin','qwerty')
+            .auth('admin', 'qwerty')
             .expect(204)
 
 
@@ -680,7 +683,7 @@ describe('/10', () => {
         const newComment = await request(app)
             .post(`/posts/${postId}/comments`)
             .set('Authorization', `Bearer ${accessToken}`)
-            .send({"content":"bla bla bla first comment"})
+            .send({"content": "bla bla bla first comment"})
             .expect(201)
 
         const getNewComment = await request(app)
@@ -696,7 +699,7 @@ describe('/10', () => {
                 totalCount: 1,
                 items: [
                     {
-                        id:expect.any(String),
+                        id: expect.any(String),
                         postId: postId,
                         content: 'bla bla bla first comment',
                         commentatorInfo: expect.any(Object),
@@ -709,6 +712,115 @@ describe('/10', () => {
             "userId": expect.any(String),
             "userLogin": "qwerty"
         })
+        commentId = newComment.body.id
+
+
+    });
+    it('LIKE', async () => {
+
+        const queryLikeStatusRepository = new QueryLikeStatusRepositoryClass()
+
+        let likeStatus = await queryLikeStatusRepository.findLikeStatusByUserId(userId)
+        let likesCount = await queryLikeStatusRepository.getLikesCount(userId)
+        let dislikesCount = await queryLikeStatusRepository.getDislikesCount(userId)
+
+        let comment = await request(app)
+            .get(`/comments/${commentId}`)
+            .set('Authorization', `Bearer ${accessToken}`).expect(200)
+
+
+        expect(comment.body).toEqual({
+            id: commentId,
+            postId: postId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: likesCount,
+                dislikesCount: dislikesCount,
+                myStatus: likeStatus
+            }
+        })
+
+
+        await request(app)
+            .put(`/comments/${commentId}/like-status`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .send({"likeStatus": "Like"})
+            .expect(204)
+
+
+        comment = await request(app)
+            .get(`/comments/${commentId}`)
+            .set('Authorization', `Bearer ${accessToken}`).expect(200)
+
+        likeStatus = await queryLikeStatusRepository.findLikeStatusByUserId(userId)
+        likesCount = await queryLikeStatusRepository.getLikesCount(userId)
+        dislikesCount = await queryLikeStatusRepository.getDislikesCount(userId)
+
+
+        expect(comment.body).toEqual({
+            id: commentId,
+            postId: postId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 1,
+                dislikesCount: dislikesCount,
+                myStatus: likeStatus
+            }
+        })
+
+        for(let i = 0;i<10;i++){
+            await likesStatusModel.create({
+                userId:'testUser',
+                commentId: commentId,
+                status: 'Like'
+            })
+
+        }
+        for(let i = 0;i<15;i++){
+            await likesStatusModel.create({
+                userId:'testUser',
+                commentId: commentId,
+                status: 'Dislike'
+            })
+        }
+
+        comment = await request(app)
+            .get(`/comments/${commentId}`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .expect(200)
+
+        expect(comment.body).toEqual({
+            id: commentId,
+            postId: postId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 11,
+                dislikesCount: 15,
+                myStatus: 'Like'
+            }
+        })
+
 
     });
 

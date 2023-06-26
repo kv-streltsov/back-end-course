@@ -4,7 +4,6 @@ import {rateLimitModel} from "../db/schemes/rate.limit.scheme";
 
 
 export const rateLimitMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    debugger
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
     const baseUrl = req.originalUrl
     await rateLimitModel.create({
