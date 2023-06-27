@@ -919,6 +919,72 @@ describe('/10', () => {
         })
 
 
+        // ADD COMMENT FOR ENDPOINT POST
+        comment = await request(app)
+            .post(`/posts/${postId}/comments`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .send({
+                "content": "ADD COMMENT FOR ENDPOINT POST"
+            })
+            .expect(201)
+
+
+        expect(comment.body).toEqual({
+            id: comment.body.id,
+            content: "ADD COMMENT FOR ENDPOINT POST",
+            createdAt: expect.any(String),
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
+
+        })
+
+
+
+
+        // GET COMMENT FOR ENDPOINT POST
+        comment = await request(app)
+            .get(`/posts/${postId}/comments`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .send({
+                "content": "ADD COMMENT FOR ENDPOINT POST"
+            })
+            .expect(200)
+
+
+        expect(comment.body).toEqual({
+            id: comment.body.id,
+            content: "ADD COMMENT FOR ENDPOINT POST",
+            createdAt: expect.any(String),
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None'
+            }
+
+        })
+
+
+
+
+
+
+
+
+
+
     });
 
 })

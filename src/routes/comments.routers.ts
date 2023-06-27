@@ -4,7 +4,6 @@ import {QueryCommentRepositoryClass} from "../repositories/query-comment-reposit
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {createCommentValidation} from "../middleware/validation/comments-validations";
 import {RequestWithParams, RequestWithParamsAndBody} from "../dto/interface.request";
-import {ICommentId} from "../dto/interface.comment";
 import {ILike} from "../dto/interface.like";
 import {CommentServiceClass} from "../domain/comment-service";
 import {LikeStatusServiceClass} from "../domain/like-status-service";
@@ -30,18 +29,12 @@ class CommentController {
 
     async getCommentById(req: RequestWithParams<{ commentId: string }>, res: Response) {
         const comment = await this.queryCommentRepository.getCommentById(req.params.commentId)
-        const likeStatus = await this.queryLikeStatusRepository.findLikeStatusByUserId(req.user.id)
-        const likesCount = await this.queryLikeStatusRepository.getLikesCount(req.params.commentId)
-        const dislikesCount = await this.queryLikeStatusRepository.getDislikesCount(req.params.commentId)
+        const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.user.id,req.params.commentId)
 
         if (comment) {
             return res.status(200).send({
                 ...comment,
-                likesInfo : {
-                    myStatus: likeStatus,
-                    likesCount: likesCount,
-                    dislikesCount: dislikesCount
-                }
+                likesInfo: likesInfo
             })
         } else {
             return res.sendStatus(HttpStatusCode.NOT_FOUND)

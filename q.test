@@ -1,92 +1,51 @@
-  > Homework 6  Comments for posts with auth  POST -> "/posts/:postId/comments": should create new comment; status 201; content: created comment;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /comments/:commentId;
+  > Homework 11
+  Comment likes  POST -> "/posts/:postId/comments": should create new comment; status 201; content: created comment;
+  used additional methods: POST -> /blogs, POST -> /posts, GET -> /comments/:commentId;
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 0
+
+    @@ -4,11 +4,6 @@
+          "userLogin": Any<String>,
+        },
+        "content": Any<String>,
+        "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+        "id": Any<String>,
+    -   "likesInfo": Object {
+    -     "dislikesCount": Any<Number>,
+    -     "likesCount": Any<Number>,
+    -     "myStatus": StringMatching /^Like$|^Dislike$|^None$/,
+    -   },
+      }
+
+      63 |   expectedStatus = 201,
+      64 | }: IPerformCreateTestFlowPayload<T>) => {
+    > 65 |   expect(createEntityResponseData).toEqual(entitySchema);
+         |                                    ^
+      66 |   expect(createEntityResponseStatus).toBe(expectedStatus);
+      67 |
+      68 |   const { data: getByIdResponseData } = await axiosInstance
+
+      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:65:36)
+      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:97:32)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 11  Comment likes  GET -> "comments/:commentsId": should return status 200; content: comment by id;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /posts/:postId/comments;
 
 
 
     Expected: success response
 
-    Received: Request failed with status code 404
+    Received: Request failed with status code 401
 
     Config:
-     url: comments/1687425753768
+     url: comments/1687789694602
      method: get
-     response status: 404
+     response status: 401
      request body: undefined
-     response data: "Not Found"
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:70:38
-      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:68:41)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:97:7)
-
-  > Homework 6  Comments for posts with auth  GET -> "/posts/:postId/comments": should return status 200; content: comments with pagination;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /comments;
-
-    Passed queryParams: ""
-
-    Expected: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"id":"1687425757194","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:37.194Z"},{"id":"1687425757026","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:37.026Z"},{"id":"1687425756870","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:36.870Z"},{"id":"1687425756647","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:36.647Z"},{"id":"1687425756413","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:36.413Z"},{"id":"1687425756121","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:36.121Z"},{"id":"1687425755685","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:35.685Z"},{"id":"1687425755488","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:35.488Z"},{"id":"1687425755335","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:35.335Z"},{"id":"1687425755166","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-22T09:22:35.166Z"}]}
-
-    Received: {"pagesCount":2,"page":1,"pageSize":10,"totalCount":12,"items":[{"_id":"649412dd3f9324e5942c33f5","id":"1687425757194","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:37.194Z","__v":0},{"_id":"649412dd3f9324e5942c33f0","id":"1687425757026","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:37.026Z","__v":0},{"_id":"649412dc3f9324e5942c33eb","id":"1687425756870","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:36.870Z","__v":0},{"_id":"649412dc3f9324e5942c33e6","id":"1687425756647","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:36.647Z","__v":0},{"_id":"649412dc3f9324e5942c33e1","id":"1687425756413","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:36.413Z","__v":0},{"_id":"649412dc3f9324e5942c33dc","id":"1687425756121","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:36.121Z","__v":0},{"_id":"649412db3f9324e5942c33d7","id":"1687425755685","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:35.685Z","__v":0},{"_id":"649412db3f9324e5942c33d2","id":"1687425755488","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:35.488Z","__v":0},{"_id":"649412db3f9324e5942c33cd","id":"1687425755335","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:35.335Z","__v":0},{"_id":"649412db3f9324e5942c33c8","id":"1687425755166","postId":"1687425754280","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"9e017998-a8ca-4dec-9e77-ff396c2f75c1","userLogin":"lg-751415"},"createdAt":"2023-06-22T09:22:35.166Z","__v":0}]}
-
-      105 |
-      106 |     if (expectedData) {
-    > 107 |       expect(data).toBeEqualWithQueryParams(expectedData, queryParams, withDiffPrint);
-          |                    ^
-      108 |     }
-      109 |   }
-      110 | };
-
-      at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:174:7)
-
-  > Homework 6  Comments for posts with auth  PUT -> "/comments/:commentId": should update comment by id; status 204;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /posts/:postId/comments, GET -> /comments/:commentId;
-
-
-
-    Expected: success response
-
-    Received: Request failed with status code 404
-
-    Config:
-     url: comments/1687425759067
-     method: get
-     response status: 404
-     request body: undefined
-     response data: "Not Found"
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:109:38
-      at performPUTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:107:41)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:134:7)
-
-  > Homework 6  Comments for posts with auth  GET -> "comments/:commentsId": should return status 200; content: comment by id;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /posts/:postId/comments;
-
-
-
-    Expected: success response
-
-    Received: Request failed with status code 404
-
-    Config:
-     url: comments/1687425759848
-     method: get
-     response status: 404
-     request body: undefined
-     response data: "Not Found"
+     response data: "Unauthorized"
 
       22 |     };
       23 |
@@ -98,10 +57,37 @@
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
       at src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:83:38
+          at runMicrotasks (<anonymous>)
       at performGETByIdTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:81:72)
       at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:202:7)
 
-  > Homework 6  Comments for posts with auth  PUT, DELETE -> "/comments/:id": should return error if access denied; status 403;  used additional methods: POST -> /users;
+  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": should return error if :id from uri param not found; status 404;
+
+
+
+    Tested case params:
+     endpoint: comments/602afe92-7d97-4395-b1b9-6cf98b351bbe/like-status,
+     method: PUT,
+     headers: {"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlYzE2MDYxZS0zZjAyLTRlNGItYTRkMy02OGVhY2YwMmM2NzAiLCJpYXQiOjE2ODc3ODk2OTMsImV4cCI6MTY4Nzc5MDY5M30.PLJmsNOjeKn1UGNiviyqSzCuRXL5Bbg7ZSKeFVo7iOk"},
+    body: {"likeStatus":"None"}
+
+    Expected status: 404
+
+    Received status: 204
+
+      49 |       }
+      50 |
+    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
+         |                      ^
+      52 |         headers,
+      53 |         endpoint,
+      54 |         method,
+
+      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:328:7)
+
+  > Homework 11  Comment likes  GET -> "/comments/:commentId": get comment by unauthorized user. Should return liked comment with 'myStatus: None'; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, PUT => /comments/:commentId/like-status;
 
 
 
@@ -110,10 +96,10 @@
     Received: Request failed with status code 401
 
     Config:
-     url: posts/1687425763267/comments
-     method: post
+     url: comments/1687789696629
+     method: get
      response status: 401
-     request body: {"content":"length_21-weqweqweqwq"}
+     request body: undefined
      response data: "Unauthorized"
 
       22 |     };
@@ -125,26 +111,215 @@
       27 |   throw new Error(error.message);
 
       at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/comments/comments-V2-describe.ts:341:24
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:340:30)
+      at src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:175:38
+          at runMicrotasks (<anonymous>)
+      at performGetLikeByUnauthorizedUser (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:173:34)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:354:7)
 
-  > Homework 6  Comments for posts with auth  Comments body validation  POST -> "/posts/:postId/comments": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
+  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
+   like the comment by user 1, user 2, user 3, user 4.
+   get the comment after each like by user 1.
+   ; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+    @@ -9,6 +9,7 @@
+        "likesInfo": Object {
+          "dislikesCount": 0,
+          "likesCount": 1,
+          "myStatus": "Like",
+        },
+    +   "postId": "1687789703728",
+      }
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:83:7)
+
+  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
+   dislike the comment by user 1, user 2;
+   like the comment by user 3;
+   get the comment after each like by user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 2
+
+    @@ -7,8 +7,9 @@
+        "createdAt": "2023-06-26T14:28:25.171Z",
+        "id": "1687789705171",
+        "likesInfo": Object {
+          "dislikesCount": 1,
+          "likesCount": 0,
+    -     "myStatus": "Dislike",
+    +     "myStatus": "Like",
+        },
+    +   "postId": "1687789705025",
+      }
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:114:7)
+
+  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
+   like the comment twice by user 1;
+   get the comment after each like by user 1.
+   Should increase like's count once; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+    @@ -9,6 +9,7 @@
+        "likesInfo": Object {
+          "dislikesCount": 0,
+          "likesCount": 1,
+          "myStatus": "Like",
+        },
+    +   "postId": "1687789705833",
+      }
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:145:7)
+
+  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
+   like the comment by user 1;
+   dislike the comment by user 1;
+   set 'none' status by user 1;
+   get the comment after each like by user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+    @@ -9,6 +9,7 @@
+        "likesInfo": Object {
+          "dislikesCount": 0,
+          "likesCount": 1,
+          "myStatus": "Like",
+        },
+    +   "postId": "1687789706958",
+      }
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:176:7)
+
+  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
+   like the comment by user 1 then get by user 2;
+   dislike the comment by user 2 then get by the user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 1
+
+    @@ -9,6 +9,7 @@
+        "likesInfo": Object {
+          "dislikesCount": 0,
+          "likesCount": 1,
+          "myStatus": "None",
+        },
+    +   "postId": "1687789707833",
+      }
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:207:7)
+
+  > Homework 11  Comment likes  GET -> "/posts/:postId/comments": create 6 comments then:
+  like comment 1 by user 1, user 2;
+  like comment 2 by user 2, user 3;
+  dislike comment 3 by user 1;
+  like comment 4 by user 1, user 4, user 2, user 3;
+  like comment 5 by user 2, dislike by user 3;
+  like comment 6 by user 1, dislike by user 2.
+  Get the comments by user 1 after all likes
+  ; status 200; content: comments array for post with pagination;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, PUT -> /posts/:postId/like-status;
 
 
 
-    Tested endpoint: posts/1687425764322/comments
+    Expected: ArrayContaining [{"commentatorInfo": {"userId": Any<String>, "userLogin": Any<String>}, "content": Any<String>, "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "id": Any<String>, "likesInfo": {"dislikesCount": Any<Number>, "likesCount": Any<Number>, "myStatus": StringMatching /^Like$|^Dislike$|^None$/}}]
 
-    Tested method: POST
+    Received: [{"id":"1687789708755","commentatorInfo":{"userId":"a7d7b462-7991-4231-840e-e9985c2590b9","userLogin":"7020lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-26T14:28:28.755Z"},{"id":"1687789708933","commentatorInfo":{"userId":"a7d7b462-7991-4231-840e-e9985c2590b9","userLogin":"7020lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-26T14:28:28.933Z"},{"id":"1687789709180","commentatorInfo":{"userId":"a7d7b462-7991-4231-840e-e9985c2590b9","userLogin":"7020lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-26T14:28:29.180Z"},{"id":"1687789709569","commentatorInfo":{"userId":"a7d7b462-7991-4231-840e-e9985c2590b9","userLogin":"7020lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-26T14:28:29.569Z"},{"id":"1687789709732","commentatorInfo":{"userId":"a7d7b462-7991-4231-840e-e9985c2590b9","userLogin":"7020lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-26T14:28:29.732Z"},{"id":"1687789709883","commentatorInfo":{"userId":"a7d7b462-7991-4231-840e-e9985c2590b9","userLogin":"7020lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-26T14:28:29.883Z"}]
+
+    Wrong entity: {"id":"1687789708755","commentatorInfo":{"userId":"a7d7b462-7991-4231-840e-e9985c2590b9","userLogin":"7020lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-26T14:28:28.755Z"}
+
+      246 |       }).catch((error) => handleTestError(error));
+      247 |
+    > 248 |       expect(create6CommentsResult).toBeStrictObjectsArray(commentSchema);
+          |                                     ^
+      249 |
+      250 |       const comments6WithLikes = await likeSeveralItemsSeveralTimes({
+      251 |         //userWhoGet should be loggedUsers[0]
+
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:248:37)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 11  Comment likes  Comment like body validation  PUT -> "/comments/:commentId/like-status": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /comments;
+
+
+
+    Tested endpoint: comments/1687789710367/like-status
+
+    Tested method: PUT
 
     Expected status: 400
 
-    Received status: 401
+    Received status: 204
 
-    Passed body: {"content":"short"}
+    Passed body: {"likeStatus":""}
 
-    Expected data: { errorsMessages: [{ message: Any<String>, field: "content" }] }
+    Expected data: { errorsMessages: [{ message: Any<String>, field: "likeStatus" }] }
 
-    Received data: "Unauthorized"
+    Received data: ""
 
       40 |     }
       41 |
@@ -155,31 +330,5 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-body-validatin-v2-describe.ts:47:7)
-
-  > Homework 6  Comments for posts with auth  Comments body validation  PUT -> "/comments/:commentId": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts;
-
-
-
-    Expected: success response
-
-    Received: Request failed with status code 401
-
-    Config:
-     url: posts/1687425764733/comments
-     method: post
-     response status: 401
-     request body: {"content":"length_21-weqweqweqwq"}
-     response data: "Unauthorized"
-
-      22 |     };
-      23 |
-    > 24 |     expect(mappedError).printError(description);
-         |                         ^
-      25 |   }
-      26 |
-      27 |   throw new Error(error.message);
-
-      at handleTestError (src/tests/jest/back/testHelpers/handleTestError.ts:24:25)
-      at src/tests/jest/back/describes/comments/comments-body-validatin-v2-describe.ts:73:24
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-body-validatin-v2-describe.ts:72:30)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/likes-body-validation-describe.ts:79:7)

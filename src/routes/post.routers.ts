@@ -17,19 +17,24 @@ import {
 import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
 import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
 import {CommentServiceClass} from "../domain/comment-service";
+import {QueryLikeStatusRepositoryClass} from "../repositories/query-like-status-repository";
+import {IComment, ICommentDb} from "../dto/interface.comment";
 
 export const postRouters = Router({})
 
 
 class PostController {
+
     private queryCommentRepository: QueryCommentRepositoryClass
     private queryPostsRepository: QueryPostsRepositoryClass
     private commentService: CommentServiceClass
+    private queryLikeStatusRepository: QueryLikeStatusRepositoryClass
 
     constructor() {
         this.queryPostsRepository = new QueryPostsRepositoryClass
         this.queryCommentRepository = new QueryCommentRepositoryClass
-        this.commentService =  new CommentServiceClass
+        this.commentService = new CommentServiceClass
+        this.queryLikeStatusRepository = new QueryLikeStatusRepositoryClass
 
     }
 
@@ -74,9 +79,17 @@ class PostController {
 
     // POSTs
     async postCommentByPostId(req: Request, res: Response) {
-        const createdComment = await this.commentService.postComment(req.params.postId, req.user, req.body)
-        if (createdComment) {
-            res.status(201).send(createdComment)
+
+        const comment: IComment | boolean | null = await this.commentService.postComment(req.params.postId, req.user, req.body)
+
+        if (comment) {
+            const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.user.id, comment.id)
+
+            res.status(201).send({
+                ...comment,
+                likesInfo: likesInfo
+            })
+
         } else {
             res.sendStatus(HttpStatusCode.NOT_FOUND)
         }
