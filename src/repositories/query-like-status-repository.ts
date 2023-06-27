@@ -39,7 +39,7 @@ export class QueryLikeStatusRepositoryClass {
             return {
                 likesCount: like,
                 dislikesCount: disLike,
-                myStatus: (likeStatus === null) ? "None" : likeStatus.status
+                myStatus: likeStatus === null ? "None" : likeStatus.status
             }
 
 

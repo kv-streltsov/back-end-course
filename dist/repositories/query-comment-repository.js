@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QueryCommentRepositoryClass = exports.paginationHandler = void 0;
 const comments_scheme_1 = require("../db/schemes/comments.scheme");
+const query_like_status_repository_1 = require("./query-like-status-repository");
 const DEFAULT_SORT_FIELD = 'createdAt';
 const PROJECTION = { _id: 0, __v: 0 };
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
@@ -24,6 +25,9 @@ const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
 };
 exports.paginationHandler = paginationHandler;
 class QueryCommentRepositoryClass {
+    constructor() {
+        this.queryLikeStatusRepository = new query_like_status_repository_1.QueryLikeStatusRepositoryClass;
+    }
     getCommentsByPostId(postId, pageNumber = 1, pageSize = 10, sortDirection, sortBy = DEFAULT_SORT_FIELD) {
         return __awaiter(this, void 0, void 0, function* () {
             const count = yield comments_scheme_1.commentsModel.countDocuments({ postId: postId });
@@ -37,18 +41,22 @@ class QueryCommentRepositoryClass {
                 .sort(sortField)
                 .limit(pageSize)
                 .lean();
+            const items = yield Promise.all(comments.map((comment) => __awaiter(this, void 0, void 0, function* () {
+                const likesInfo = yield this.queryLikeStatusRepository.getLikesInfo(comment.commentatorInfo.userId, comment.id);
+                return Object.assign(Object.assign({}, comment), { likesInfo: likesInfo });
+            })));
             return {
                 pagesCount: Math.ceil(count / pageSize),
                 page: pageNumber,
                 pageSize,
                 totalCount: count,
-                items: comments
+                items: items
             };
         });
     }
     getCommentById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return comments_scheme_1.commentsModel.findOne({ id: id }).select(PROJECTION);
+            return comments_scheme_1.commentsModel.findOne({ id: id }).select(PROJECTION).lean();
         });
     }
 }

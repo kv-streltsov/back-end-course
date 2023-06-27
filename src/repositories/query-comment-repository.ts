@@ -1,4 +1,5 @@
 import {commentsModel} from "../db/schemes/comments.scheme";
+import {QueryLikeStatusRepositoryClass} from "./query-like-status-repository";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
 const PROJECTION = {_id: 0, __v: 0}
@@ -15,6 +16,12 @@ export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: 
 }
 
 export class QueryCommentRepositoryClass {
+
+    queryLikeStatusRepository: QueryLikeStatusRepositoryClass
+    constructor() {
+        this.queryLikeStatusRepository = new QueryLikeStatusRepositoryClass
+    }
+
     async getCommentsByPostId(
         postId: string,
         pageNumber: number = 1,
@@ -34,12 +41,21 @@ export class QueryCommentRepositoryClass {
             .limit(pageSize)
             .lean()
 
+        const items =  await Promise.all(comments.map(async comment => {
+            const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(comment.commentatorInfo.userId, comment.id)
+            return {
+                ...comment,
+                likesInfo: likesInfo
+            }
+        }))
+
+
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: count,
-            items: comments
+            items: items
         }
 
     }

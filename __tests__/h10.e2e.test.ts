@@ -680,6 +680,7 @@ describe('/10', () => {
 
     });
     it('COMMENT', async () => {
+
         const newComment = await request(app)
             .post(`/posts/${postId}/comments`)
             .set('Authorization', `Bearer ${accessToken}`)
@@ -703,7 +704,12 @@ describe('/10', () => {
                         postId: postId,
                         content: 'bla bla bla first comment',
                         commentatorInfo: expect.any(Object),
-                        createdAt: expect.any(String)
+                        createdAt: expect.any(String),
+                        likesInfo:{
+                            likesCount:0,
+                            dislikesCount:0,
+                            myStatus: 'None'
+                        }
                     }
                 ]
             }

@@ -17,18 +17,21 @@ const interface_html_code_1 = require("../dto/interface.html-code");
 const comments_validations_1 = require("../middleware/validation/comments-validations");
 const comment_service_1 = require("../domain/comment-service");
 const like_status_service_1 = require("../domain/like-status-service");
+const query_like_status_repository_1 = require("../repositories/query-like-status-repository");
 exports.commentsRouter = (0, express_1.Router)({});
 class CommentController {
     constructor() {
         this.queryCommentRepository = new query_comment_repository_1.QueryCommentRepositoryClass;
         this.commentService = new comment_service_1.CommentServiceClass;
         this.likeStatusService = new like_status_service_1.LikeStatusServiceClass;
+        this.queryLikeStatusRepository = new query_like_status_repository_1.QueryLikeStatusRepositoryClass();
     }
     getCommentById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const comment = yield this.queryCommentRepository.getCommentById(req.params.commentId);
+            const likesInfo = yield this.queryLikeStatusRepository.getLikesInfo(req.user.id, req.params.commentId);
             if (comment) {
-                return res.status(200).send(comment);
+                return res.status(200).send(Object.assign(Object.assign({}, comment), { likesInfo: likesInfo }));
             }
             else {
                 return res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
@@ -65,14 +68,14 @@ class CommentController {
     }
     putLikeStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus);
+            yield this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus);
             res.sendStatus(204);
         });
     }
 }
 const commentController = new CommentController();
-exports.commentsRouter.get('/:id', commentController.getCommentById.bind(commentController));
-exports.commentsRouter.put('/:id', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, commentController.putCommentById);
+exports.commentsRouter.get('/:commentId', jwt_auth_middleware_1.authMiddleware, commentController.getCommentById.bind(commentController));
+exports.commentsRouter.put('/:commentId', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, commentController.putCommentById.bind(commentController));
 exports.commentsRouter.put('/:commentId/like-status', jwt_auth_middleware_1.authMiddleware, commentController.putLikeStatus.bind(commentController));
-exports.commentsRouter.delete('/:id', jwt_auth_middleware_1.authMiddleware, commentController.deleteCommentById);
+exports.commentsRouter.delete('/:id', jwt_auth_middleware_1.authMiddleware, commentController.deleteCommentById.bind(commentController));
 //# sourceMappingURL=comments.routers.js.map

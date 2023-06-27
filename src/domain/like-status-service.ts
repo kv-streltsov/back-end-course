@@ -20,7 +20,6 @@ export class LikeStatusServiceClass {
             return await this.likeStatusRepository.createLike(userId, commentId, likeStatus)
         }
         if(checkLikeExist){
-            console.log(123123123)
             return await this.likeStatusRepository.updateLike(userId, commentId, likeStatus)
         }
 

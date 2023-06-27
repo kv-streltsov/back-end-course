@@ -68,7 +68,6 @@ class PostController {
             req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
             req.query?.sortBy && req.query.sortBy,
         )
-
         if (comments !== null) {
             res.status(HttpStatusCode.OK).send(comments)
         } else {
@@ -118,9 +117,11 @@ class PostController {
 }
 
 const postController = new PostController()
+// GET
 postRouters.get('/', postController.getAllPosts.bind(postController))
 postRouters.get('/:id', postController.getPostById.bind(postController))
 postRouters.get('/:postId/comments', postController.getCommentsByPostId.bind(postController))
+// POST
 postRouters.post('/:postId/comments', authMiddleware, createCommentValidation, postController.postCommentByPostId.bind(postController))
 postRouters.post('/', basic_auth, createPostValidation, postController.postPost)
 postRouters.put('/:id', basic_auth, updatePostValidation, postController.putPostById)
