@@ -83,4 +83,3 @@ export class CommentServiceClass {
     }
 }
 
-// export const commentService = new CommentServiceClass()

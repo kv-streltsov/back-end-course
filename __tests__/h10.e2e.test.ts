@@ -722,6 +722,28 @@ describe('/10', () => {
 
     });
     it('LIKE', async () => {
+        // CREATE 2 USER
+        await request(app)
+            .post('/users')
+            .auth('admin', 'qwerty')
+            .send( {
+                "login": "likeMaster",
+                "password": "qwerty1",
+                "email": "kv.streltsov@google.ru"
+            }).expect(201)
+
+        const response = await request(app)
+            .post('/auth/login')
+            .send({
+                "loginOrEmail": 'likeMaster',
+                "password": "qwerty1"
+            }).expect(200)
+
+        /// assign variables access and refresh token for body and cookies
+        const accessTokenLikeMasterUser = response.body.accessToken
+
+
+
 
         const queryLikeStatusRepository = new QueryLikeStatusRepositoryClass()
 
@@ -766,16 +788,40 @@ describe('/10', () => {
             .send({"likeStatus": "Like"})
             .expect(204)
 
-        // GET COMMENT WITH ONE LIKE
+        // GET COMMENT WITH ONE LIKE WITH USER
         comment = await request(app)
             .get(`/comments/${commentId}`)
             .set('Authorization', `Bearer ${accessToken}`).expect(200)
 
-        likeStatus = await queryLikeStatusRepository.findLikeStatusByUserId(userId)
-        likesCount = await queryLikeStatusRepository.getLikesCount(userId)
+
+
+        // CHECK ONE LIKE WITH USER
+        expect(comment.body).toEqual({
+            id: commentId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 1,
+                myStatus: 'Like'
+            }
+        })
+
+        // GET COMMENT WITH ONE LIKE WITH USER2
+        comment = await request(app)
+            .get(`/comments/${commentId}`)
+            .set('Authorization', `Bearer ${accessTokenLikeMasterUser}`).expect(200)
+
+
         dislikesCount = await queryLikeStatusRepository.getDislikesCount(userId)
 
-        // CHECK ONE LIKE
+        // CHECK ONE LIKE WITH USER2
         expect(comment.body).toEqual({
             id: commentId,
             content: 'bla bla bla first comment',
@@ -789,15 +835,16 @@ describe('/10', () => {
             likesInfo: {
                 likesCount: 1,
                 dislikesCount: dislikesCount,
-                myStatus: likeStatus
+                myStatus: 'None'
             }
         })
+        console.log(`accessTokenLikeMasterUser`,accessTokenLikeMasterUser)
 
         // GET COMMENT WITH ONE LIKE WITHOUT USER
         comment = await request(app)
             .get(`/comments/${commentId}`)
 
-        // CHECK ONE LIKE
+        // CHECK ONE LIKE WITHOUT USER
         expect(comment.body).toEqual({
             id: commentId,
             content: 'bla bla bla first comment',
@@ -816,6 +863,7 @@ describe('/10', () => {
         })
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         // PUSH 10 LIKE AND 15 DISLIKE
@@ -835,13 +883,13 @@ describe('/10', () => {
             })
         }
 
-        // GET COMMENT WITH 11 LIKE AND 15 DISLIKE
+        // GET COMMENT WITH 11 LIKE AND 15 DISLIKE WITH USER
         comment = await request(app)
             .get(`/comments/${commentId}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200)
 
-        // CHECK BODY
+        // CHECK BODY WITH USER
         expect(comment.body).toEqual({
             id: commentId,
             content: 'bla bla bla first comment',
@@ -856,6 +904,29 @@ describe('/10', () => {
                 likesCount: 11,
                 dislikesCount: 15,
                 myStatus: 'Like'
+            }
+        })
+
+        // GET COMMENT WITH 11 LIKE AND 15 DISLIKE WITHOUT USER
+        comment = await request(app)
+            .get(`/comments/${commentId}`)
+            .expect(200)
+
+        // CHECK BODY WITHOUT USER
+        expect(comment.body).toEqual({
+            id: commentId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 11,
+                dislikesCount: 15,
+                myStatus: 'None'
             }
         })
 
@@ -867,12 +938,13 @@ describe('/10', () => {
             .send({"likeStatus": "Like"})
             .expect(204)
 
+        // GET COMMENT WITH 11 LIKE AND 15 DISLIKE WITH USER
         comment = await request(app)
             .get(`/comments/${commentId}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200)
 
-        // CHECK BODY
+        // CHECK BODY  WITH USER
         expect(comment.body).toEqual({
             id: commentId,
             content: 'bla bla bla first comment',
@@ -889,6 +961,38 @@ describe('/10', () => {
                 myStatus: 'Like'
             }
         })
+
+        // GET COMMENT WITH 11 LIKE AND 15 DISLIKE WITHOUT USER
+        comment = await request(app)
+            .get(`/comments/${commentId}`)
+            .expect(200)
+
+        // CHECK BODY  WITHOUT USER
+        expect(comment.body).toEqual({
+            id: commentId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 11,
+                dislikesCount: 15,
+                myStatus: 'None'
+            }
+        })
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // CHANGE LIKE TO DISLIKE WITHOUT USER | 401
+        await request(app)
+            .put(`/comments/${commentId}/like-status`)
+            .send({"likeStatus": "Dislike"})
+            .expect(401)
 
         // CHANGE LIKE TO DISLIKE
         await request(app)
@@ -901,6 +1005,7 @@ describe('/10', () => {
             .get(`/comments/${commentId}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200)
+
         // CHECK BODY
         expect(comment.body).toEqual({
             id: commentId,

@@ -1,6 +1,5 @@
-
-
-  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
+  > Homework 11  Comment likes
+  PUT -> "/comments/:commentId/like-status": create comment then:
    dislike the comment by user 1, user 2;
    like the comment by user 3;
    get the comment after each like by user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
@@ -11,8 +10,8 @@
     + Received  + 1
 
     @@ -7,8 +7,8 @@
-        "createdAt": "2023-06-28T06:31:44.179Z",
-        "id": "1687933904179",
+        "createdAt": "2023-06-28T07:02:50.820Z",
+        "id": "1687935770819",
         "likesInfo": Object {
           "dislikesCount": 1,
           "likesCount": 0,
@@ -45,8 +44,8 @@
     + Received  + 1
 
     @@ -7,8 +7,8 @@
-        "createdAt": "2023-06-28T06:31:46.632Z",
-        "id": "1687933906632",
+        "createdAt": "2023-06-28T07:02:52.828Z",
+        "id": "1687935772828",
         "likesInfo": Object {
           "dislikesCount": 1,
           "likesCount": 0,
@@ -77,8 +76,8 @@
     + Received  + 1
 
     @@ -7,8 +7,8 @@
-        "createdAt": "2023-06-28T06:31:47.766Z",
-        "id": "1687933907766",
+        "createdAt": "2023-06-28T07:02:54.174Z",
+        "id": "1687935774174",
         "likesInfo": Object {
           "dislikesCount": 0,
           "likesCount": 1,
@@ -111,9 +110,9 @@
 
     Passed queryParams: ""
 
-    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687933909854","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.854Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like"}},{"id":"1687933909621","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.621Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None"}},{"id":"1687933909437","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.437Z","likesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like"}},{"id":"1687933909290","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.290Z","likesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike"}},{"id":"1687933909083","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.083Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933908839","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:48.839Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like"}}]}
+    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687935776432","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T07:02:56.432Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like"}},{"id":"1687935776197","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T07:02:56.197Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None"}},{"id":"1687935775496","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T07:02:55.496Z","likesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like"}},{"id":"1687935775244","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T07:02:55.244Z","likesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike"}},{"id":"1687935775090","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T07:02:55.090Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None"}},{"id":"1687935774923","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T07:02:54.923Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like"}}]}
 
-    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687933909854","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.854Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909621","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.621Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909437","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.437Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909290","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.290Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909083","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.083Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933908839","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:48.839Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}}]}
+    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687935776432","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"createdAt":"2023-06-28T07:02:56.432Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687935776197","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"createdAt":"2023-06-28T07:02:56.197Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687935775496","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"createdAt":"2023-06-28T07:02:55.496Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687935775244","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"createdAt":"2023-06-28T07:02:55.244Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687935775090","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"createdAt":"2023-06-28T07:02:55.090Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687935774923","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"1b8b4131-7f32-45a2-bf89-9dfbdff255d5","userLogin":"983lg"},"createdAt":"2023-06-28T07:02:54.923Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}}]}
 
     Attention: "addedAt": Any<String> is equal to any date string, don't worry about highlighting this field
 
@@ -123,8 +122,8 @@
     @@ -7,13 +7,13 @@
             },
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:31:49.854Z",
-            "id": "1687933909854",
+            "createdAt": "2023-06-28T07:02:56.432Z",
+            "id": "1687935776432",
             "likesInfo": Object {
     -         "dislikesCount": 1,
     -         "likesCount": 1,
@@ -136,12 +135,12 @@
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "30fce4f8-4a16-4c72-b1d0-52787396f665",
+              "userId": "1b8b4131-7f32-45a2-bf89-9dfbdff255d5",
     @@ -21,12 +21,12 @@
             },
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:31:49.621Z",
-            "id": "1687933909621",
+            "createdAt": "2023-06-28T07:02:56.197Z",
+            "id": "1687935776197",
             "likesInfo": Object {
     -         "dislikesCount": 1,
     -         "likesCount": 1,
@@ -154,8 +153,8 @@
             "commentatorInfo": Object {
     @@ -36,12 +36,12 @@
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:31:49.437Z",
-            "id": "1687933909437",
+            "createdAt": "2023-06-28T07:02:55.496Z",
+            "id": "1687935775496",
             "likesInfo": Object {
               "dislikesCount": 0,
     -         "likesCount": 4,
@@ -166,12 +165,12 @@
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "30fce4f8-4a16-4c72-b1d0-52787396f665",
+              "userId": "1b8b4131-7f32-45a2-bf89-9dfbdff255d5",
     @@ -49,13 +49,13 @@
             },
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:31:49.290Z",
-            "id": "1687933909290",
+            "createdAt": "2023-06-28T07:02:55.244Z",
+            "id": "1687935775244",
             "likesInfo": Object {
     -         "dislikesCount": 1,
     +         "dislikesCount": 0,
@@ -182,11 +181,11 @@
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "30fce4f8-4a16-4c72-b1d0-52787396f665",
+              "userId": "1b8b4131-7f32-45a2-bf89-9dfbdff255d5",
     @@ -64,11 +64,11 @@
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:31:49.083Z",
-            "id": "1687933909083",
+            "createdAt": "2023-06-28T07:02:55.090Z",
+            "id": "1687935775090",
             "likesInfo": Object {
               "dislikesCount": 0,
     -         "likesCount": 2,
@@ -198,8 +197,8 @@
             "commentatorInfo": Object {
     @@ -78,12 +78,12 @@
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:31:48.839Z",
-            "id": "1687933908839",
+            "createdAt": "2023-06-28T07:02:54.923Z",
+            "id": "1687935774923",
             "likesInfo": Object {
               "dislikesCount": 0,
     -         "likesCount": 2,
@@ -221,14 +220,13 @@
       110 | };
 
       at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:259:7)
 
   > Homework 11  Comment likes  Comment like body validation  PUT -> "/comments/:commentId/like-status": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /comments;
 
 
 
-    Tested endpoint: comments/1687933913549/like-status
+    Tested endpoint: comments/1687935780689/like-status
 
     Tested method: PUT
 
@@ -251,5 +249,4 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/likes-body-validation-describe.ts:79:7)

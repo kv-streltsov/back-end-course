@@ -9,6 +9,7 @@ import {CommentServiceClass} from "../domain/comment-service";
 import {LikeStatusServiceClass} from "../domain/like-status-service";
 import {QueryLikeStatusRepositoryClass} from "../repositories/query-like-status-repository";
 import {jwtService} from "../application/jwt-service";
+import {IErrorMessage, InterfaceError} from "../dto/Interface-error";
 
 
 export const commentsRouter = Router({})
@@ -29,7 +30,6 @@ class CommentController {
 
 
     async getCommentById(req: RequestWithParams<{commentId: string}>, res: Response) {
-
         if (req.headers.authorization) {
             const token = req.headers.authorization.split(' ')[1]
             req.user = await jwtService.getUserIdByToken(token)
@@ -73,11 +73,18 @@ class CommentController {
 
     async putLikeStatus(req: RequestWithParamsAndBody<{commentId: string}, ILike>, res: Response) {
 
-        const result = await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
+        const result: null | InterfaceError | any  = await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
+
         if (result === null) {
             res.sendStatus(HttpStatusCode.NOT_FOUND)
             return
         }
+
+        if(result.errorsMessages !== undefined) {
+            res.sendStatus(HttpStatusCode.BAD_REQUEST)
+            return
+        }
+
         res.sendStatus(204)
     }
 }
