@@ -26,7 +26,6 @@ export class QueryLikeStatusRepositoryClass {
 
     async getLikesInfo(commentId: string, userId: string = `null`) {
         try {
-
             const like = await likesStatusModel.count({commentId: commentId, status: 'Like'}).lean()
             const disLike = await likesStatusModel.count({commentId: commentId, status: 'Dislike'}).lean()
             const likeStatus = await likesStatusModel.findOne({userId: userId}).select({

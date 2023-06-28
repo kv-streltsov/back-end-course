@@ -18,6 +18,7 @@ const comments_validations_1 = require("../middleware/validation/comments-valida
 const comment_service_1 = require("../domain/comment-service");
 const like_status_service_1 = require("../domain/like-status-service");
 const query_like_status_repository_1 = require("../repositories/query-like-status-repository");
+const jwt_service_1 = require("../application/jwt-service");
 exports.commentsRouter = (0, express_1.Router)({});
 class CommentController {
     constructor() {
@@ -28,8 +29,12 @@ class CommentController {
     }
     getCommentById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (req.headers.authorization) {
+                const token = req.headers.authorization.split(' ')[1];
+                req.user = yield jwt_service_1.jwtService.getUserIdByToken(token);
+            }
             const comment = yield this.queryCommentRepository.getCommentById(req.params.commentId);
-            const likesInfo = yield this.queryLikeStatusRepository.getLikesInfo(req.params.commentId);
+            const likesInfo = yield this.queryLikeStatusRepository.getLikesInfo(req.params.commentId, req.user === undefined ? 'null' : req.user);
             if (comment) {
                 return res.status(200).send(Object.assign(Object.assign({}, comment), { likesInfo: likesInfo }));
             }

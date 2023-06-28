@@ -8,6 +8,7 @@ import {ILike} from "../dto/interface.like";
 import {CommentServiceClass} from "../domain/comment-service";
 import {LikeStatusServiceClass} from "../domain/like-status-service";
 import {QueryLikeStatusRepositoryClass} from "../repositories/query-like-status-repository";
+import {jwtService} from "../application/jwt-service";
 
 
 export const commentsRouter = Router({})
@@ -28,8 +29,16 @@ class CommentController {
 
 
     async getCommentById(req: RequestWithParams<{ commentId: string }>, res: Response) {
+
+        if (req.headers.authorization) {
+            const token = req.headers.authorization.split(' ')[1]
+            req.user = await jwtService.getUserIdByToken(token)
+        }
+
         const comment = await this.queryCommentRepository.getCommentById(req.params.commentId)
-        const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.params.commentId)
+        const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.params.commentId, req.user === undefined ? 'null' : req.user)
+
+
 
         if (comment) {
             return res.status(200).send({

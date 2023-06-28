@@ -729,6 +729,7 @@ describe('/10', () => {
         let likeStatus = await queryLikeStatusRepository.findLikeStatusByUserId(userId)
         let likesCount = await queryLikeStatusRepository.getLikesCount(userId)
         let dislikesCount = await queryLikeStatusRepository.getDislikesCount(userId)
+
         // GET 0 LIKES
         let comment = await request(app)
             .get(`/comments/${commentId}`)
@@ -771,23 +772,48 @@ describe('/10', () => {
         dislikesCount = await queryLikeStatusRepository.getDislikesCount(userId)
 
         // CHECK ONE LIKE
-        // expect(comment.body).toEqual({
-        //     id: commentId,
-        //     postId: postId,
-        //     content: 'bla bla bla first comment',
-        //     createdAt: expect.any(String),
-        //
-        //     commentatorInfo: {
-        //         userId: userId,
-        //         userLogin: user.login,
-        //     },
-        //
-        //     likesInfo: {
-        //         likesCount: 1,
-        //         dislikesCount: dislikesCount,
-        //         myStatus: likeStatus
-        //     }
-        // })
+        expect(comment.body).toEqual({
+            id: commentId,
+            postId: postId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 1,
+                dislikesCount: dislikesCount,
+                myStatus: likeStatus
+            }
+        })
+
+        // GET COMMENT WITH ONE LIKE WITHOUT USER
+        comment = await request(app)
+            .get(`/comments/${commentId}`)
+
+        // CHECK ONE LIKE
+        expect(comment.body).toEqual({
+            id: commentId,
+            postId: postId,
+            content: 'bla bla bla first comment',
+            createdAt: expect.any(String),
+
+            commentatorInfo: {
+                userId: userId,
+                userLogin: user.login,
+            },
+
+            likesInfo: {
+                likesCount: 1,
+                dislikesCount: dislikesCount,
+                myStatus: 'None'
+            }
+        })
+
+
 
 
         // PUSH 10 LIKE AND 15 DISLIKE
@@ -955,7 +981,7 @@ describe('/10', () => {
 
 
 
-        // GET COMMENT FOR ENDPOINT POST
+        // GET COMMENTS FOR ENDPOINT POST
         comment = await request(app)
             .get(`/posts/${postId}/comments`)
             .set('Authorization', `Bearer ${accessToken}`)
