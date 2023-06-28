@@ -73,7 +73,11 @@ class CommentController {
     }
     putLikeStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus);
+            const result = yield this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus);
+            if (result === null) {
+                res.sendStatus(interface_html_code_1.HttpStatusCode.NOT_FOUND);
+                return;
+            }
             res.sendStatus(204);
         });
     }

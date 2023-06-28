@@ -1,111 +1,4 @@
-  > Homework 11  Comment likes  POST -> "/posts/:postId/comments": should create new comment; status 201; content: created comment;  used additional methods: POST -> /blogs, POST -> /posts, GET -> /comments/:commentId;
 
-    expect(received).toEqual(expected) // deep equality
-
-    - Expected  - 0
-    + Received  + 1
-
-    @@ -9,6 +9,7 @@
-        "likesInfo": Object {
-          "dislikesCount": Any<Number>,
-          "likesCount": Any<Number>,
-          "myStatus": StringMatching /^Like$|^Dislike$|^None$/,
-        },
-    +   "postId": "1687933197493",
-      }
-
-      70 |     .catch((error) => handleTestError(error));
-      71 |
-    > 72 |   expect(getByIdResponseData).toEqual(entitySchema);
-         |                               ^
-      73 |   expect(createEntityResponseData).toStrictEqual(getByIdResponseData);
-      74 | };
-      75 |
-
-      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:72:31)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:97:7)
-
-  > Homework 11  Comment likes  GET -> "comments/:commentsId": should return status 200; content: comment by id;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /posts/:postId/comments;
-
-    expect(received).toEqual(expected) // deep equality
-
-    - Expected  - 0
-    + Received  + 1
-
-    @@ -9,6 +9,7 @@
-        "likesInfo": Object {
-          "dislikesCount": Any<Number>,
-          "likesCount": Any<Number>,
-          "myStatus": StringMatching /^Like$|^Dislike$|^None$/,
-        },
-    +   "postId": "1687933198150",
-      }
-
-      84 |
-      85 |   expect(getByIdResponseStatus).toBe(200);
-    > 86 |   expect(getByIdResponseData).toEqual(entitySchema);
-         |                               ^
-      87 |   expect(getByIdResponseData).toStrictEqual(createEntityResponseData);
-      88 | };
-      89 |
-
-      at performGETByIdTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:86:31)
-      at Object.<anonymous> (src/tests/jest/back/describes/comments/comments-V2-describe.ts:202:7)
-
-  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": should return error if :id from uri param not found; status 404;
-
-
-
-    Tested case params:
-     endpoint: comments/602afe92-7d97-4395-b1b9-6cf98b351bbe/like-status,
-     method: PUT,
-     headers: {"Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlY2RmZmFkNS01YzRjLTRlMmYtYjllYy0yNzJiMmMwNTI4YTkiLCJpYXQiOjE2ODc5MzMxOTcsImV4cCI6MTY4NzkzNDE5N30.K1eGGXW72ocwduo9NCahMurMJAxJJQf72VGUWjphLNs"},
-    body: {"likeStatus":"None"}
-
-    Expected status: 404
-
-    Received status: 204
-
-      49 |       }
-      50 |
-    > 51 |       expect(status).toBeWith4xxStatus(expectedStatusCode, {
-         |                      ^
-      52 |         headers,
-      53 |         endpoint,
-      54 |         method,
-
-      at performEndpointErrorChecker (src/tests/jest/back/testHelpers/performCheckers.ts:51:22)
-      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:328:7)
-
-  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
-   like the comment by user 1, user 2, user 3, user 4.
-   get the comment after each like by user 1.
-   ; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
-
-    expect(received).toStrictEqual(expected) // deep equality
-
-    - Expected  - 0
-    + Received  + 1
-
-    @@ -9,6 +9,7 @@
-        "likesInfo": Object {
-          "dislikesCount": 0,
-          "likesCount": 1,
-          "myStatus": "Like",
-        },
-    +   "postId": "1687933208269",
-      }
-
-      110 |       .catch((error) => handleTestError(error));
-      111 |
-    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
-          |                                 ^
-      113 |   }
-      114 | };
-      115 |
-
-      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
-      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:83:7)
 
   > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
    dislike the comment by user 1, user 2;
@@ -115,18 +8,17 @@
     expect(received).toStrictEqual(expected) // deep equality
 
     - Expected  - 1
-    + Received  + 2
+    + Received  + 1
 
-    @@ -7,8 +7,9 @@
-        "createdAt": "2023-06-28T06:20:09.318Z",
-        "id": "1687933209318",
+    @@ -7,8 +7,8 @@
+        "createdAt": "2023-06-28T06:31:44.179Z",
+        "id": "1687933904179",
         "likesInfo": Object {
           "dislikesCount": 1,
           "likesCount": 0,
     -     "myStatus": "Dislike",
     +     "myStatus": "Like",
         },
-    +   "postId": "1687933209173",
       }
 
       110 |       .catch((error) => handleTestError(error));
@@ -138,37 +30,8 @@
       115 |
 
       at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:114:7)
-
-  > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
-   like the comment twice by user 1;
-   get the comment after each like by user 1.
-   Should increase like's count once; status 204;  used additional methods: POST => /blogs, POST => /posts, POST => /posts/:postId/comments, GET => /comments/:id;
-
-    expect(received).toStrictEqual(expected) // deep equality
-
-    - Expected  - 0
-    + Received  + 1
-
-    @@ -9,6 +9,7 @@
-        "likesInfo": Object {
-          "dislikesCount": 0,
-          "likesCount": 1,
-          "myStatus": "Like",
-        },
-    +   "postId": "1687933210587",
-      }
-
-      110 |       .catch((error) => handleTestError(error));
-      111 |
-    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
-          |                                 ^
-      113 |   }
-      114 | };
-      115 |
-
-      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
-      at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:145:7)
 
   > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
    like the comment by user 1;
@@ -178,16 +41,18 @@
 
     expect(received).toStrictEqual(expected) // deep equality
 
-    - Expected  - 0
+    - Expected  - 1
     + Received  + 1
 
-    @@ -9,6 +9,7 @@
+    @@ -7,8 +7,8 @@
+        "createdAt": "2023-06-28T06:31:46.632Z",
+        "id": "1687933906632",
         "likesInfo": Object {
-          "dislikesCount": 0,
-          "likesCount": 1,
-          "myStatus": "Like",
+          "dislikesCount": 1,
+          "likesCount": 0,
+    -     "myStatus": "Dislike",
+    +     "myStatus": "Like",
         },
-    +   "postId": "1687933211846",
       }
 
       110 |       .catch((error) => handleTestError(error));
@@ -199,6 +64,7 @@
       115 |
 
       at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:176:7)
 
   > Homework 11  Comment likes  PUT -> "/comments/:commentId/like-status": create comment then:
@@ -207,16 +73,18 @@
 
     expect(received).toStrictEqual(expected) // deep equality
 
-    - Expected  - 0
+    - Expected  - 1
     + Received  + 1
 
-    @@ -9,6 +9,7 @@
+    @@ -7,8 +7,8 @@
+        "createdAt": "2023-06-28T06:31:47.766Z",
+        "id": "1687933907766",
         "likesInfo": Object {
           "dislikesCount": 0,
           "likesCount": 1,
-          "myStatus": "None",
+    -     "myStatus": "None",
+    +     "myStatus": "Like",
         },
-    +   "postId": "1687933212702",
       }
 
       110 |       .catch((error) => handleTestError(error));
@@ -228,6 +96,7 @@
       115 |
 
       at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:207:7)
 
   > Homework 11  Comment likes  GET -> "/posts/:postId/comments": create 6 comments then:
@@ -242,20 +111,20 @@
 
     Passed queryParams: ""
 
-    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687933214949","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:20:14.949Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like"}},{"id":"1687933214799","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:20:14.799Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None"}},{"id":"1687933214651","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:20:14.651Z","likesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like"}},{"id":"1687933214468","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:20:14.468Z","likesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike"}},{"id":"1687933214287","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:20:14.287Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933214043","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:20:14.043Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like"}}]}
+    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687933909854","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.854Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like"}},{"id":"1687933909621","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.621Z","likesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None"}},{"id":"1687933909437","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.437Z","likesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like"}},{"id":"1687933909290","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.290Z","likesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike"}},{"id":"1687933909083","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:49.083Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933908839","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"content":"length_21-weqweqweqwq","createdAt":"2023-06-28T06:31:48.839Z","likesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like"}}]}
 
-    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687933214949","postId":"1687933213883","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"createdAt":"2023-06-28T06:20:14.949Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933214799","postId":"1687933213883","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"createdAt":"2023-06-28T06:20:14.799Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933214651","postId":"1687933213883","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"createdAt":"2023-06-28T06:20:14.651Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933214468","postId":"1687933213883","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"createdAt":"2023-06-28T06:20:14.468Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933214287","postId":"1687933213883","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"createdAt":"2023-06-28T06:20:14.287Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933214043","postId":"1687933213883","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"cd159154-3948-4781-bb8c-0b09bad33379","userLogin":"1022lg"},"createdAt":"2023-06-28T06:20:14.043Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}}]}
+    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1687933909854","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.854Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909621","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.621Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909437","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.437Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909290","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.290Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933909083","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:49.083Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}},{"id":"1687933908839","content":"length_21-weqweqweqwq","commentatorInfo":{"userId":"30fce4f8-4a16-4c72-b1d0-52787396f665","userLogin":"4654lg"},"createdAt":"2023-06-28T06:31:48.839Z","likesInfo":{"likesCount":0,"dislikesCount":0,"myStatus":"None"}}]}
 
     Attention: "addedAt": Any<String> is equal to any date string, don't worry about highlighting this field
 
     - Expected
     + Received
 
-    @@ -7,28 +7,30 @@
+    @@ -7,13 +7,13 @@
             },
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:20:14.949Z",
-            "id": "1687933214949",
+            "createdAt": "2023-06-28T06:31:49.854Z",
+            "id": "1687933909854",
             "likesInfo": Object {
     -         "dislikesCount": 1,
     -         "likesCount": 1,
@@ -264,16 +133,15 @@
     +         "likesCount": 0,
     +         "myStatus": "None",
             },
-    +       "postId": "1687933213883",
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "cd159154-3948-4781-bb8c-0b09bad33379",
-              "userLogin": "1022lg",
+              "userId": "30fce4f8-4a16-4c72-b1d0-52787396f665",
+    @@ -21,12 +21,12 @@
             },
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:20:14.799Z",
-            "id": "1687933214799",
+            "createdAt": "2023-06-28T06:31:49.621Z",
+            "id": "1687933909621",
             "likesInfo": Object {
     -         "dislikesCount": 1,
     -         "likesCount": 1,
@@ -281,16 +149,13 @@
     +         "likesCount": 0,
               "myStatus": "None",
             },
-    +       "postId": "1687933213883",
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "cd159154-3948-4781-bb8c-0b09bad33379",
-              "userLogin": "1022lg",
-    @@ -36,27 +38,29 @@
+    @@ -36,12 +36,12 @@
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:20:14.651Z",
-            "id": "1687933214651",
+            "createdAt": "2023-06-28T06:31:49.437Z",
+            "id": "1687933909437",
             "likesInfo": Object {
               "dislikesCount": 0,
     -         "likesCount": 4,
@@ -298,16 +163,15 @@
     +         "likesCount": 0,
     +         "myStatus": "None",
             },
-    +       "postId": "1687933213883",
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "cd159154-3948-4781-bb8c-0b09bad33379",
-              "userLogin": "1022lg",
+              "userId": "30fce4f8-4a16-4c72-b1d0-52787396f665",
+    @@ -49,13 +49,13 @@
             },
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:20:14.468Z",
-            "id": "1687933214468",
+            "createdAt": "2023-06-28T06:31:49.290Z",
+            "id": "1687933909290",
             "likesInfo": Object {
     -         "dislikesCount": 1,
     +         "dislikesCount": 0,
@@ -315,32 +179,27 @@
     -         "myStatus": "Dislike",
     +         "myStatus": "None",
             },
-    +       "postId": "1687933213883",
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "cd159154-3948-4781-bb8c-0b09bad33379",
-              "userLogin": "1022lg",
-    @@ -64,13 +68,14 @@
+              "userId": "30fce4f8-4a16-4c72-b1d0-52787396f665",
+    @@ -64,11 +64,11 @@
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:20:14.287Z",
-            "id": "1687933214287",
+            "createdAt": "2023-06-28T06:31:49.083Z",
+            "id": "1687933909083",
             "likesInfo": Object {
               "dislikesCount": 0,
     -         "likesCount": 2,
     +         "likesCount": 0,
               "myStatus": "None",
             },
-    +       "postId": "1687933213883",
           },
           Object {
             "commentatorInfo": Object {
-              "userId": "cd159154-3948-4781-bb8c-0b09bad33379",
-              "userLogin": "1022lg",
-    @@ -78,13 +83,14 @@
+    @@ -78,12 +78,12 @@
             "content": "length_21-weqweqweqwq",
-            "createdAt": "2023-06-28T06:20:14.043Z",
-            "id": "1687933214043",
+            "createdAt": "2023-06-28T06:31:48.839Z",
+            "id": "1687933908839",
             "likesInfo": Object {
               "dislikesCount": 0,
     -         "likesCount": 2,
@@ -348,12 +207,10 @@
     +         "likesCount": 0,
     +         "myStatus": "None",
             },
-    +       "postId": "1687933213883",
           },
         ],
         "page": 1,
         "pageSize": 10,
-        "pagesCount": 1,
 
       105 |
       106 |     if (expectedData) {
@@ -364,13 +221,14 @@
       110 | };
 
       at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/commentsLikes-describe-v2.ts:259:7)
 
   > Homework 11  Comment likes  Comment like body validation  PUT -> "/comments/:commentId/like-status": should return error if passed body is incorrect; status 400;  used additional methods: POST -> /blogs, POST -> /posts, POST -> /comments;
 
 
 
-    Tested endpoint: comments/1687933218254/like-status
+    Tested endpoint: comments/1687933913549/like-status
 
     Tested method: PUT
 
@@ -393,4 +251,5 @@
       45 |     });
 
       at performTestsWithIncorrectBody (src/tests/jest/back/testHelpers/performTestsWithIncorrectBody.ts:42:22)
+          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/likes-body-validation-describe.ts:79:7)

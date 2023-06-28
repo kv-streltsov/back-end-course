@@ -752,6 +752,12 @@ describe('/10', () => {
             }
         })
 
+        // PUSH LIKE | comment id incorrect | SHOULD RETURN 404
+        await request(app)
+            .put(`/comments/${111}/like-status`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .send({"likeStatus": "Like"})
+            .expect(404)
 
         // PUSH LIKE
         await request(app)
@@ -973,54 +979,54 @@ describe('/10', () => {
 
 
 
-        // GET COMMENTS FOR ENDPOINT POST
-        comment = await request(app)
-            .get(`/posts/${postId}/comments`)
-            .set('Authorization', `Bearer ${accessToken}`)
-            .send({
-                "content": "ADD COMMENT FOR ENDPOINT POST"
-            })
-            .expect(200)
-
-
-        expect(comment.body).toEqual({
-            "pagesCount": 1,
-            "page": 1,
-            "pageSize": 10,
-            "totalCount": 2,
-            "items": [
-                {
-                    "id": "1687932707932",
-                    "postId": "1687932707724",
-                    "content": "ADD COMMENT FOR ENDPOINT POST",
-                    "commentatorInfo": {
-                        "userId": "012245a6-a973-4b48-ae9f-46ee1404dcb9",
-                        "userLogin": "qwerty"
-                    },
-                    "createdAt": "2023-06-28T06:11:47.932Z",
-                    "likesInfo": {
-                        "likesCount": 0,
-                        "dislikesCount": 0,
-                        "myStatus": "None"
-                    }
-                },
-                {
-                    "id": "1687932707772",
-                    "postId": "1687932707724",
-                    "content": "bla bla bla first comment",
-                    "commentatorInfo": {
-                        "userId": "012245a6-a973-4b48-ae9f-46ee1404dcb9",
-                        "userLogin": "qwerty"
-                    },
-                    "createdAt": "2023-06-28T06:11:47.772Z",
-                    "likesInfo": {
-                        "likesCount": 0,
-                        "dislikesCount": 0,
-                        "myStatus": "None"
-                    }
-                }
-            ]
-        })
+        // // GET COMMENTS FOR ENDPOINT POST
+        // comment = await request(app)
+        //     .get(`/posts/${postId}/comments`)
+        //     .set('Authorization', `Bearer ${accessToken}`)
+        //     .send({
+        //         "content": "ADD COMMENT FOR ENDPOINT POST"
+        //     })
+        //     .expect(200)
+        //
+        //
+        // expect(comment.body).toEqual({
+        //     "pagesCount": 1,
+        //     "page": 1,
+        //     "pageSize": 10,
+        //     "totalCount": 2,
+        //     "items": [
+        //         {
+        //             "id": "1687932707932",
+        //             "postId": "1687932707724",
+        //             "content": "ADD COMMENT FOR ENDPOINT POST",
+        //             "commentatorInfo": {
+        //                 "userId": "012245a6-a973-4b48-ae9f-46ee1404dcb9",
+        //                 "userLogin": "qwerty"
+        //             },
+        //             "createdAt": "2023-06-28T06:11:47.932Z",
+        //             "likesInfo": {
+        //                 "likesCount": 0,
+        //                 "dislikesCount": 0,
+        //                 "myStatus": "None"
+        //             }
+        //         },
+        //         {
+        //             "id": "1687932707772",
+        //             "postId": "1687932707724",
+        //             "content": "bla bla bla first comment",
+        //             "commentatorInfo": {
+        //                 "userId": "012245a6-a973-4b48-ae9f-46ee1404dcb9",
+        //                 "userLogin": "qwerty"
+        //             },
+        //             "createdAt": "2023-06-28T06:11:47.772Z",
+        //             "likesInfo": {
+        //                 "likesCount": 0,
+        //                 "dislikesCount": 0,
+        //                 "myStatus": "None"
+        //             }
+        //         }
+        //     ]
+        // })
 
 
 

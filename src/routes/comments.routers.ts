@@ -28,17 +28,14 @@ class CommentController {
     }
 
 
-    async getCommentById(req: RequestWithParams<{ commentId: string }>, res: Response) {
+    async getCommentById(req: RequestWithParams<{commentId: string}>, res: Response) {
 
         if (req.headers.authorization) {
             const token = req.headers.authorization.split(' ')[1]
             req.user = await jwtService.getUserIdByToken(token)
         }
-
         const comment = await this.queryCommentRepository.getCommentById(req.params.commentId)
         const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.params.commentId, req.user === undefined ? 'null' : req.user)
-
-
 
         if (comment) {
             return res.status(200).send({
@@ -74,14 +71,19 @@ class CommentController {
         }
     }
 
-    async putLikeStatus(req: RequestWithParamsAndBody<{ commentId: string }, ILike>, res: Response) {
-        await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
+    async putLikeStatus(req: RequestWithParamsAndBody<{commentId: string}, ILike>, res: Response) {
+
+        const result = await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
+        if (result === null) {
+            res.sendStatus(HttpStatusCode.NOT_FOUND)
+            return
+        }
         res.sendStatus(204)
     }
 }
 
 const commentController = new CommentController()
-commentsRouter.get('/:commentId',  commentController.getCommentById.bind(commentController))
+commentsRouter.get('/:commentId', commentController.getCommentById.bind(commentController))
 commentsRouter.put('/:commentId', authMiddleware, createCommentValidation, commentController.putCommentById.bind(commentController))
 commentsRouter.put('/:commentId/like-status', authMiddleware, commentController.putLikeStatus.bind(commentController))
 commentsRouter.delete('/:id', authMiddleware, commentController.deleteCommentById.bind(commentController))
