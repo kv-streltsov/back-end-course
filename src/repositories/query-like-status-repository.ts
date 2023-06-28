@@ -24,7 +24,7 @@ export class QueryLikeStatusRepositoryClass {
     }
 
 
-    async getLikesInfo(userId: string, commentId: string) {
+    async getLikesInfo(commentId: string, userId: string = `null`) {
         try {
 
             const like = await likesStatusModel.count({commentId: commentId, status: 'Like'}).lean()

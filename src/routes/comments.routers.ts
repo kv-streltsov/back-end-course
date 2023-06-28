@@ -29,7 +29,7 @@ class CommentController {
 
     async getCommentById(req: RequestWithParams<{ commentId: string }>, res: Response) {
         const comment = await this.queryCommentRepository.getCommentById(req.params.commentId)
-        const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.user.id,req.params.commentId)
+        const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.params.commentId)
 
         if (comment) {
             return res.status(200).send({
@@ -72,7 +72,7 @@ class CommentController {
 }
 
 const commentController = new CommentController()
-commentsRouter.get('/:commentId', authMiddleware, commentController.getCommentById.bind(commentController))
+commentsRouter.get('/:commentId',  commentController.getCommentById.bind(commentController))
 commentsRouter.put('/:commentId', authMiddleware, createCommentValidation, commentController.putCommentById.bind(commentController))
 commentsRouter.put('/:commentId/like-status', authMiddleware, commentController.putLikeStatus.bind(commentController))
 commentsRouter.delete('/:id', authMiddleware, commentController.deleteCommentById.bind(commentController))

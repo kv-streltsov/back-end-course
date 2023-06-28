@@ -29,7 +29,7 @@ class CommentController {
     getCommentById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const comment = yield this.queryCommentRepository.getCommentById(req.params.commentId);
-            const likesInfo = yield this.queryLikeStatusRepository.getLikesInfo(req.user.id, req.params.commentId);
+            const likesInfo = yield this.queryLikeStatusRepository.getLikesInfo(req.params.commentId);
             if (comment) {
                 return res.status(200).send(Object.assign(Object.assign({}, comment), { likesInfo: likesInfo }));
             }
@@ -74,7 +74,7 @@ class CommentController {
     }
 }
 const commentController = new CommentController();
-exports.commentsRouter.get('/:commentId', jwt_auth_middleware_1.authMiddleware, commentController.getCommentById.bind(commentController));
+exports.commentsRouter.get('/:commentId', commentController.getCommentById.bind(commentController));
 exports.commentsRouter.put('/:commentId', jwt_auth_middleware_1.authMiddleware, comments_validations_1.createCommentValidation, commentController.putCommentById.bind(commentController));
 exports.commentsRouter.put('/:commentId/like-status', jwt_auth_middleware_1.authMiddleware, commentController.putLikeStatus.bind(commentController));
 exports.commentsRouter.delete('/:id', jwt_auth_middleware_1.authMiddleware, commentController.deleteCommentById.bind(commentController));
