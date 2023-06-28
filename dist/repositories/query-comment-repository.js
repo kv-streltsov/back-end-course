@@ -13,7 +13,7 @@ exports.QueryCommentRepositoryClass = exports.paginationHandler = void 0;
 const comments_scheme_1 = require("../db/schemes/comments.scheme");
 const query_like_status_repository_1 = require("./query-like-status-repository");
 const DEFAULT_SORT_FIELD = 'createdAt';
-const PROJECTION = { _id: 0, __v: 0 };
+const PROJECTION = { postId: 0, _id: 0, __v: 0 };
 const paginationHandler = (pageNumber, pageSize, sortBy, sortDirection) => {
     const countItems = (pageNumber - 1) * pageSize;
     let sortField = {};

@@ -2,7 +2,7 @@ import {commentsModel} from "../db/schemes/comments.scheme";
 import {QueryLikeStatusRepositoryClass} from "./query-like-status-repository";
 
 const DEFAULT_SORT_FIELD = 'createdAt'
-const PROJECTION = {_id: 0, __v: 0}
+const PROJECTION = {postId: 0,_id: 0, __v: 0}
 
 export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
     const countItems = (pageNumber - 1) * pageSize;

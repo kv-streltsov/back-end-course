@@ -701,7 +701,6 @@ describe('/10', () => {
                 items: [
                     {
                         id: expect.any(String),
-                        postId: postId,
                         content: 'bla bla bla first comment',
                         commentatorInfo: expect.any(Object),
                         createdAt: expect.any(String),
@@ -738,7 +737,6 @@ describe('/10', () => {
 
         expect(comment.body).toEqual({
             id: commentId,
-            postId: postId,
             content: 'bla bla bla first comment',
             createdAt: expect.any(String),
 
@@ -774,7 +772,6 @@ describe('/10', () => {
         // CHECK ONE LIKE
         expect(comment.body).toEqual({
             id: commentId,
-            postId: postId,
             content: 'bla bla bla first comment',
             createdAt: expect.any(String),
 
@@ -797,7 +794,6 @@ describe('/10', () => {
         // CHECK ONE LIKE
         expect(comment.body).toEqual({
             id: commentId,
-            postId: postId,
             content: 'bla bla bla first comment',
             createdAt: expect.any(String),
 
@@ -842,7 +838,6 @@ describe('/10', () => {
         // CHECK BODY
         expect(comment.body).toEqual({
             id: commentId,
-            postId: postId,
             content: 'bla bla bla first comment',
             createdAt: expect.any(String),
 
@@ -874,7 +869,6 @@ describe('/10', () => {
         // CHECK BODY
         expect(comment.body).toEqual({
             id: commentId,
-            postId: postId,
             content: 'bla bla bla first comment',
             createdAt: expect.any(String),
 
@@ -904,7 +898,6 @@ describe('/10', () => {
         // CHECK BODY
         expect(comment.body).toEqual({
             id: commentId,
-            postId: postId,
             content: 'bla bla bla first comment',
             createdAt: expect.any(String),
 
@@ -934,7 +927,6 @@ describe('/10', () => {
 
         expect(comment.body).toEqual({
             id: commentId,
-            postId: postId,
             content: 'bla bla bla first comment',
             createdAt: expect.any(String),
 
@@ -992,20 +984,42 @@ describe('/10', () => {
 
 
         expect(comment.body).toEqual({
-            id: comment.body.id,
-            content: "ADD COMMENT FOR ENDPOINT POST",
-            createdAt: expect.any(String),
-            commentatorInfo: {
-                userId: userId,
-                userLogin: user.login,
-            },
-
-            likesInfo: {
-                likesCount: 0,
-                dislikesCount: 0,
-                myStatus: 'None'
-            }
-
+            "pagesCount": 1,
+            "page": 1,
+            "pageSize": 10,
+            "totalCount": 2,
+            "items": [
+                {
+                    "id": "1687932707932",
+                    "postId": "1687932707724",
+                    "content": "ADD COMMENT FOR ENDPOINT POST",
+                    "commentatorInfo": {
+                        "userId": "012245a6-a973-4b48-ae9f-46ee1404dcb9",
+                        "userLogin": "qwerty"
+                    },
+                    "createdAt": "2023-06-28T06:11:47.932Z",
+                    "likesInfo": {
+                        "likesCount": 0,
+                        "dislikesCount": 0,
+                        "myStatus": "None"
+                    }
+                },
+                {
+                    "id": "1687932707772",
+                    "postId": "1687932707724",
+                    "content": "bla bla bla first comment",
+                    "commentatorInfo": {
+                        "userId": "012245a6-a973-4b48-ae9f-46ee1404dcb9",
+                        "userLogin": "qwerty"
+                    },
+                    "createdAt": "2023-06-28T06:11:47.772Z",
+                    "likesInfo": {
+                        "likesCount": 0,
+                        "dislikesCount": 0,
+                        "myStatus": "None"
+                    }
+                }
+            ]
         })
 
 
