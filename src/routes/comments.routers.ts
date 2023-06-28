@@ -81,7 +81,7 @@ class CommentController {
         }
 
         if(result.errorsMessages !== undefined) {
-            res.sendStatus(HttpStatusCode.BAD_REQUEST)
+            res.status(HttpStatusCode.BAD_REQUEST).send(result)
             return
         }
 
