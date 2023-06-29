@@ -21,8 +21,8 @@ export class LikeStatusServiceClass {
         const checkCommentExist = await this.queryCommentRepository.getCommentById(commentId)
         if (checkCommentExist === null) return null
 
-        const checkLikeExist = await this.checkLikeExist(userId, commentId)
-        if (likeStatus === LikeStatus.None && checkLikeExist) {
+        const checkLikeExist = await this.checkLikeExist(userId, commentId)//"1688041586130"
+        if ((likeStatus === LikeStatus.None) && checkLikeExist) {
             return await this.likeStatusRepository.deleteLike(userId, commentId)
         }
 

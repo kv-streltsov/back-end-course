@@ -27,21 +27,20 @@ export class QueryLikeStatusRepositoryClass {
 
     async getLikesInfo(commentId: string, userId: string | null = null) {
 
-            const like = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Like}).lean()
-            const disLike = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Dislike}).lean()
-            const likeStatus = await likesStatusModel.findOne({userId: userId}).select({
-                __v: 0,
-                _id: 0,
-                commentId: 0,
-                userId: 0,
-            }).lean()
+        const like = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Like}).lean()
+        const disLike = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Dislike}).lean()
+        const likeStatus = await likesStatusModel.findOne({userId: userId, commentId: commentId}).select({
+            __v: 0,
+            _id: 0,
+            commentId: 0,
+            userId: 0,
+        }).lean()
 
-            return {
-                likesCount: like,
-                dislikesCount: disLike,
-                myStatus: likeStatus === null ? LikeStatus.None : likeStatus.status
-            }
-
+        return {
+            likesCount: like,
+            dislikesCount: disLike,
+            myStatus: likeStatus === null ? LikeStatus.None : likeStatus.status
+        }
 
 
     }
