@@ -1,4 +1,5 @@
 import {likesStatusModel} from "../db/schemes/likes.scheme";
+import {LikeStatus} from "../dto/interface.like";
 
 export class QueryLikeStatusRepositoryClass {
     async findLikeStatusByUserId(userId: string) {
@@ -10,13 +11,13 @@ export class QueryLikeStatusRepositoryClass {
         }).lean()
 
         if (result === null) {
-            return "None"
+            return LikeStatus.None
         }
         return result.status
     }
 
     async getLikesCount(commentId: string) {
-        return likesStatusModel.count({commentId: commentId, status: 'Like'}).lean()
+        return likesStatusModel.count({commentId: commentId, status: LikeStatus.Like}).lean()
     }
 
     async getDislikesCount(commentId: string) {
@@ -24,10 +25,10 @@ export class QueryLikeStatusRepositoryClass {
     }
 
 
-    async getLikesInfo(commentId: string, userId: string = `null`) {
-        try {
-            const like = await likesStatusModel.count({commentId: commentId, status: 'Like'}).lean()
-            const disLike = await likesStatusModel.count({commentId: commentId, status: 'Dislike'}).lean()
+    async getLikesInfo(commentId: string, userId: string | null = null) {
+
+            const like = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Like}).lean()
+            const disLike = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Dislike}).lean()
             const likeStatus = await likesStatusModel.findOne({userId: userId}).select({
                 __v: 0,
                 _id: 0,
@@ -38,14 +39,11 @@ export class QueryLikeStatusRepositoryClass {
             return {
                 likesCount: like,
                 dislikesCount: disLike,
-                myStatus: likeStatus === null ? "None" : likeStatus.status
+                myStatus: likeStatus === null ? LikeStatus.None : likeStatus.status
             }
 
 
-        } catch (err) {
-            console.log(`getLikesInfo: `, err)
-            return err
-        }
+
     }
 
 }

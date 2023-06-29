@@ -1,6 +1,6 @@
 import {LikeStatusRepositoryClass} from "../repositories/like-status-repository";
 import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
-import {createJestPreset} from "ts-jest";
+import {LikeStatus} from "../dto/interface.like";
 
 export class LikeStatusServiceClass {
     private likeStatusRepository: LikeStatusRepositoryClass
@@ -22,16 +22,15 @@ export class LikeStatusServiceClass {
         if (checkCommentExist === null) return null
 
         const checkLikeExist = await this.checkLikeExist(userId, commentId)
-        if (likeStatus === 'None' && checkLikeExist) {
+        if (likeStatus === LikeStatus.None && checkLikeExist) {
             return await this.likeStatusRepository.deleteLike(userId, commentId)
         }
 
         if (checkLikeExist === null) {
             return await this.likeStatusRepository.createLike(userId, commentId, likeStatus)
         }
-        if (checkLikeExist) {
-            return await this.likeStatusRepository.updateLike(userId, commentId, likeStatus)
-        }
+
+        return await this.likeStatusRepository.updateLike(userId, commentId, likeStatus)
 
 
     }
@@ -41,7 +40,7 @@ export class LikeStatusServiceClass {
     }
 
     likeStatusValidator(likeStatus: string) {
-        if (likeStatus !== 'Like' && likeStatus !== 'Dislike' && likeStatus !== 'None') {
+        if (likeStatus !== LikeStatus.Like && likeStatus !== LikeStatus.Dislike && likeStatus !== LikeStatus.None) {
             return {
                 errorsMessages: [{
                     message: "Invalid value",

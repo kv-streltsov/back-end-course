@@ -31,7 +31,6 @@ class AuthController {
     ////////////////////////////////////  TOKEN FLOW     /////////////////////////////////////////
     async login(req: RequestWithBody<InterfaceUserAuthPost>, res: Response) {
         const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
-        console.log(`userAuth: `, userAuth)
         if (!userAuth) {
             return res.sendStatus(HttpStatusCode.UNAUTHORIZED)
         }

@@ -722,6 +722,8 @@ describe('/10', () => {
 
     });
     it('LIKE', async () => {
+
+
         // CREATE 2 USER
         await request(app)
             .post('/users')
@@ -807,8 +809,8 @@ describe('/10', () => {
             },
 
             likesInfo: {
-                likesCount: 0,
-                dislikesCount: 1,
+                likesCount: 1,
+                dislikesCount: 0,
                 myStatus: 'Like'
             }
         })
@@ -838,7 +840,6 @@ describe('/10', () => {
                 myStatus: 'None'
             }
         })
-        console.log(`accessTokenLikeMasterUser`,accessTokenLikeMasterUser)
 
         // GET COMMENT WITH ONE LIKE WITHOUT USER
         comment = await request(app)
@@ -1080,6 +1081,10 @@ describe('/10', () => {
             }
 
         })
+
+        ///////////////////////////////////////////////////////////!??!?!?!??!?!?!?!?!?!??!?!?!?!?!!??!?!?!?!?
+
+
 
 
 

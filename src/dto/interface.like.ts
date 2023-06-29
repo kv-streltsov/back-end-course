@@ -1,19 +1,19 @@
-enum likeStatus {
+export enum LikeStatus {
     None="None",
     Like="Like",
     Dislike="Dislike"
 }
 
 export interface ILike {
-    likeStatus: likeStatus
+    likeStatus: LikeStatus
 }
 export interface ILikesStatusDb{
     userId: string,
     commentId: string,
-    status: likeStatus
+    status: LikeStatus
 }
 export interface ILikeStatusInfoView{
     likesCount: string,
     dislikesCount: string,
-    MyStatus: likeStatus
+    MyStatus: LikeStatus
 }

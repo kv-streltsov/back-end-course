@@ -9,7 +9,7 @@ import {CommentServiceClass} from "../domain/comment-service";
 import {LikeStatusServiceClass} from "../domain/like-status-service";
 import {QueryLikeStatusRepositoryClass} from "../repositories/query-like-status-repository";
 import {jwtService} from "../application/jwt-service";
-import {IErrorMessage, InterfaceError} from "../dto/Interface-error";
+import {InterfaceError} from "../dto/Interface-error";
 
 
 export const commentsRouter = Router({})
@@ -29,63 +29,96 @@ class CommentController {
     }
 
 
-    async getCommentById(req: RequestWithParams<{commentId: string}>, res: Response) {
-        if (req.headers.authorization) {
-            const token = req.headers.authorization.split(' ')[1]
-            req.user = await jwtService.getUserIdByToken(token)
-        }
-        const comment = await this.queryCommentRepository.getCommentById(req.params.commentId)
-        const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.params.commentId, req.user === undefined ? 'null' : req.user)
+    async getCommentById(req: RequestWithParams<{
+        commentId: string
+    }>, res: Response) {
+        try {
 
-        if (comment) {
-            return res.status(200).send({
-                ...comment,
-                likesInfo: likesInfo
-            })
-        } else {
-            return res.sendStatus(HttpStatusCode.NOT_FOUND)
+            if (req.headers.authorization) {
+                const token = req.headers.authorization.split(' ')[1]
+                req.user = await jwtService.getUserIdByToken(token)
+            }
+
+            const comment = await this.queryCommentRepository.getCommentById(req.params.commentId)
+            const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.params.commentId, req.user === undefined ? null : req.user)
+
+            if (comment) {
+                return res.status(200).send({
+                    ...comment,
+                    likesInfo: likesInfo
+                })
+            } else {
+                return res.sendStatus(HttpStatusCode.NOT_FOUND)
+            }
         }
+
+        catch (error) {
+            res.status(500).send(error)
+            return
+        }
+
     }
 
     async putCommentById(req: Request, res: Response) {
-        const result: boolean | string | null = await this.commentService.putComment(req.params.id, req.user, req.body)
-        if (result === 'forbidden') {
-            return res.sendStatus(HttpStatusCode.FORBIDDEN)
-        }
-        if (result === true) {
-            return res.sendStatus(HttpStatusCode.NO_CONTENT)
-        } else {
-            return res.sendStatus(HttpStatusCode.NOT_FOUND)
-        }
+       try {
+           const result: boolean | string | null = await this.commentService.putComment(req.params.id, req.user, req.body)
+           if (result === 'forbidden') {
+               return res.sendStatus(HttpStatusCode.FORBIDDEN)
+           }
+           if (result === true) {
+               return res.sendStatus(HttpStatusCode.NO_CONTENT)
+           } else {
+               return res.sendStatus(HttpStatusCode.NOT_FOUND)
+           }
+       }
+       catch (error) {
+           res.status(500).send(error)
+           return
+       }
     }
 
     async deleteCommentById(req: Request, res: Response) {
-        const result: boolean | string | null = await this.commentService.deleteComment(req.params.id, req.user)
-        if (result === 'forbidden') {
-            return res.sendStatus(HttpStatusCode.FORBIDDEN)
-        }
-        if (result === true) {
-            return res.sendStatus(HttpStatusCode.NO_CONTENT)
-        } else {
-            return res.sendStatus(HttpStatusCode.NOT_FOUND)
+        try {
+
+            const result: boolean | string | null = await this.commentService.deleteComment(req.params.id, req.user)
+
+            if (result === 'forbidden') {
+                return res.sendStatus(HttpStatusCode.FORBIDDEN)
+            }
+
+            if (result === true) {
+                return res.sendStatus(HttpStatusCode.NO_CONTENT)
+            } else {
+                return res.sendStatus(HttpStatusCode.NOT_FOUND)
+            }
+
+        } catch (error) {
+            res.status(500).send(error)
+            return
         }
     }
 
-    async putLikeStatus(req: RequestWithParamsAndBody<{commentId: string}, ILike>, res: Response) {
+    async putLikeStatus(req: RequestWithParamsAndBody<{
+        commentId: string
+    }, ILike>, res: Response) {
+        try {
 
-        const result: null | InterfaceError | any  = await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
+            const result: null | InterfaceError | any = await this.likeStatusService.putLikeStatus(req.user.id, req.params.commentId, req.body.likeStatus)
 
-        if (result === null) {
-            res.sendStatus(HttpStatusCode.NOT_FOUND)
-            return
+            if (result === null) {
+                res.sendStatus(HttpStatusCode.NOT_FOUND)
+                return
+            }
+
+            if (result.errorsMessages !== undefined) {
+                res.status(HttpStatusCode.BAD_REQUEST).send(result)
+                return
+            }
+
+            res.sendStatus(204)
+        } catch (error) {
+            res.status(500).send(error)
         }
-
-        if(result.errorsMessages !== undefined) {
-            res.status(HttpStatusCode.BAD_REQUEST).send(result)
-            return
-        }
-
-        res.sendStatus(204)
     }
 }
 
