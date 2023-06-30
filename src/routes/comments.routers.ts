@@ -43,10 +43,6 @@ class CommentController {
             const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(req.params.commentId, req.user === undefined ? null : req.user)
 
             if (comment) {
-                console.log(`RESPONSE: `,{
-                    ...comment,
-                    likesInfo: likesInfo
-                } )
                 return res.status(200).send({
                     ...comment,
                     likesInfo: likesInfo

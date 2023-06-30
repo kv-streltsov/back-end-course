@@ -40,9 +40,8 @@ export class QueryCommentRepositoryClass {
             .sort(sortField)
             .limit(pageSize)
             .lean()
-
         const items =  await Promise.all(comments.map(async comment => {
-            const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(comment.commentatorInfo.userId, comment.id)
+            const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(comment.id, comment.commentatorInfo.userId)
             return {
                 ...comment,
                 likesInfo: likesInfo

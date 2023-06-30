@@ -2,6 +2,7 @@ import {likesStatusModel} from "../db/schemes/likes.scheme";
 import {LikeStatus} from "../dto/interface.like";
 
 export class QueryLikeStatusRepositoryClass {
+
     async findLikeStatusByUserId(userId: string) {
         const result = await likesStatusModel.findOne({userId: userId}).select({
             __v: 0,
@@ -21,7 +22,7 @@ export class QueryLikeStatusRepositoryClass {
     }
 
     async getDislikesCount(commentId: string) {
-        return likesStatusModel.count({commentId: commentId, status: 'Dislike'}).lean()
+        return likesStatusModel.count({commentId: commentId, status: LikeStatus.Dislike}).lean()
     }
 
 
