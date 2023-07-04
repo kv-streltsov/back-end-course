@@ -1,8 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import * as dotenv from 'dotenv'
 import {HttpStatusCode} from "../dto/interface.html-code";
-import {jwtService} from "../application/jwt-service";
-import {usersService} from "../domain/user-service";
+import {jwtService, usersService} from "../composition.root";
 
 dotenv.config()
 

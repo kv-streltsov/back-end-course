@@ -1,4 +1,4 @@
-import express from 'express'
+import   express from 'express'
 import * as dotenv from 'dotenv'
 import {testingRouter} from "./routes/testing.router";
 import {blogRouters} from "./routes/blog.routers";
@@ -9,6 +9,7 @@ import {authRouters} from "./routes/auth.routers";
 import {commentsRouter} from "./routes/comments.routers";
 import cookieParser from "cookie-parser";
 import {securityDevicesRouters} from "./routes/security.devices.routers";
+import {auth} from "./middleware/auth-middleware";
 
 dotenv.config()
 export const app = express()
@@ -16,6 +17,7 @@ const port = process.env.DEV_PORT || 5001
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(auth)
 app.set('trust proxy', true)
 
 

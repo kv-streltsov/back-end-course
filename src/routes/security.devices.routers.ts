@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
-import {jwtService} from "../application/jwt-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
+import {jwtService} from "../composition.root";
 
 
 export const securityDevicesRouters = Router({})

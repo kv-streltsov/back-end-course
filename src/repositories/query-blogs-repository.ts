@@ -49,11 +49,9 @@ export class QueryBlogsRepositoryClass {
 
 
     }
-
     async getBlogById(id: string) {
         return blogsModel.findOne({id: id}).select(PROJECTION);
     }
-
     async getPostsInBlog(pageNumber: number = 1, pageSize: number = 10, sortDirection: number, sortBy: string = DEFAULT_SORT_FIELD, id: string): Promise<WithId<any>> {
         const findBlog = await blogsModel.findOne({id: id})
         if (findBlog === null) {

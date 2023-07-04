@@ -1,7 +1,5 @@
 import {InterfaceViewUser} from "../dto/interface.input.user";
 import {usersModel} from "../db/schemes/users.scheme";
-import {readdirSync} from "fs";
-import {emailService} from "../domain/email-service";
 
 export interface IUpdatePassword {
     salt: string,

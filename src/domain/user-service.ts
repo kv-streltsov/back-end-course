@@ -6,9 +6,7 @@ import {IResultUserService} from "../dto/interface.user.service.contract";
 
 export class UsersServiceClass {
 
-    private usersRepository: UsersRepositoryClass
-    constructor() {
-        this.usersRepository = new UsersRepositoryClass()
+    constructor(protected usersRepository: UsersRepositoryClass) {
     }
 
     async postUser(login: string, email: string, password: string, confirmAdmin: boolean = false) {
@@ -127,5 +125,4 @@ export class UsersServiceClass {
     }
 }
 
-export const usersService = new UsersServiceClass()
 

@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
-import {jwtService} from "../application/jwt-service";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {usersModel} from "../db/schemes/users.scheme";
+import { jwtService } from "../composition.root";
 
 
 export const refreshTokenMiddleware = async (req: Request, res: Response, next: NextFunction) => {

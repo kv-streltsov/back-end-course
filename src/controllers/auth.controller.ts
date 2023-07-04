@@ -1,7 +1,3 @@
-import {Request, Response, Router} from "express";
-import {HttpStatusCode} from "../dto/interface.html-code";
-import {authUserValidation} from "../middleware/validation/user-auth-validations";
-import {authMiddleware} from "../middleware/jwt-auth-middleware";
 import {RequestWithBody} from "../dto/interface.request";
 import {
     ICodeConfirm,
@@ -10,19 +6,16 @@ import {
     InterfaceUserAuthPost,
     InterfaceUserInput
 } from "../dto/interface.user";
-import {createUserValidation} from "../middleware/validation/user-input-validations";
-import {emailService} from "../domain/email-service";
-import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
-import * as dotenv from "dotenv";
-import {rateLimitMiddleware} from "../middleware/rate-limit-middleware";
-import {recoveryPasswordValidator} from "../middleware/validation/password-recovery-validations";
+import {Request, Response} from "express";
 import {jwtService, usersService} from "../composition.root";
-dotenv.config()
-export const COOKIE_SECURE: boolean = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
-
-export const authRouters = Router({})
+import {HttpStatusCode} from "../dto/interface.html-code";
+import {emailService} from "../domain/email-service";
 
 class AuthController {
+    private COOKIE_SECURE: boolean;
+    constructor() {
+        this.COOKIE_SECURE = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
+    }
     ////////////////////////////////////  TOKEN FLOW     /////////////////////////////////////////
     async login(req: RequestWithBody<InterfaceUserAuthPost>, res: Response) {
         const userAuth = await usersService.checkUser(req.body.loginOrEmail, req.body.password)
@@ -34,7 +27,7 @@ class AuthController {
             const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
             const jwtPair = await jwtService.createJwt(userAuth, req.headers["user-agent"], ip)
 
-            res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
+            res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: this.COOKIE_SECURE})
             return res.status(HttpStatusCode.OK).send({
                 "accessToken": jwtPair.accessToken
             })
@@ -56,7 +49,7 @@ class AuthController {
         const refreshToken = req.cookies.refreshToken
         const jwtPair = await jwtService.refreshJwt(req.user, refreshToken)
 
-        res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: COOKIE_SECURE})
+        res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: this.COOKIE_SECURE})
         return res.status(HttpStatusCode.OK).send({
             "accessToken": jwtPair.accessToken
         })
@@ -122,16 +115,5 @@ class AuthController {
 
 }
 
+export const authController = new AuthController()
 
-const authController = new AuthController()
-////////////////////////////////////  TOKEN FLOW     /////////////////////////////////////////
-authRouters.post('/login', rateLimitMiddleware, authUserValidation, authController.login)
-authRouters.post('/logout', refreshTokenMiddleware, authController.logout)
-authRouters.post('/refresh-token', refreshTokenMiddleware, authController.refreshToken)
-/////////////////////////////////    REGISTRATION FLOW    ///////////////////////////////////
-authRouters.post('/registration', rateLimitMiddleware, createUserValidation, authController.registration)
-authRouters.post('/registration-confirmation', rateLimitMiddleware, authController.registrationConfirmation)
-authRouters.post('/registration-email-resending', rateLimitMiddleware, authController.registrationEmailResending)
-authRouters.post('/password-recovery', rateLimitMiddleware, authController.passwordRecovery)
-authRouters.post('/new-password', rateLimitMiddleware, recoveryPasswordValidator, authController.newPassword)
-authRouters.get('/me', authMiddleware, authController.me)

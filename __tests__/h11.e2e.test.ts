@@ -87,7 +87,7 @@ describe('/11', () => {
     });
     it('LOGIN FOUR USERS | should return JWT Pair ', async () => {
 
-                            /// LOGIN USER ///
+        /// LOGIN USER ///
 
         // LOGIN USER 1
         let response = await request(app)
@@ -608,103 +608,102 @@ describe('/11', () => {
         //   status 200; content: comments array for post with pagination;
 
         let comments = await request(app)
-            .get(`/posts/${postId}/comments`)
+            .get(`/posts/${postId}/comments?pageNumber=1&pageSize=10&sortBy=createdAt&sortDirection=asc`)
             .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
 
         expect(comments.body).toEqual({
-            pagesCount: 1,
-            page: 1,
-            pageSize: 10,
-            totalCount: 6,
-            items: [
-                {
-                    id: commentIdOne,
-                    content: 'bla bla bla test comment One',
-                    commentatorInfo: {
-                        userId: userOne.id,
-                        userLogin: userOne.login,
+                pagesCount: 1,
+                page: 1,
+                pageSize: 10,
+                totalCount: 6,
+                items: [
+                    {
+                        id: commentIdOne,
+                        content: 'bla bla bla test comment One',
+                        commentatorInfo: {
+                            userId: userOne.id,
+                            userLogin: userOne.login,
+                        },
+                        createdAt: expect.any(String),
+                        likesInfo: {
+                            likesCount: 2,
+                            dislikesCount: 0,
+                            myStatus: 'Like'
+                        }
                     },
-                    createdAt: expect.any(String),
-                    likesInfo: {
-                        likesCount: 1,
-                        dislikesCount: 1,
-                        myStatus: 'Like'
-                    }
-                },
-                {
-                    id: commentIdTwo,
-                    content: 'bla bla bla test comment Two',
-                    commentatorInfo: {
-                        userId: userOne.id,
-                        userLogin: userOne.login,
+                    {
+                        id: commentIdTwo,
+                        content: 'bla bla bla test comment Two',
+                        commentatorInfo: {
+                            userId: userOne.id,
+                            userLogin: userOne.login,
+                        },
+                        createdAt: expect.any(String),
+                        likesInfo: {
+                            likesCount: 2,
+                            dislikesCount: 0,
+                            myStatus: 'None'
+                        }
                     },
-                    createdAt: expect.any(String),
-                    likesInfo: {
-                        likesCount: 1,
-                        dislikesCount: 1,
-                        myStatus: 'Like'
-                    }
-                },
-                {
-                    id: commentIdThree,
-                    content: 'bla bla bla test comment Three',
-                    commentatorInfo: {
-                        userId: userOne.id,
-                        userLogin: userOne.login,
+                    {
+                        id: commentIdThree,
+                        content: 'bla bla bla test comment Three',
+                        commentatorInfo: {
+                            userId: userOne.id,
+                            userLogin: userOne.login,
+                        },
+                        createdAt: expect.any(String),
+                        likesInfo: {
+                            likesCount: 0,
+                            dislikesCount: 1,
+                            myStatus: 'Dislike'
+                        }
                     },
-                    createdAt: expect.any(String),
-                    likesInfo: {
-                        likesCount: 1,
-                        dislikesCount: 1,
-                        myStatus: 'Like'
-                    }
-                },
-                {
-                    id: commentIdFour,
-                    content: 'bla bla bla test comment Four',
-                    commentatorInfo: {
-                        userId: userOne.id,
-                        userLogin: userOne.login,
+                    {
+                        id: commentIdFour,
+                        content: 'bla bla bla test comment Four',
+                        commentatorInfo: {
+                            userId: userOne.id,
+                            userLogin: userOne.login,
+                        },
+                        createdAt: expect.any(String),
+                        likesInfo: {
+                            likesCount: 3,
+                            dislikesCount: 0,
+                            myStatus: 'Like'
+                        }
                     },
-                    createdAt: expect.any(String),
-                    likesInfo: {
-                        likesCount: 1,
-                        dislikesCount: 1,
-                        myStatus: 'Like'
-                    }
-                },
-                {
-                    id: commentIdFive,
-                    content: 'bla bla bla test comment Five',
-                    commentatorInfo: {
-                        userId: userOne.id,
-                        userLogin: userOne.login,
+                    {
+                        id: commentIdFive,
+                        content: 'bla bla bla test comment Five',
+                        commentatorInfo: {
+                            userId: userOne.id,
+                            userLogin: userOne.login,
+                        },
+                        createdAt: expect.any(String),
+                        likesInfo: {
+                            likesCount: 1,
+                            dislikesCount: 1,
+                            myStatus: 'None'
+                        }
                     },
-                    createdAt: expect.any(String),
-                    likesInfo: {
-                        likesCount: 1,
-                        dislikesCount: 1,
-                        myStatus: 'Like'
+                    {
+                        id: commentIdSix,
+                        content: 'bla bla bla test comment Six',
+                        commentatorInfo: {
+                            userId: userOne.id,
+                            userLogin: userOne.login,
+                        },
+                        createdAt: expect.any(String),
+                        likesInfo: {
+                            likesCount: 1,
+                            dislikesCount: 1,
+                            myStatus: 'Like'
+                        }
                     }
-                },
-                {
-                    id: commentIdSix,
-                    content: 'bla bla bla test comment Six',
-                    commentatorInfo: {
-                        userId: userOne.id,
-                        userLogin: userOne.login,
-                    },
-                    createdAt: expect.any(String),
-                    likesInfo: {
-                        likesCount: 1,
-                        dislikesCount: 1,
-                        myStatus: 'Like'
-                    }
-                }
-            ]
-        }
+                ]
+            }
         )
-
 
 
     });
