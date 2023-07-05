@@ -3,13 +3,12 @@ import {QueryCommentRepositoryClass} from "../repositories/query-comment-reposit
 import {LikeStatus} from "../dto/interface.like";
 
 export class LikeStatusServiceClass {
-    private likeStatusRepository: LikeStatusRepositoryClass
-    private queryCommentRepository: QueryCommentRepositoryClass
 
-    constructor() {
-        this.likeStatusRepository = new LikeStatusRepositoryClass
-        this.queryCommentRepository = new QueryCommentRepositoryClass
-    }
+
+    constructor(
+        protected likeStatusRepository: LikeStatusRepositoryClass,
+        protected queryCommentRepository: QueryCommentRepositoryClass
+    ) {    }
 
 
     async putLikeStatus(userId: string, commentId: string, likeStatus: string) {

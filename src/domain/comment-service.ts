@@ -6,15 +6,11 @@ import {QueryCommentRepositoryClass} from "../repositories/query-comment-reposit
 
 export class CommentServiceClass {
 
-    private commentsRepository: CommentsRepositoryClass
-    private queryPostsRepository: QueryPostsRepositoryClass
-    private queryCommentRepository: QueryCommentRepositoryClass
-
-    constructor() {
-        this.commentsRepository = new CommentsRepositoryClass
-        this.queryPostsRepository = new QueryPostsRepositoryClass
-        this.queryCommentRepository = new QueryCommentRepositoryClass
-    }
+    constructor(
+        protected commentsRepository: CommentsRepositoryClass,
+        protected queryPostsRepository: QueryPostsRepositoryClass,
+        protected queryCommentRepository: QueryCommentRepositoryClass
+    ) {}
 
     async postComment(postId: string, user: IUserDb, comment: InterfaceCommentInput) {
 

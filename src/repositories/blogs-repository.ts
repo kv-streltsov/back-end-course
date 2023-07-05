@@ -5,7 +5,6 @@ import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
 
 export class BlogsRepositoryClass {
-
     async postBlog(body: InterfaceBlogInput): Promise<InterfaceBlogView> {
 
         const createData = {

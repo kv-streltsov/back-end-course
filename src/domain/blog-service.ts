@@ -2,12 +2,8 @@ import {InterfaceBlog, InterfaceBlogInput} from "../dto/interface.blog";
 import {BlogsRepositoryClass} from "../repositories/blogs-repository";
 import {InterfacePostInBlog} from "../dto/interface.post";
 
-class BlogsServiceClass {
-    private blogsRepository: BlogsRepositoryClass
-
-    constructor() {
-        this.blogsRepository = new BlogsRepositoryClass()
-    }
+export class BlogsServiceClass {
+    constructor(protected blogsRepository: BlogsRepositoryClass) {}
 
     async postBlog(body: InterfaceBlogInput) {
         return this.blogsRepository.postBlog(body)
@@ -25,6 +21,3 @@ class BlogsServiceClass {
         return this.blogsRepository.deleteBlog(id)
     }
 }
-
-export const blogsService = new BlogsServiceClass()
-

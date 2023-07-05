@@ -10,11 +10,13 @@ import {Request, Response} from "express";
 import {jwtService, usersService} from "../composition.root";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {emailService} from "../domain/email-service";
+import {UsersServiceClass} from "../domain/user-service";
 
-class AuthController {
-    private COOKIE_SECURE: boolean;
-    constructor() {
-        this.COOKIE_SECURE = process.env.COOKIE_SECURE === null ? false : process.env.COOKIE_SECURE === 'true';
+export class AuthController {
+    constructor(
+        private COOKIE_SECURE: boolean,
+        protected usersService: UsersServiceClass
+    ) {
     }
     ////////////////////////////////////  TOKEN FLOW     /////////////////////////////////////////
     async login(req: RequestWithBody<InterfaceUserAuthPost>, res: Response) {
@@ -27,7 +29,7 @@ class AuthController {
             const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
             const jwtPair = await jwtService.createJwt(userAuth, req.headers["user-agent"], ip)
 
-            res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: this.COOKIE_SECURE})
+            res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: false})
             return res.status(HttpStatusCode.OK).send({
                 "accessToken": jwtPair.accessToken
             })
@@ -49,7 +51,7 @@ class AuthController {
         const refreshToken = req.cookies.refreshToken
         const jwtPair = await jwtService.refreshJwt(req.user, refreshToken)
 
-        res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: this.COOKIE_SECURE})
+        res.cookie('refreshToken', jwtPair.refreshToken, {httpOnly: true, secure: false})
         return res.status(HttpStatusCode.OK).send({
             "accessToken": jwtPair.accessToken
         })
@@ -115,5 +117,5 @@ class AuthController {
 
 }
 
-export const authController = new AuthController()
+
 
