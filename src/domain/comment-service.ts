@@ -3,13 +3,14 @@ import {IUserDb} from "../dto/interface.user";
 import {CommentsRepositoryClass} from "../repositories/comments-repository";
 import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
 import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
-
+import {inject, injectable} from "inversify";
+@injectable()
 export class CommentServiceClass {
 
     constructor(
-        protected commentsRepository: CommentsRepositoryClass,
-        protected queryPostsRepository: QueryPostsRepositoryClass,
-        protected queryCommentRepository: QueryCommentRepositoryClass
+        @inject(CommentsRepositoryClass)protected commentsRepository: CommentsRepositoryClass,
+        @inject(QueryPostsRepositoryClass)protected queryPostsRepository: QueryPostsRepositoryClass,
+        @inject(QueryCommentRepositoryClass)protected queryCommentRepository: QueryCommentRepositoryClass
     ) {}
 
     async postComment(postId: string, user: IUserDb, comment: InterfaceCommentInput) {

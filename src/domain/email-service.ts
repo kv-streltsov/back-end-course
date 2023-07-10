@@ -1,6 +1,8 @@
+import "reflect-metadata"
 import nodemailer from "nodemailer";
 import {InterfaceError} from "../dto/Interface-error";
 import {UsersRepositoryClass} from "../repositories/users-repository";
+import {inject, injectable} from "inversify";
 
 
 const transporter = nodemailer.createTransport({
@@ -11,10 +13,11 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-class emailServiceClass {
-    private usersRepository: UsersRepositoryClass
-    constructor() {
-        this.usersRepository = new UsersRepositoryClass()
+@injectable()
+export class EmailServiceClass {
+    constructor(
+        @inject(UsersRepositoryClass) protected usersRepository: UsersRepositoryClass
+    ) {
     }
 
     async sendMailRegistration(email: string, uuid: string) {
@@ -34,7 +37,7 @@ class emailServiceClass {
 
     async sendMailPasswordRecovery(email: string): Promise<boolean | InterfaceError> {
 
-        const validResult = emailService._validatorEmail(email)
+        const validResult = this._validatorEmail(email)
         if (validResult !== true) {
             return validResult
         }
@@ -76,4 +79,3 @@ class emailServiceClass {
     }
 }
 
-export const emailService = new emailServiceClass()

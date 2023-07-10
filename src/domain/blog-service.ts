@@ -1,13 +1,16 @@
 import {InterfaceBlog, InterfaceBlogInput} from "../dto/interface.blog";
 import {BlogsRepositoryClass} from "../repositories/blogs-repository";
 import {InterfacePostInBlog} from "../dto/interface.post";
+import {inject, injectable} from "inversify";
+import {blogsModel} from "../db/schemes/blogs.scheme";
 
+
+@injectable()
 export class BlogsServiceClass {
-    constructor(protected blogsRepository: BlogsRepositoryClass) {}
+    constructor(@inject(BlogsRepositoryClass)protected blogsRepository: BlogsRepositoryClass) {}
 
     async postBlog(body: InterfaceBlogInput) {
-        return this.blogsRepository.postBlog(body)
-    }
+        return await this.blogsRepository.postBlog(body)}
 
     async postPostInBlog(id: string, body: InterfacePostInBlog) {
         return this.blogsRepository.postPostInBlog(id, body)

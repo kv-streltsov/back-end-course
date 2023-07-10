@@ -3,8 +3,11 @@ import {InterfacePostInBlog, InterfacePostView} from "../dto/interface.post";
 import {WithId} from "mongodb";
 import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogsRepositoryClass {
+
     async postBlog(body: InterfaceBlogInput): Promise<InterfaceBlogView> {
 
         const createData = {
@@ -16,11 +19,10 @@ export class BlogsRepositoryClass {
             ...createData,
             ...body
         }
-        await blogsModel.create(newBlog)
-        return {
-            ...createData,
-            ...body
-        }
+
+        const blog = new blogsModel(newBlog)
+        await blog.save()
+        return newBlog
 
     }
     async postPostInBlog(id: string, body: InterfacePostInBlog): Promise<InterfacePostView | undefined> {

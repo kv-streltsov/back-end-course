@@ -4,13 +4,15 @@ import {Request, Response} from "express";
 import {InterfacePaginationQueryParamsUser, SortType} from "../dto/interface.pagination";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {InterfaceInputUser} from "../dto/interface.input.user";
+import {inject, injectable, } from "inversify";
 
+
+@injectable()
 export class UserController {
     constructor(
-        protected usersService:UsersServiceClass,
-        protected queryUsersRepository:QueryUsersRepositoryClass
-    ) {
-    }
+        @inject(UsersServiceClass) protected usersService: UsersServiceClass,
+        @inject(QueryUsersRepositoryClass) protected queryUsersRepository: QueryUsersRepositoryClass
+    ) {}
 
     async getUser(req: Request<any, any, any, InterfacePaginationQueryParamsUser>, res: Response) {
         const allUsers = await this.queryUsersRepository.getAllUsers(

@@ -2,11 +2,13 @@ import {UsersRepositoryClass} from "../repositories/users-repository";
 import bcrypt from "bcrypt";
 import {randomUUID} from "crypto";
 import {IResultUserService} from "../dto/interface.user.service.contract";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class UsersServiceClass {
-
-    constructor(protected usersRepository: UsersRepositoryClass) {
+    constructor(
+        @inject(UsersRepositoryClass) protected usersRepository: UsersRepositoryClass
+    ) {
     }
 
     async postUser(login: string, email: string, password: string, confirmAdmin: boolean = false) {
@@ -40,7 +42,7 @@ export class UsersServiceClass {
         })
     }
 
-    async  confirmationUser  (code: string): Promise<IResultUserService<boolean>>  {
+    async confirmationUser  (code: string): Promise<IResultUserService<boolean>>  {
         const findUser = await this.usersRepository.findUserByConfirmationCode(code)
         if (findUser === null || findUser.confirmation.wasConfirm === true) {
             return {

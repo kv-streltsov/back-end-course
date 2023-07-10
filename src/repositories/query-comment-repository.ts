@@ -1,12 +1,14 @@
 import {commentsModel} from "../db/schemes/comments.scheme";
 import {QueryLikeStatusRepositoryClass} from "./query-like-status-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class QueryCommentRepositoryClass {
     private DEFAULT_SORT_FIELD: string = 'createdAt'
     private PROJECTION = {postId: 0, _id: 0, __v: 0}
 
     constructor(
-        protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass
+        @inject(QueryLikeStatusRepositoryClass)protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass
     ) {}
     async getCommentsByPostId(
         postId: string,

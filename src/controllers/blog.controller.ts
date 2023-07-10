@@ -13,13 +13,13 @@ import {HttpStatusCode} from "../dto/interface.html-code";
 import {WithId} from "mongodb";
 import {InterfacePostInBlog} from "../dto/interface.post";
 import  {BlogsServiceClass} from "../domain/blog-service";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class BlogController {
-
     constructor(
-      protected queryBlogsRepository:QueryBlogsRepositoryClass,
-       protected  blogsService: BlogsServiceClass
+      @inject(QueryBlogsRepositoryClass)protected queryBlogsRepository:QueryBlogsRepositoryClass,
+      @inject(BlogsServiceClass)protected  blogsService: BlogsServiceClass
     ) {}
 
 
@@ -37,14 +37,16 @@ export class BlogController {
     async getBlogById(req: RequestWithParams<InterfaceId>,
                       res: Response<WithId<any>>) {
         const findBlog = await this.queryBlogsRepository.getBlogById(req.params.id)
+
         if (findBlog !== null) {
             res.status(HttpStatusCode.OK).send(findBlog)
         } else res.sendStatus(HttpStatusCode.NOT_FOUND)
 
     }
 
-    async getPostsByiDBlog(req: RequestWithParamsAndQuery<InterfaceId, InterfacePaginationQueryParams>,
-                           res: Response<WithId<any>>) {
+
+    getPostsByiDBlog = async (req: RequestWithParamsAndQuery<InterfaceId, InterfacePaginationQueryParams>,
+                           res: Response<WithId<any>>) =>  {
         const posts = await this.queryBlogsRepository.getPostsInBlog
         (
             req.query?.pageNumber && Number(req.query.pageNumber),

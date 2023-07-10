@@ -1,5 +1,7 @@
 import {likesStatusModel} from "../db/schemes/likes.scheme";
+import {injectable} from "inversify";
 
+@injectable()
 export class LikeStatusRepositoryClass {
 
     async createLike(userId: string, commentId: string, status: string) {

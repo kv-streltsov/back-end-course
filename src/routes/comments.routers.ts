@@ -1,10 +1,11 @@
 import {Router} from "express";
 import {authMiddleware} from "../middleware/jwt-auth-middleware";
 import {createCommentValidation} from "../middleware/validation/comments-validations";
-import {commentController} from "../composition.root";
-
+import {container} from "../composition.root";
+import {CommentController} from "../controllers/comment.controller";
 
 export const commentsRouter = Router({})
+const commentController = container.resolve(CommentController)
 
 commentsRouter.get('/:commentId', commentController.getCommentById.bind(commentController))
 commentsRouter.put('/:commentId', authMiddleware, createCommentValidation, commentController.putCommentById.bind(commentController))

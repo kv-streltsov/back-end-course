@@ -1,12 +1,9 @@
 import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
 import {PostsRepositoryClass} from "../repositories/posts-repository";
-
+import {inject, injectable} from "inversify";
+@injectable()
 export class PostsServiceClass {
-
-    private postsRepository: PostsRepositoryClass;
-
-    constructor() {
-        this.postsRepository = new PostsRepositoryClass()
+    constructor(@inject(PostsRepositoryClass)protected postsRepository:PostsRepositoryClass) {
     }
 
     async postPost(body: InterfacePostInput) {
@@ -22,4 +19,4 @@ export class PostsServiceClass {
     }
 }
 
-export const postsService = new PostsServiceClass()
+// export const postsService = new PostsServiceClass()

@@ -1,6 +1,8 @@
 import {ICommentDb} from "../dto/interface.comment";
 import {commentsModel} from "../db/schemes/comments.scheme";
+import {injectable} from "inversify";
 
+@injectable()
 export class CommentsRepositoryClass {
     async createComment(commentObj: ICommentDb) {
         return await commentsModel.create(commentObj)

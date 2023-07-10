@@ -1,12 +1,14 @@
 import {InterfaceViewUser} from "../dto/interface.input.user";
 import {usersModel} from "../db/schemes/users.scheme";
+import {injectable} from "inversify";
 
 export interface IUpdatePassword {
     salt: string,
     passwordHash: string
 }
-
+@injectable()
 export class UsersRepositoryClass {
+
     async postUser(createdUser: InterfaceViewUser) {
         return await usersModel.create(createdUser)
     }

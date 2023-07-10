@@ -1,6 +1,8 @@
 import {likesStatusModel} from "../db/schemes/likes.scheme";
 import {LikeStatus} from "../dto/interface.like";
+import {injectable} from "inversify";
 
+@injectable()
 export class QueryLikeStatusRepositoryClass {
 
     async findLikeStatusByUserId(userId: string) {

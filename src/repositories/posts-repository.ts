@@ -1,7 +1,9 @@
 import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
 import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostsRepositoryClass {
     async postPost(body: InterfacePostInput): Promise<InterfacePostView | undefined> {
 

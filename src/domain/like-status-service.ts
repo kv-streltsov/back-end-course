@@ -1,21 +1,20 @@
 import {LikeStatusRepositoryClass} from "../repositories/like-status-repository";
 import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
 import {LikeStatus} from "../dto/interface.like";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class LikeStatusServiceClass {
-
-
     constructor(
-        protected likeStatusRepository: LikeStatusRepositoryClass,
-        protected queryCommentRepository: QueryCommentRepositoryClass
-    ) {    }
-
+        @inject(LikeStatusRepositoryClass) protected likeStatusRepository: LikeStatusRepositoryClass,
+        @inject(QueryCommentRepositoryClass) protected queryCommentRepository: QueryCommentRepositoryClass
+    ) {
+    }
 
     async putLikeStatus(userId: string, commentId: string, likeStatus: string) {
 
         const validStatus = this.likeStatusValidator(likeStatus)
         if (validStatus !== true) return validStatus
-
 
         const checkCommentExist = await this.queryCommentRepository.getCommentById(commentId)
         if (checkCommentExist === null) return null
@@ -30,15 +29,13 @@ export class LikeStatusServiceClass {
         }
 
         return await this.likeStatusRepository.updateLike(userId, commentId, likeStatus)
-
-
     }
 
     async checkLikeExist(userId: string, commentId: string) {
         return await this.likeStatusRepository.checkLikeExist(userId, commentId)
     }
 
-    likeStatusValidator(likeStatus: string) {
+    public likeStatusValidator(likeStatus: string) {
         if (likeStatus !== LikeStatus.Like && likeStatus !== LikeStatus.Dislike && likeStatus !== LikeStatus.None) {
             return {
                 errorsMessages: [{

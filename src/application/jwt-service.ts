@@ -1,20 +1,23 @@
+import "reflect-metadata"
 import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import {randomUUID} from "crypto";
-import {jwtRepository} from "../repositories/jwt-repository";
-import {usersService} from "../composition.root";
+import {JwtRepositoryClass} from "../repositories/jwt-repository";
+import {UsersServiceClass} from "../domain/user-service";
+import {inject, injectable} from "inversify";
 
 dotenv.config()
 
+@injectable()
 export class JwtServiceClass {
 
     constructor(
-        public JWT_SECRET:string =           (process.env.JWT_SECRET === undefined) ? `undefined` : process.env.JWT_SECRET,
-        public JWT_ACCESS_EXPIRES:string =   (process.env.JWT_ACCESS_EXPIRES === undefined)  ? `undefined` : process.env.JWT_ACCESS_EXPIRES,
-        public JWT_REFRESH_EXPIRES:string =  (process.env.JWT_REFRESH_EXPIRES === undefined) ? `undefined` : process.env.JWT_REFRESH_EXPIRES,
-    ) {
-
-    }
+        @inject(UsersServiceClass) protected usersService: UsersServiceClass,
+        @inject(JwtRepositoryClass) protected jwtRepository: JwtRepositoryClass,
+        private JWT_SECRET: string = (process.env.JWT_SECRET === undefined) ? `undefined` : process.env.JWT_SECRET,
+        private JWT_ACCESS_EXPIRES: string = (process.env.JWT_ACCESS_EXPIRES === undefined) ? `undefined` : process.env.JWT_ACCESS_EXPIRES,
+        private JWT_REFRESH_EXPIRES: string = (process.env.JWT_REFRESH_EXPIRES === undefined) ? `undefined` : process.env.JWT_REFRESH_EXPIRES,
+    ) {}
 
     async createJwt(user: any, userAgent: string = 'someDevice', ip: string | string[] | undefined) {
         const tokenPair = {
@@ -30,7 +33,7 @@ export class JwtServiceClass {
         jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString()
         jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString()
 
-        await jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip)
+        await this.jwtRepository.insertDeviceSessions(jwtPayload, userAgent, ip)
 
         return tokenPair
     }
@@ -51,7 +54,7 @@ export class JwtServiceClass {
         jwtPayload.iat = new Date(jwtPayload.iat * 1000).toISOString()
         jwtPayload.exp = new Date(jwtPayload.exp * 1000).toISOString()
 
-        await jwtRepository.updateDeviceSessions(jwtPayload)
+        await this.jwtRepository.updateDeviceSessions(jwtPayload)
 
         return tokenPair
 
@@ -62,7 +65,7 @@ export class JwtServiceClass {
 
             const result: any = jwt.verify(token, this.JWT_SECRET)
 
-            const checkUser = await usersService.getUserById(result.userId)
+            const checkUser = await this.usersService.getUserById(result.userId)
             if (!checkUser) {
                 return null
             }
@@ -78,7 +81,7 @@ export class JwtServiceClass {
         try {
 
             const result: any = jwt.verify(token, this.JWT_SECRET)
-            let devises = await jwtRepository.findAllDeviceSessionByUserId(result.userId)
+            let devises = await this.jwtRepository.findAllDeviceSessionByUserId(result.userId)
 
             if (!devises) {
                 return null
@@ -94,7 +97,7 @@ export class JwtServiceClass {
     async getSpecifiedDeviceByToken(token: string) {
         try {
             const result: any = jwt.verify(token, this.JWT_SECRET)
-            const devise: any = await jwtRepository.findDeviceSessionById(result.deviceId)
+            const devise: any = await this.jwtRepository.findDeviceSessionById(result.deviceId)
             if (!devise) {
                 return null
             }
@@ -109,12 +112,12 @@ export class JwtServiceClass {
     async logoutSpecifiedDevice(token: string, deviceId: string) {
 
         const tokenDecode: any = jwt.decode(token)
-        const device: any = await jwtRepository.findDeviceSessionById(deviceId)
+        const device: any = await this.jwtRepository.findDeviceSessionById(deviceId)
 
         if (!device) return null
         if (tokenDecode.userId !== device.userId) return false
 
-        await jwtRepository.deleteDeviceSession(deviceId)
+        await this.jwtRepository.deleteDeviceSession(deviceId)
         return true
 
     }
@@ -122,6 +125,6 @@ export class JwtServiceClass {
     async logoutAllDevices(token: string) {
         const tokenDecode: any = jwt.decode(token)
 
-        return await jwtRepository.deleteAllDevicesSessions(tokenDecode.userId, tokenDecode.deviceId)
+        return await this.jwtRepository.deleteAllDevicesSessions(tokenDecode.userId, tokenDecode.deviceId)
     }
 }

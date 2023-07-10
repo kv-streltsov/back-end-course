@@ -1,8 +1,9 @@
 import {postsModel} from "../db/schemes/posts.scheme";
+import {injectable} from "inversify";
 
 
 
-
+@injectable()
 export class QueryPostsRepositoryClass {
 
     private DEFAULT_SORT_FIELD: string = 'createdAt'

@@ -15,14 +15,15 @@ import {HttpStatusCode} from "../dto/interface.html-code";
 import {IComment} from "../dto/interface.comment";
 import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
 import {PostsServiceClass} from "../domain/post-service";
-
+import {inject, injectable} from "inversify";
+@injectable()
 export class PostController {
     constructor(
-        protected queryCommentRepository: QueryCommentRepositoryClass,
-        protected queryPostsRepository: QueryPostsRepositoryClass,
-        protected commentService: CommentServiceClass,
-        protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass,
-        protected postsService: PostsServiceClass
+        @inject(QueryCommentRepositoryClass)protected queryCommentRepository: QueryCommentRepositoryClass,
+        @inject(QueryPostsRepositoryClass)protected queryPostsRepository: QueryPostsRepositoryClass,
+        @inject(CommentServiceClass)protected commentService: CommentServiceClass,
+        @inject(QueryLikeStatusRepositoryClass)protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass,
+        @inject(PostsServiceClass)protected postsService: PostsServiceClass
     ) {
     }
 

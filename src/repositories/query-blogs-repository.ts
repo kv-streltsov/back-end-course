@@ -2,8 +2,9 @@ import {InterfaceGetBlogsWitchQuery} from "../dto/interface.blog";
 import {WithId} from "mongodb";
 import {postsModel} from "../db/schemes/posts.scheme";
 import {blogsModel} from "../db/schemes/blogs.scheme";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class QueryBlogsRepositoryClass {
 
     private DEFAULT_SORT_FIELD = 'createdAt'

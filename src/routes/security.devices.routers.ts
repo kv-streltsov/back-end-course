@@ -1,50 +1,11 @@
-import {Request, Response, Router} from "express";
+import {Router} from "express";
 import {refreshTokenMiddleware} from "../middleware/refresh-token-middleware";
-import {HttpStatusCode} from "../dto/interface.html-code";
-import {jwtService} from "../composition.root";
-
+import {container} from "../composition.root";
+import {SecurityDevicesController} from "../controllers/security.devices.controller";
 
 export const securityDevicesRouters = Router({})
+const securityDevicesController = container.resolve(SecurityDevicesController)
 
-
-class SecurityDevicesController {
-    async getSecurityDevices(req: Request, res: Response) {
-
-        const refreshToken = req.cookies.refreshToken
-        const result = await jwtService.getAllDevisesByToken(refreshToken)
-
-        if (result === null) {
-            res.sendStatus(HttpStatusCode.NOT_FOUND)
-            return
-        }
-
-        res.status(HttpStatusCode.OK).send(result)
-    }
-    async deleteSecurityDevicesExceptCurrent(req: Request, res: Response) {
-
-        const refreshToken = req.cookies.refreshToken
-        await jwtService.logoutAllDevices(refreshToken)
-        res.sendStatus(HttpStatusCode.NO_CONTENT)
-
-    }
-    async deleteSecurityDevicesById(req: Request, res: Response) {
-
-        const refreshToken = req.cookies.refreshToken
-        const result = await jwtService.logoutSpecifiedDevice(refreshToken, req.params.devicesId)
-
-        if (result === null) {
-            res.sendStatus(HttpStatusCode.NOT_FOUND)
-            return
-        }
-        if (!result) {
-            res.sendStatus(HttpStatusCode.FORBIDDEN)
-            return
-        }
-        res.sendStatus(HttpStatusCode.NO_CONTENT)
-    }
-}
-
-const securityDevicesController = new SecurityDevicesController()
-securityDevicesRouters.get('/devices', refreshTokenMiddleware, securityDevicesController.getSecurityDevices)
-securityDevicesRouters.delete('/devices', refreshTokenMiddleware, securityDevicesController.deleteSecurityDevicesExceptCurrent)
-securityDevicesRouters.delete('/devices/:devicesId', refreshTokenMiddleware, securityDevicesController.deleteSecurityDevicesById)
+securityDevicesRouters.get('/devices', refreshTokenMiddleware, securityDevicesController.getSecurityDevices.bind(securityDevicesController))
+securityDevicesRouters.delete('/devices', refreshTokenMiddleware, securityDevicesController.deleteSecurityDevicesExceptCurrent.bind(securityDevicesController))
+securityDevicesRouters.delete('/devices/:devicesId', refreshTokenMiddleware, securityDevicesController.deleteSecurityDevicesById.bind(securityDevicesController))

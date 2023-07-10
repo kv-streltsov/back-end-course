@@ -7,15 +7,15 @@ import {Request, Response} from "express";
 import {HttpStatusCode} from "../dto/interface.html-code";
 import {ILike} from "../dto/interface.like";
 import {InterfaceError} from "../dto/Interface-error";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class CommentController {
-
-
     constructor(
-        protected queryCommentRepository: QueryCommentRepositoryClass,
-        protected commentService: CommentServiceClass,
-        protected likeStatusService: LikeStatusServiceClass,
-        protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass
+        @inject(QueryCommentRepositoryClass) protected queryCommentRepository: QueryCommentRepositoryClass,
+        @inject(CommentServiceClass) protected commentService: CommentServiceClass,
+        @inject(LikeStatusServiceClass) protected likeStatusService: LikeStatusServiceClass,
+        @inject(QueryLikeStatusRepositoryClass) protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass
     ) {
 
     }

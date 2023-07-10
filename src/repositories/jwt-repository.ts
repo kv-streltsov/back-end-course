@@ -1,8 +1,10 @@
+import "reflect-metadata"
 import {IDevice, IDeviceView} from "../dto/interface.device";
 import {devicesSessionsModel} from "../db/schemes/devices.sessions.scheme";
+import {injectable} from "inversify";
 
-
-class JwtRepositoryClass {
+@injectable()
+export class JwtRepositoryClass {
     async findDeviceSessionById(deviceId: string) {
         try {
             return await devicesSessionsModel.findOne({deviceId: deviceId})
