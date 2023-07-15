@@ -1,14 +1,20 @@
-import {InterfaceCommentView} from "../dto/interface.comment";
-import {collectionComments} from "../db/db_mongo";
+import {ICommentDb} from "../dto/interface.comment";
+import {commentsModel} from "../db/schemes/comments.scheme";
+import {injectable} from "inversify";
 
-export const commentsRepository = {
-    createComment: async (commentObj: InterfaceCommentView) => {
-        return await collectionComments.insertOne(commentObj)
-    },
-    updateComment: async (commentId: string, comment: string) => {
-        return await collectionComments.updateOne({id: commentId}, {$set: {content: comment}})
-    },
-    deleteComment: async (commentId: string) => {
-        return await collectionComments.deleteOne({id: commentId})
+@injectable()
+export class CommentsRepositoryClass {
+    async createComment(commentObj: ICommentDb) {
+        return await commentsModel.create(commentObj)
     }
+
+    async updateComment(commentId: string, comment: string) {
+        return commentsModel.updateOne({id: commentId}, {$set: {content: comment}});
+    }
+
+    async deleteComment(commentId: string) {
+        return commentsModel.deleteOne({id: commentId})
+    }
+
 }
+

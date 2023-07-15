@@ -1,52 +1,65 @@
-import {collectionComments} from "../db/db_mongo";
+import {commentsModel} from "../db/schemes/comments.scheme";
+import {QueryLikeStatusRepositoryClass} from "./query-like-status-repository";
+import {inject, injectable} from "inversify";
 
-const DEFAULT_SORT_FIELD = 'createdAt'
+@injectable()
+export class QueryCommentRepositoryClass {
+    private DEFAULT_SORT_FIELD: string = 'createdAt'
+    private PROJECTION = {postId: 0, _id: 0, __v: 0}
 
-export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
-    const countItems = (pageNumber - 1) * pageSize;
-    let sortField: any = {}
-    sortField[sortBy] = sortDirection
-
-    return {
-        countItems,
-        sortField
-    }
-}
-export const queryCommentRepository = {
-
-    getCommentsByPostId: async (
+    constructor(
+        @inject(QueryLikeStatusRepositoryClass)protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass
+    ) {}
+    async getCommentsByPostId(
         postId: string,
         pageNumber: number = 1,
         pageSize: number = 10,
         sortDirection: number,
-        sortBy: string = DEFAULT_SORT_FIELD
-    ) => {
-        const count: number = await collectionComments.countDocuments({postId: postId})
-        if(count === 0){
+        sortBy: string = this.DEFAULT_SORT_FIELD
+    ) {
+        const count: number = await commentsModel.countDocuments({postId: postId})
+        if (count === 0) {
             return null
         }
-        const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const comments = await collectionComments.find({postId: postId}, {projection: {_id: 0,postId:0}})
+        const {countItems, sortField} = this.paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
+        const comments = await commentsModel.find({postId: postId})
+            .select(this.PROJECTION)
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
-            .toArray()
+            .lean()
+
+        const items = await Promise.all(comments.map(async comment => {
+            const likesInfo = await this.queryLikeStatusRepository.getLikesInfo(comment.id, comment.commentatorInfo.userId)
+            return {
+                ...comment,
+                likesInfo: likesInfo
+            }
+        }))
+
 
         return {
             pagesCount: Math.ceil(count / pageSize),
             page: pageNumber,
             pageSize,
             totalCount: count,
-            items: comments
+            items: items
         }
 
-    },
-    getCommentById: async (id: string) => {
-        return await collectionComments.findOne({id: id},
-            {projection: {_id: 0,postId:0},
-        })
     }
 
+    async getCommentById(id: string) {
+        return commentsModel.findOne({id: id}).select(this.PROJECTION).lean()
+    }
+    paginationHandler(pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) {
+        const countItems = (pageNumber - 1) * pageSize;
+        let sortField: any = {}
+        sortField[sortBy] = sortDirection
 
+        return {
+            countItems,
+            sortField
+        }
+    }
 }
 

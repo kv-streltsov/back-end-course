@@ -1,33 +1,29 @@
-import {collectionPosts} from "../db/db_mongo";
+import {postsModel} from "../db/schemes/posts.scheme";
+import {injectable} from "inversify";
 
-const DEFAULT_SORT_FIELD = 'createdAt'
 
-export const paginationHandler = (pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) => {
-    const countItems = (pageNumber - 1) * pageSize;
-    let sortField: any = {}
-    sortField[sortBy] = sortDirection
 
-    return {
-        countItems,
-        sortField
-    }
-}
-export const queryPostsRepository = {
+@injectable()
+export class QueryPostsRepositoryClass {
 
-    getAllPosts: async (
+    private DEFAULT_SORT_FIELD: string = 'createdAt'
+    private PROJECTION = {_id: 0, __v: 0}
+
+    async getAllPosts(
         pageNumber: number = 1,
         pageSize: number = 10,
         sortDirection: number,
-        sortBy: string = DEFAULT_SORT_FIELD
-    ) => {
+        sortBy: string = this.DEFAULT_SORT_FIELD
+    ) {
 
-        const count = await collectionPosts.countDocuments({})
-        const {countItems, sortField} = paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const posts = await collectionPosts.find({}, {projection: {_id: 0}})
+        const count = await postsModel.countDocuments({})
+        const {countItems, sortField} = this.paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
+        const posts = await postsModel.find({})
+            .select(this.PROJECTION)
             .skip(countItems)
             .sort(sortField)
             .limit(pageSize)
-            .toArray()
+            .lean()
 
         return {
             pagesCount: Math.ceil(count / pageSize),
@@ -37,13 +33,23 @@ export const queryPostsRepository = {
             items: posts
         }
 
-    },
-    getPostById: async (id: string) => {
-        return await collectionPosts.findOne({id: id}, {
-            projection: {_id: 0},
-        })
     }
 
+    async getPostById(id: string) {
+        return postsModel.findOne({id: id}).select(this.PROJECTION)
+    }
 
+    paginationHandler(pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) {
+
+        const countItems = (pageNumber - 1) * pageSize;
+        let sortField: any = {}
+        sortField[sortBy] = sortDirection
+
+        return {
+            countItems,
+            sortField
+        }
+    }
 }
+
 

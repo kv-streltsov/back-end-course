@@ -1,18 +1,26 @@
-import {commentsRepository} from "../repositories/comments-repository";
-import {InterfaceCommentInput, InterfaceCommentView} from "../dto/interface.comment";
-import {InterfaceUserDb} from "../dto/interface.user";
-import {collectionComments, collectionPosts} from "../db/db_mongo";
-import {queryCommentRepository} from "../repositories/query-comment-repository";
-import {HttpStatusCode} from "../dto/interface.html-code";
+import {ICommentDb, InterfaceCommentInput} from "../dto/interface.comment";
+import {IUserDb} from "../dto/interface.user";
+import {CommentsRepositoryClass} from "../repositories/comments-repository";
+import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
+import {QueryCommentRepositoryClass} from "../repositories/query-comment-repository";
+import {inject, injectable} from "inversify";
+@injectable()
+export class CommentServiceClass {
 
-export const commentService = {
-    postComment: async (postId: string, user: InterfaceUserDb, comment: InterfaceCommentInput) => {
-        const findPost = await collectionPosts.findOne({id: postId},)
+    constructor(
+        @inject(CommentsRepositoryClass)protected commentsRepository: CommentsRepositoryClass,
+        @inject(QueryPostsRepositoryClass)protected queryPostsRepository: QueryPostsRepositoryClass,
+        @inject(QueryCommentRepositoryClass)protected queryCommentRepository: QueryCommentRepositoryClass
+    ) {}
+
+    async postComment(postId: string, user: IUserDb, comment: InterfaceCommentInput) {
+
+        const findPost = await this.queryPostsRepository.getPostById(postId)
         if (findPost === null) {
             return null
         }
 
-        const commentObj: InterfaceCommentView = {
+        const commentObj: ICommentDb = {
             id: new Date().getTime().toString(),
             postId: postId,
             commentatorInfo: {
@@ -23,8 +31,8 @@ export const commentService = {
             createdAt: new Date().toISOString()
         }
 
-        const newComment = await commentsRepository.createComment({...commentObj})
-        if (newComment.acknowledged) {
+        const newComment = await this.commentsRepository.createComment({...commentObj})
+        if (newComment) {
             return {
                 id: commentObj.id,
                 commentatorInfo: commentObj.commentatorInfo,
@@ -33,25 +41,29 @@ export const commentService = {
             }
         }
         return false
-    },
-    putComment: async (commentId: string, user: InterfaceUserDb, comment: InterfaceCommentInput) => {
-        const checkComment = await queryCommentRepository.getCommentById(commentId)
+    }
+
+    async putComment(commentId: string, user: IUserDb, comment: InterfaceCommentInput) {
+        const checkComment = await this.queryCommentRepository.getCommentById(commentId)
+
         if (checkComment === null) {
             return null
         }
+
         if (checkComment!.commentatorInfo.userId !== user.id) {
             return 'forbidden'
         }
 
-        const result = await commentsRepository.updateComment(commentId, comment.content)
+        const result = await this.commentsRepository.updateComment(commentId, comment.content)
         if (result.matchedCount === 1) {
             return true
         } else {
             return false
         }
-    },
-    deleteComment: async (commentId: string, user: InterfaceUserDb) => {
-        const checkComment = await queryCommentRepository.getCommentById(commentId)
+    }
+
+    async deleteComment(commentId: string, user: IUserDb) {
+        const checkComment = await this.queryCommentRepository.getCommentById(commentId)
         if (checkComment === null) {
             return null
         }
@@ -59,7 +71,7 @@ export const commentService = {
             return 'forbidden'
         }
 
-        const result = await commentsRepository.deleteComment(commentId)
+        const result = await this.commentsRepository.deleteComment(commentId)
         if (result.deletedCount === 1) {
             return true
         } else {
@@ -67,3 +79,4 @@ export const commentService = {
         }
     }
 }
+

@@ -1,12 +1,13 @@
 import {InterfacePostInput, InterfacePostView} from "../dto/interface.post";
-import {collectionBlogs, collectionPosts} from "../db/db_mongo";
+import {postsModel} from "../db/schemes/posts.scheme";
+import {blogsModel} from "../db/schemes/blogs.scheme";
+import {injectable} from "inversify";
 
+@injectable()
+export class PostsRepositoryClass {
+    async postPost(body: InterfacePostInput): Promise<InterfacePostView | undefined> {
 
-export const postsRepository = {
-
-    postPost: async (body: InterfacePostInput): Promise<InterfacePostView | undefined> => {
-
-        const findBlogName = await collectionBlogs.findOne({id: body.blogId})
+        const findBlogName = await blogsModel.findOne({id: body.blogId})
 
         if (findBlogName) {
             const createData = {
@@ -19,7 +20,7 @@ export const postsRepository = {
                 ...createData,
                 ...body
             }
-            await collectionPosts.insertOne(newPost)
+            await postsModel.create(newPost)
             return {
                 ...createData,
                 ...body
@@ -28,13 +29,13 @@ export const postsRepository = {
         return undefined
 
 
-    },
-    putPost: async (body: InterfacePostInput, id: string): Promise<boolean | null> => {
+    }
+    async putPost(body: InterfacePostInput, id: string): Promise<boolean | null> {
 
-        const findPost = await collectionPosts.findOne({id: id})
+        const findPost = await postsModel.findOne({id: id})
         if (findPost === null) return null
 
-        await collectionPosts.updateOne({id: id}, {
+        await postsModel.updateOne({id: id}, {
             $set: {
                 title: body.title,
                 shortDescription: body.shortDescription,
@@ -43,14 +44,13 @@ export const postsRepository = {
             }
         })
         return true
-    },
-    deletePost: async (id: string): Promise<boolean | null> => {
-        const deletePost = await collectionPosts.deleteOne({id: id})
+    }
+    async deletePost(id: string): Promise<boolean | null> {
+        const deletePost = await postsModel.deleteOne({id: id})
         if (deletePost.deletedCount) {
             return true
         } else return null
     }
-
-
 }
+
 

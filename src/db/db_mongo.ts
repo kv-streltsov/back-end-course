@@ -1,37 +1,50 @@
-import {MongoClient} from 'mongodb'
 import * as dotenv from 'dotenv'
+import mongoose from "mongoose";
+import {devicesSessionsModel} from "./schemes/devices.sessions.scheme";
+import {rateLimitModel} from "./schemes/rate.limit.scheme";
+import {commentsModel} from "./schemes/comments.scheme";
+import {usersModel} from "./schemes/users.scheme";
+import {postsModel} from "./schemes/posts.scheme";
+import {blogsModel} from "./schemes/blogs.scheme";
+import {likesStatusModel} from "./schemes/likes.scheme";
 
 
 dotenv.config()
-export const MONGO_URL:string | undefined = process.env.MONGO_URL
+export const MONGO_URL: string | undefined = process.env.MONGO_URL
+export const MONGOOSE_URL: string | undefined  = process.env.MONGOOSE_URL
 
-if (!MONGO_URL) {
+if (!MONGO_URL  ) {
     throw new Error('!!! Bad URL')
 }
-export const clientMongo = new MongoClient(MONGO_URL)
-export const collectionBlogs = clientMongo.db('back-end-course').collection('Blogs')
-export const collectionPosts = clientMongo.db('back-end-course').collection('Posts')
-export const collectionUsers = clientMongo.db('back-end-course').collection('Users')
-export const collectionComments = clientMongo.db('back-end-course').collection('Comments')
 
 export async function runMongo() {
+
+    if (!MONGOOSE_URL) {
+        throw new Error('!!! Bad URL')
+    }
+
     try {
-        await clientMongo.connect()
-        await clientMongo.db("Back-end-course").command({ping: 1})
+        await mongoose.connect(MONGOOSE_URL)
         console.log('connected successfully to mongo server')
 
     } catch {
-        await clientMongo.close()
+        await mongoose.disconnect()
         console.log('connect error to mongo server')
     }
 }
 
 export async function clear_db_mongo(): Promise<boolean> {
-    await collectionBlogs.deleteMany({})
-    await collectionPosts.deleteMany({})
-    await collectionUsers.deleteMany({})
-    await collectionComments.deleteMany({})
 
+    const asyncArray = [
+        await blogsModel.deleteMany({}),
+        await postsModel.deleteMany({}),
+        await usersModel.deleteMany({}),
+        await commentsModel.deleteMany({}),
+        await rateLimitModel.deleteMany({}),
+        await devicesSessionsModel.deleteMany({}),
+        await likesStatusModel.deleteMany({}),
+    ]
+    await Promise.all(asyncArray)
     return true
 }
 

@@ -4,9 +4,7 @@
 
 import {Request} from "express";
 
-export interface InterfaceId {
-    id: string
-}
+export interface InterfaceId {id:string}
 
 export interface InterfacePostId {
     postId: string
