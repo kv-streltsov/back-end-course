@@ -119,8 +119,8 @@ describe('/12 like posts', () => {
         response = await request(app)
             .post('/auth/login')
             .send({
-                "loginOrEmail": userThree.email,
-                "password": userThree.password
+                "loginOrEmail": userFour.email,
+                "password": userFour.password
             }).expect(200)
         userFour.accessToken = response.body.accessToken
 
@@ -175,6 +175,7 @@ describe('/12 like posts', () => {
 
     });
     it('PUSH 2 LIKE AND 2 DISLIKE', async () => {
+
         await request(app)
             .put(`/posts/${postId}/like-status`)
             .set('Authorization', `Bearer ${userOne.accessToken}`)
@@ -192,11 +193,58 @@ describe('/12 like posts', () => {
             .set('Authorization', `Bearer ${userThree.accessToken}`)
             .send({"likeStatus": "Dislike"})
             .expect(204)
+
         await request(app)
             .put(`/posts/${postId}/like-status`)
             .set('Authorization', `Bearer ${userFour.accessToken}`)
             .send({"likeStatus": "Dislike"})
             .expect(204)
+
+    });
+    it('GET LIKE STATUS', async () => {
+
+        // FIRST USER GET COMMENT | SHOULD RETURN 1 LIKE 2 DISLIKE AND MY STATUS `Dislike`
+        let post = await request(app)
+            .get(`/posts/${postId}`)
+            .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
+
+        console.log(`test post`,post.body)
+        console.log(123123,userOne.accessToken )
+
+        expect(post.body).toEqual({
+            id: postId,
+            content: 'test post content',
+            blogId: expect.any(String),
+            blogName: expect.any(String),
+            createdAt: expect.any(String),
+            shortDescription: "shortDescription test post",
+            title: "it test test post",
+            extendedLikesInfo: {
+                likesCount: 2,
+                dislikesCount: 2,
+                myStatus: "Like",
+                newestLikes: [
+                    {
+                        addedAt: expect.any(String),
+                        userId: expect.any(String),
+                        login: expect.any(String),
+                    },
+                    {
+                        addedAt: expect.any(String),
+                        userId: expect.any(String),
+                        login: expect.any(String),
+                    },
+                    {
+                        addedAt: expect.any(String),
+                        userId: expect.any(String),
+                        login: expect.any(String),
+                    }
+                ]
+            }
+
+        })
+
+
 
     });
 })

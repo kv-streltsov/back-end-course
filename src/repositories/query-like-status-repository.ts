@@ -1,9 +1,13 @@
 import {likesStatusModel} from "../db/schemes/likes.scheme";
 import {LikeStatus} from "../dto/interface.like";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
+import {UsersRepositoryClass} from "./users-repository";
 
 @injectable()
 export class QueryLikeStatusRepositoryClass {
+
+    constructor(@inject(UsersRepositoryClass)protected usersRepository: UsersRepositoryClass) {
+    }
 
     async findLikeStatusByUserId(userId: string) {
         const result = await likesStatusModel.findOne({userId: userId}).select({
@@ -28,11 +32,11 @@ export class QueryLikeStatusRepositoryClass {
     }
 
 
-    async getLikesInfo(commentId: string, userId: string | null = null) {
+    async getLikesInfo(entityId: string, userId: string | null = null) {
 
-        const like = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Like}).lean()
-        const disLike = await likesStatusModel.countDocuments({commentId: commentId, status: LikeStatus.Dislike}).lean()
-        const likeStatus = await likesStatusModel.findOne({userId: userId, commentId: commentId}).select({
+        const like = await likesStatusModel.countDocuments({entityId: entityId, status: LikeStatus.Like}).lean()
+        const disLike = await likesStatusModel.countDocuments({entityId: entityId, status: LikeStatus.Dislike}).lean()
+        const likeStatus = await likesStatusModel.findOne({userId: userId, entityId: entityId}).select({
             __v: 0,
             _id: 0,
             commentId: 0,
@@ -47,5 +51,49 @@ export class QueryLikeStatusRepositoryClass {
 
 
     }
+    async getExtendedLikesInfo(entityId: string, userId: string | null = null) {
+
+        const like = await likesStatusModel.countDocuments({entityId: entityId, status: LikeStatus.Like}).lean()
+        const disLike = await likesStatusModel.countDocuments({entityId: entityId, status: LikeStatus.Dislike}).lean()
+        const newestLikes = await likesStatusModel.find({entityId: entityId}).sort({addedAt:1}).limit(3).select({
+            __v: 0,
+            _id: 0,
+            entityId: 0,
+            status:0,
+
+        }).lean()
+
+        const likeStatus = await likesStatusModel.findOne({userId: userId, entityId: entityId}).select({
+            __v: 0,
+            _id: 0,
+            commentId: 0,
+            userId: 0,
+            entityId: 0,
+            addedAt: 0
+        }).lean()
+
+        const newLikes = await Promise.all(newestLikes.map(async like => {
+            const findUser = await this.usersRepository.findUserById(like.userId)
+            const login = findUser!.login
+            return {
+                userId:like.userId,
+                addedAt:like.addedAt,
+                login: login
+            }
+
+        }))
+
+        return  {
+                likesCount: like,
+                dislikesCount: disLike,
+                myStatus: (likeStatus === null) ? `None` : likeStatus.status,
+                newestLikes: newLikes
+        }
+
+
+
+
+    }
+
 
 }

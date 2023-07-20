@@ -11,7 +11,7 @@ export interface ILikesStatusDb{
     userId: string,
     entityId: string,
     status: LikeStatus,
-    createdAt: string
+    addedAt: string
 }
 export interface ILikeStatusInfoView{
     likesCount: string,

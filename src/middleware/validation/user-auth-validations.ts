@@ -4,15 +4,14 @@ import {inputValidationMiddleware} from "./input-validation-middleware";
 const loginValidation = body('loginOrEmail').isString().trim().notEmpty().custom(loginOrEmail => {
 
     const regexEmail =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
     if (loginOrEmail.length < 3) {
+        console.log(loginOrEmail.length)
         throw new Error('error length')
     }
 
     if (!loginOrEmail.match('^[a-zA-Z0-9_-]*$') && !loginOrEmail.match(regexEmail) ) {
         throw new Error('error match')
     }
-
     return true
 })
 

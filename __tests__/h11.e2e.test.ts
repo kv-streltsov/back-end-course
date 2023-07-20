@@ -223,6 +223,7 @@ describe('/11', () => {
         comment = await request(app)
             .get(`/comments/${commentIdTwo}`)
             .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
+
         expect(comment.body).toEqual({
             id: commentIdTwo,
             content: 'bla bla bla test comment',

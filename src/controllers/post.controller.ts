@@ -19,15 +19,16 @@ import {inject, injectable} from "inversify";
 import {ILike} from "../dto/interface.like";
 import {InterfaceError} from "../dto/Interface-error";
 import {LikeStatusServiceClass} from "../domain/like-status-service";
+
 @injectable()
 export class PostController {
     constructor(
-        @inject(QueryCommentRepositoryClass)protected queryCommentRepository: QueryCommentRepositoryClass,
-        @inject(QueryPostsRepositoryClass)protected queryPostsRepository: QueryPostsRepositoryClass,
-        @inject(CommentServiceClass)protected commentService: CommentServiceClass,
-        @inject(QueryLikeStatusRepositoryClass)protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass,
+        @inject(QueryCommentRepositoryClass) protected queryCommentRepository: QueryCommentRepositoryClass,
+        @inject(QueryPostsRepositoryClass) protected queryPostsRepository: QueryPostsRepositoryClass,
+        @inject(CommentServiceClass) protected commentService: CommentServiceClass,
+        @inject(QueryLikeStatusRepositoryClass) protected queryLikeStatusRepository: QueryLikeStatusRepositoryClass,
         @inject(LikeStatusServiceClass) protected likeStatusService: LikeStatusServiceClass,
-        @inject(PostsServiceClass)protected postsService: PostsServiceClass
+        @inject(PostsServiceClass) protected postsService: PostsServiceClass
     ) {
     }
 
@@ -47,10 +48,21 @@ export class PostController {
     }
 
     async getPostById(req: RequestWithParams<InterfaceId>, res: Response) {
-        const findPost = await this.queryPostsRepository.getPostById(req.params.id)
-        if (findPost !== null) {
-            res.status(HttpStatusCode.OK).send(findPost)
-        } else res.sendStatus(HttpStatusCode.NOT_FOUND)
+        try {
+            const findPost = await this.queryPostsRepository.getPostById(req.params.id)
+            const extendedLikesInfo = await this.queryLikeStatusRepository.getExtendedLikesInfo(req.params.id, req.user === undefined ? null : req.user)
+
+            if (findPost !== null) {
+                res.status(HttpStatusCode.OK).json({
+                    ...findPost,
+                    extendedLikesInfo
+                })
+            } else res.sendStatus(HttpStatusCode.NOT_FOUND)
+
+        } catch (error) {
+            res.status(500).send(error)
+            return
+        }
     }
 
     async getCommentsByPostId(req: RequestWithParamsAndQuery<InterfacePostId, InterfacePaginationQueryParams>, res: Response) {
@@ -99,7 +111,8 @@ export class PostController {
             res.sendStatus(HttpStatusCode.NO_CONTENT)
         } else res.sendStatus(HttpStatusCode.NOT_FOUND)
     }
-    async putLikeStatus(req: RequestWithParamsAndBody<{postId: string}, ILike>, res: Response) {
+
+    async putLikeStatus(req: RequestWithParamsAndBody<{ postId: string }, ILike>, res: Response) {
         try {
 
             const result: null | InterfaceError | any = await this.likeStatusService.putLikeStatusPost(req.user.id, req.params.postId, req.body.likeStatus)

@@ -9,7 +9,7 @@ export class LikeStatusRepositoryClass {
             userId: userId,
             entityId: entityId,
             status: status,
-            createdAt: new Date().toISOString()
+            addedAt: new Date().toISOString()
         })
         return true
     }
@@ -18,24 +18,25 @@ export class LikeStatusRepositoryClass {
         const result = await likesStatusModel.updateOne({
             userId: userId,
             entityId: entityId
-        }, {$set: {status: status}})
+        }, {$set: {status: status,addedAt: new Date().toISOString()}}
+        )
         return true
 
     }
 
-    async deleteLike(userId: string, commentId: string) {
+    async deleteLike(userId: string, entityId: string) {
         await likesStatusModel.deleteOne({
             userId: userId,
-            commentId: commentId
+            entityId: entityId
         })
         return true
 
     }
 
-    async checkLikeExist(userId: string, commentId: string) {
+    async checkLikeExist(userId: string, entityId: string) {
         return likesStatusModel.findOne({
             userId: userId,
-            commentId: commentId
+            entityId: entityId
         })
 
     }

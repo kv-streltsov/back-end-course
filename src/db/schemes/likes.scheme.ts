@@ -6,7 +6,7 @@ const LikesStatusScheme = new Schema<ILikesStatusDb>({
     entityId:String,
     userId: String,
     status: String,
-    createdAt: String
+    addedAt: String
 })
 
 export const likesStatusModel = mongoose.model('LikesStatus', LikesStatusScheme, 'LikesStatus')

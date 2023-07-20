@@ -21,12 +21,12 @@ export class LikeStatusServiceClass {
         const isCommentExist = await this.queryCommentRepository.getCommentById(commentId)
         if (isCommentExist === null) return null
 
-        const checkLikeExist = await this.checkLikeExist(userId, commentId)//"1688041586130"
-        if ((likeStatus === LikeStatus.None) && checkLikeExist) {
+        const isLikeExist = await this.checkLikeExist(userId, commentId)
+        if ((likeStatus === LikeStatus.None) && isLikeExist) {
             return await this.likeStatusRepository.deleteLike(userId, commentId)
         }
 
-        if (checkLikeExist === null) {
+        if ((likeStatus !== LikeStatus.None) && isLikeExist === null) {
             return await this.likeStatusRepository.createLike(userId, commentId, likeStatus)
         }
 
@@ -40,20 +40,20 @@ export class LikeStatusServiceClass {
         const isPostExist = await this.queryPostRepository.getPostById(postId)
         if (isPostExist === null) return null
 
-        const checkLikeExist = await this.checkLikeExist(userId, postId)//"1688041586130"
-        if ((likeStatus === LikeStatus.None) && checkLikeExist) {
+        const isLikeExist = await this.checkLikeExist(userId, postId)
+        if ((likeStatus === LikeStatus.None) && isLikeExist) {
             return await this.likeStatusRepository.deleteLike(userId, postId)
         }
 
-        if (checkLikeExist === null) {
+        if ((likeStatus !== LikeStatus.None) && isLikeExist === null) {
             return await this.likeStatusRepository.createLike(userId, postId, likeStatus)
         }
 
         return await this.likeStatusRepository.updateLike(userId, postId, likeStatus)
     }
 
-    async checkLikeExist(userId: string, commentId: string) {
-        return await this.likeStatusRepository.checkLikeExist(userId, commentId)
+    async checkLikeExist(userId: string, entityId: string) {
+        return await this.likeStatusRepository.checkLikeExist(userId, entityId)
     }
 
     private likeStatusValidator(likeStatus: string) {

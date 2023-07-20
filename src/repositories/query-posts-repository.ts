@@ -1,5 +1,7 @@
 import {postsModel} from "../db/schemes/posts.scheme";
 import {injectable} from "inversify";
+import {likesStatusModel} from "../db/schemes/likes.scheme";
+import {LikeStatus} from "../dto/interface.like";
 
 
 
@@ -36,8 +38,28 @@ export class QueryPostsRepositoryClass {
     }
 
     async getPostById(id: string) {
-        return postsModel.findOne({id: id}).select(this.PROJECTION)
+        return postsModel.findOne({id: id}).select(this.PROJECTION).lean()
     }
+    async getLikesInfo(postId: string, userId: string | null = null) {
+
+        const like = await likesStatusModel.countDocuments({commentId: postId, status: LikeStatus.Like}).lean()
+        const disLike = await likesStatusModel.countDocuments({commentId: postId, status: LikeStatus.Dislike}).lean()
+        const likeStatus = await likesStatusModel.findOne({userId: userId, commentId: postId}).select({
+            __v: 0,
+            _id: 0,
+            commentId: 0,
+            userId: 0,
+        }).lean()
+
+        return {
+            likesCount: like,
+            dislikesCount: disLike,
+            myStatus: likeStatus === null ? LikeStatus.None : likeStatus.status
+        }
+
+
+    }
+
 
     paginationHandler(pageNumber: number, pageSize: number, sortBy: string, sortDirection: number) {
 
