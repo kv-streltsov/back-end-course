@@ -201,12 +201,6 @@ describe('/12 like posts', () => {
         thirdPostId = thirdPost.body.id
 
 
-
-
-
-
-
-
     });
     /////////////////////////////    POST LIKE FLOW    /////////////////////////////////////////
     it('ERROR 400 / 404', async () => {
@@ -287,16 +281,10 @@ describe('/12 like posts', () => {
                         userId: expect.any(String),
                         login: expect.any(String),
                     },
-                    {
-                        addedAt: expect.any(String),
-                        userId: expect.any(String),
-                        login: expect.any(String),
-                    }
                 ]
             }
 
         })
-
 
 
     });
@@ -364,9 +352,8 @@ describe('/12 like posts', () => {
         })
 
 
-
     });
-    it('PUT 2 DISLIKE AND 1 LIKE IN THIRD POST', async () => {
+    it('PUT 2 DISLIKE AND 1 LIKE IN THIRD POST | GET POST AFTER EACH LIKE', async () => {
 
         await request(app)
             .put(`/posts/${thirdPostId}/like-status`)
@@ -374,11 +361,53 @@ describe('/12 like posts', () => {
             .send({"likeStatus": "Dislike"})
             .expect(204)
 
+        let post = await request(app)
+            .get(`/posts/${thirdPostId}`)
+            .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
+
+        expect(post.body).toEqual({
+            id: thirdPostId,
+            content: 'test thirdPost content',
+            blogId: expect.any(String),
+            blogName: expect.any(String),
+            createdAt: expect.any(String),
+            shortDescription: 'shortDescription test thirdPost',
+            title: 'it thirdPost test post',
+            extendedLikesInfo: {
+                likesCount: 0,
+                dislikesCount: 1,
+                myStatus: "Dislike",
+                newestLikes: []
+            }
+
+        })
+
         await request(app)
             .put(`/posts/${thirdPostId}/like-status`)
             .set('Authorization', `Bearer ${userTwo.accessToken}`)
             .send({"likeStatus": "Dislike"})
             .expect(204)
+
+        post = await request(app)
+            .get(`/posts/${thirdPostId}`)
+            .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
+
+        expect(post.body).toEqual({
+            id: thirdPostId,
+            content: 'test thirdPost content',
+            blogId: expect.any(String),
+            blogName: expect.any(String),
+            createdAt: expect.any(String),
+            shortDescription: 'shortDescription test thirdPost',
+            title: 'it thirdPost test post',
+            extendedLikesInfo: {
+                likesCount: 0,
+                dislikesCount: 2,
+                myStatus: "Dislike",
+                newestLikes: []
+            }
+
+        })
 
         await request(app)
             .put(`/posts/${thirdPostId}/like-status`)
@@ -386,12 +415,7 @@ describe('/12 like posts', () => {
             .send({"likeStatus": "Like"})
             .expect(204)
 
-
-    });
-    it('GET LIKE STATUS THIRD POST', async () => {
-
-        // FIRST USER GET COMMENT | SHOULD RETURN 2 LIKE 2 DISLIKE AND MY STATUS `Like`
-        let post = await request(app)
+        post = await request(app)
             .get(`/posts/${thirdPostId}`)
             .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
 
@@ -412,22 +436,11 @@ describe('/12 like posts', () => {
                         addedAt: expect.any(String),
                         userId: expect.any(String),
                         login: expect.any(String),
-                    },
-                    {
-                        addedAt: expect.any(String),
-                        userId: expect.any(String),
-                        login: expect.any(String),
-                    },
-                    {
-                        addedAt: expect.any(String),
-                        userId: expect.any(String),
-                        login: expect.any(String),
                     }
                 ]
             }
 
         })
-
 
 
     });
