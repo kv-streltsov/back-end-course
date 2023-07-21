@@ -196,7 +196,7 @@ describe('/12 like posts', () => {
 
 
     });
-    /////////////////////////////    LIKE FLOW    /////////////////////////////////////////
+    /////////////////////////////    POST LIKE FLOW    /////////////////////////////////////////
     it('ERROR 400 / 404', async () => {
         // PUSH LIKE | comment id incorrect | SHOULD RETURN 404
         await request(app)
@@ -217,7 +217,7 @@ describe('/12 like posts', () => {
         })
 
     });
-    it('PUSH 2 LIKE AND 2 DISLIKE', async () => {
+    it('PUSH 2 LIKE AND 2 DISLIKE IN FIRST POST', async () => {
 
         await request(app)
             .put(`/posts/${postId}/like-status`)
@@ -244,7 +244,7 @@ describe('/12 like posts', () => {
             .expect(204)
 
     });
-    it('GET LIKE STATUS', async () => {
+    it('GET LIKE STATUS FIRST POST', async () => {
 
         // FIRST USER GET COMMENT | SHOULD RETURN 2 LIKE 2 DISLIKE AND MY STATUS `Like`
         let post = await request(app)
@@ -285,6 +285,34 @@ describe('/12 like posts', () => {
 
         })
 
+
+
+    });
+    it('PUSH 4 LIKE IN SECOND POST AND GET LIKE STATUS', async () => {
+        console.log(`userOne.accessToken`, userOne.accessToken)
+        await request(app)
+            .put(`/posts/${postSecondId}/like-status`)
+            .set('Authorization', `Bearer ${userOne.accessToken}`)
+            .send({"likeStatus": "Like"})
+            .expect(204)
+
+        await request(app)
+            .put(`/posts/${postSecondId}/like-status`)
+            .set('Authorization', `Bearer ${userTwo.accessToken}`)
+            .send({"likeStatus": "Like"})
+            .expect(204)
+
+        await request(app)
+            .put(`/posts/${postSecondId}/like-status`)
+            .set('Authorization', `Bearer ${userThree.accessToken}`)
+            .send({"likeStatus": "Like"})
+            .expect(204)
+
+        await request(app)
+            .put(`/posts/${postSecondId}/like-status`)
+            .set('Authorization', `Bearer ${userFour.accessToken}`)
+            .send({"likeStatus": "Like"})
+            .expect(204)
 
 
     });

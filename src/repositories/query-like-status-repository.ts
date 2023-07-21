@@ -55,7 +55,7 @@ export class QueryLikeStatusRepositoryClass {
 
         const like = await likesStatusModel.countDocuments({entityId: entityId, status: LikeStatus.Like}).lean()
         const disLike = await likesStatusModel.countDocuments({entityId: entityId, status: LikeStatus.Dislike}).lean()
-        const newestLikes = await likesStatusModel.find({entityId: entityId}).sort({addedAt:1}).limit(3).select({
+        const newestLikes = await likesStatusModel.find({entityId: entityId}).sort({addedAt:-1}).limit(3).select({
             __v: 0,
             _id: 0,
             entityId: 0,
