@@ -33,6 +33,7 @@ const userFour = {
 
 let postId: any
 let postSecondId: any
+let thirdPostId: any
 
 describe('/12 like posts', () => {
     /////////////////////////////    REPARATION    /////////////////////////////////////////
@@ -118,7 +119,7 @@ describe('/12 like posts', () => {
 
 
     });
-    it('CREATE BLOG -> POST ', async () => {
+    it('CREATE BLOG -> THREE POST ', async () => {
 
         // CREATE NEW BLOG
         const blog = await request(app)
@@ -185,8 +186,19 @@ describe('/12 like posts', () => {
             }
         })
 
+        const thirdPost = await request(app)
+            .post(`/blogs/${blog.body.id}/posts`)
+            .auth('admin', 'qwerty')
+            .send({
+                title: 'it thirdPost test post',
+                blogId: blog.body.id,
+                content: 'test thirdPost content',
+                shortDescription: 'shortDescription test thirdPost'
+            }).expect(201)
+
         postId = post.body.id
         postSecondId = postSecond.body.id
+        thirdPostId = thirdPost.body.id
 
 
 
@@ -217,7 +229,7 @@ describe('/12 like posts', () => {
         })
 
     });
-    it('PUSH 2 LIKE AND 2 DISLIKE IN FIRST POST', async () => {
+    it('PUT 2 LIKE AND 2 DISLIKE IN FIRST POST', async () => {
 
         await request(app)
             .put(`/posts/${postId}/like-status`)
@@ -288,8 +300,7 @@ describe('/12 like posts', () => {
 
 
     });
-    it('PUSH 4 LIKE IN SECOND POST AND GET LIKE STATUS', async () => {
-        console.log(`userOne.accessToken`, userOne.accessToken)
+    it('PUT 4 LIKE IN SECOND POST AND GET LIKE STATUS', async () => {
         await request(app)
             .put(`/posts/${postSecondId}/like-status`)
             .set('Authorization', `Bearer ${userOne.accessToken}`)
@@ -313,6 +324,110 @@ describe('/12 like posts', () => {
             .set('Authorization', `Bearer ${userFour.accessToken}`)
             .send({"likeStatus": "Like"})
             .expect(204)
+
+        let post = await request(app)
+            .get(`/posts/${postSecondId}`)
+            .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
+
+
+        expect(post.body).toEqual({
+            id: postSecondId,
+            content: 'test post content',
+            blogId: expect.any(String),
+            blogName: expect.any(String),
+            createdAt: expect.any(String),
+            shortDescription: "shortDescription test post",
+            title: "it test test post",
+            extendedLikesInfo: {
+                likesCount: 4,
+                dislikesCount: 0,
+                myStatus: "Like",
+                newestLikes: [
+                    {
+                        addedAt: expect.any(String),
+                        userId: userFour.id,
+                        login: userFour.login,
+                    },
+                    {
+                        addedAt: expect.any(String),
+                        userId: userThree.id,
+                        login: userThree.login,
+                    },
+                    {
+                        addedAt: expect.any(String),
+                        userId: userTwo.id,
+                        login: userTwo.login,
+                    }
+                ]
+            }
+
+        })
+
+
+
+    });
+    it('PUT 2 DISLIKE AND 1 LIKE IN THIRD POST', async () => {
+
+        await request(app)
+            .put(`/posts/${thirdPostId}/like-status`)
+            .set('Authorization', `Bearer ${userOne.accessToken}`)
+            .send({"likeStatus": "Dislike"})
+            .expect(204)
+
+        await request(app)
+            .put(`/posts/${thirdPostId}/like-status`)
+            .set('Authorization', `Bearer ${userTwo.accessToken}`)
+            .send({"likeStatus": "Dislike"})
+            .expect(204)
+
+        await request(app)
+            .put(`/posts/${thirdPostId}/like-status`)
+            .set('Authorization', `Bearer ${userThree.accessToken}`)
+            .send({"likeStatus": "Like"})
+            .expect(204)
+
+
+    });
+    it('GET LIKE STATUS THIRD POST', async () => {
+
+        // FIRST USER GET COMMENT | SHOULD RETURN 2 LIKE 2 DISLIKE AND MY STATUS `Like`
+        let post = await request(app)
+            .get(`/posts/${thirdPostId}`)
+            .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
+
+        expect(post.body).toEqual({
+            id: thirdPostId,
+            content: 'test thirdPost content',
+            blogId: expect.any(String),
+            blogName: expect.any(String),
+            createdAt: expect.any(String),
+            shortDescription: 'shortDescription test thirdPost',
+            title: 'it thirdPost test post',
+            extendedLikesInfo: {
+                likesCount: 1,
+                dislikesCount: 2,
+                myStatus: "Dislike",
+                newestLikes: [
+                    {
+                        addedAt: expect.any(String),
+                        userId: expect.any(String),
+                        login: expect.any(String),
+                    },
+                    {
+                        addedAt: expect.any(String),
+                        userId: expect.any(String),
+                        login: expect.any(String),
+                    },
+                    {
+                        addedAt: expect.any(String),
+                        userId: expect.any(String),
+                        login: expect.any(String),
+                    }
+                ]
+            }
+
+        })
+
 
 
     });

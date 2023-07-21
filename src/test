@@ -1,48 +1,4 @@
   > Homework 12  Posts likes  PUT -> "/posts/:postId/like-status": create post then:
-   like the post by user 1, user 2, user 3, user 4.
-   get the post after each like by user 1.
-   NewestLikes should be sorted in descending; status 204;  used additional methods: POST => /blogs, POST => /posts, GET => /posts/:id;
-
-    expect(received).toStrictEqual(expected) // deep equality
-
-    - Expected  - 4
-    + Received  + 4
-
-    @@ -8,17 +8,17 @@
-          "likesCount": 2,
-          "myStatus": "Like",
-          "newestLikes": Array [
-            Object {
-              "addedAt": Any<String>,
-    -         "login": "7394lg",
-    -         "userId": "4d6795a5-baff-4df2-a69b-779f6901209f",
-    +         "login": "7393lg",
-    +         "userId": "216ef1bc-15d4-4703-86e2-a3989169710a",
-            },
-            Object {
-              "addedAt": Any<String>,
-    -         "login": "7393lg",
-    -         "userId": "216ef1bc-15d4-4703-86e2-a3989169710a",
-    +         "login": "7394lg",
-    +         "userId": "4d6795a5-baff-4df2-a69b-779f6901209f",
-            },
-          ],
-        },
-        "id": "1689911674641",
-        "shortDescription": "description",
-
-      110 |       .catch((error) => handleTestError(error));
-      111 |
-    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
-          |                                 ^
-      113 |   }
-      114 | };
-      115 |
-
-      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
-      at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:84:7)
-
-  > Homework 12  Posts likes  PUT -> "/posts/:postId/like-status": create post then:
    dislike the post by user 1, user 2;
    like the post by user 3;
    get the post after each like by user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, GET => /posts/:id;
@@ -53,7 +9,7 @@
     + Received  + 7
 
     @@ -5,11 +5,17 @@
-        "createdAt": "2023-07-21T03:54:35.851Z",
+        "createdAt": "2023-07-21T05:04:21.283Z",
         "extendedLikesInfo": Object {
           "dislikesCount": 1,
           "likesCount": 0,
@@ -61,13 +17,13 @@
     -     "newestLikes": Array [],
     +     "newestLikes": Array [
     +       Object {
-    +         "addedAt": "2023-07-21T03:54:36.062Z",
-    +         "login": "7393lg",
-    +         "userId": "216ef1bc-15d4-4703-86e2-a3989169710a",
+    +         "addedAt": "2023-07-21T05:04:21.486Z",
+    +         "login": "1290lg",
+    +         "userId": "8c31f050-fb85-4c05-88a9-eb4fb6e83433",
     +       },
     +     ],
         },
-        "id": "1689911675851",
+        "id": "1689915861283",
         "shortDescription": "description",
         "title": "post title",
       }
@@ -95,7 +51,7 @@
     + Received  + 7
 
     @@ -5,11 +5,17 @@
-        "createdAt": "2023-07-21T03:54:38.087Z",
+        "createdAt": "2023-07-21T05:04:23.474Z",
         "extendedLikesInfo": Object {
           "dislikesCount": 1,
           "likesCount": 0,
@@ -103,13 +59,13 @@
     -     "newestLikes": Array [],
     +     "newestLikes": Array [
     +       Object {
-    +         "addedAt": "2023-07-21T03:54:38.853Z",
-    +         "login": "7393lg",
-    +         "userId": "216ef1bc-15d4-4703-86e2-a3989169710a",
+    +         "addedAt": "2023-07-21T05:04:24.136Z",
+    +         "login": "1290lg",
+    +         "userId": "8c31f050-fb85-4c05-88a9-eb4fb6e83433",
     +       },
     +     ],
         },
-        "id": "1689911678087",
+        "id": "1689915863474",
         "shortDescription": "description",
         "title": "post title",
       }
@@ -134,22 +90,22 @@
     - Expected  - 0
     + Received  + 5
 
-    @@ -11,10 +11,15 @@
+    @@ -8,10 +8,15 @@
+          "likesCount": 1,
+          "myStatus": "Like",
+          "newestLikes": Array [
             Object {
               "addedAt": Any<String>,
-              "login": "7393lg",
-              "userId": "216ef1bc-15d4-4703-86e2-a3989169710a",
-            },
-    +       Object {
-    +         "addedAt": "2023-07-21T03:54:40.344Z",
-    +         "login": "7394lg",
-    +         "userId": "4d6795a5-baff-4df2-a69b-779f6901209f",
+    +         "login": "1291lg",
+    +         "userId": "7fe35f81-539c-49ef-86b9-2a8162147f38",
     +       },
+    +       Object {
+    +         "addedAt": "2023-07-21T05:04:25.498Z",
+              "login": "1290lg",
+              "userId": "8c31f050-fb85-4c05-88a9-eb4fb6e83433",
+            },
           ],
         },
-        "id": "1689911679698",
-        "shortDescription": "description",
-        "title": "post title",
 
       110 |       .catch((error) => handleTestError(error));
       111 |
@@ -174,9 +130,9 @@
 
     Passed queryParams: ""
 
-    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689911689018","createdAt":"2023-07-21T03:54:49.018Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689911687764","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"35cac103-5768-4f3a-b19e-712198481c7b","login":"905lg"}]}},{"id":"1689911688819","createdAt":"2023-07-21T03:54:48.819Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689911687764","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"}]}},{"id":"1689911688626","createdAt":"2023-07-21T03:54:48.626Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689911687764","extendedLikesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"502ce227-10a0-4633-8e65-217317076f06","login":"907lg"},{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"},{"addedAt":Any<String>,"userId":"7f335d7f-a34f-40f8-a32d-e029edfbdda4","login":"908lg"}]}},{"id":"1689911688434","createdAt":"2023-07-21T03:54:48.434Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689911687764","extendedLikesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike","newestLikes":[]}},{"id":"1689911688242","createdAt":"2023-07-21T03:54:48.242Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689911687764","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"502ce227-10a0-4633-8e65-217317076f06","login":"907lg"},{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"}]}},{"id":"1689911687969","createdAt":"2023-07-21T03:54:47.969Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689911687764","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"},{"addedAt":Any<String>,"userId":"35cac103-5768-4f3a-b19e-712198481c7b","login":"905lg"}]}}]}
+    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689915874736","createdAt":"2023-07-21T05:04:34.736Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689915873346","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"e25e281d-d72c-4134-8c09-94b942ed51a2","login":"6606lg"}]}},{"id":"1689915874522","createdAt":"2023-07-21T05:04:34.522Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689915873346","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"}]}},{"id":"1689915874326","createdAt":"2023-07-21T05:04:34.326Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689915873346","extendedLikesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"f5e14b79-4870-4fb3-b7c8-1aef6c1a0be2","login":"6608lg"},{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"},{"addedAt":Any<String>,"userId":"693bcb68-6eb1-42f5-a340-8643c25845d0","login":"6609lg"}]}},{"id":"1689915874072","createdAt":"2023-07-21T05:04:34.072Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689915873346","extendedLikesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike","newestLikes":[]}},{"id":"1689915873879","createdAt":"2023-07-21T05:04:33.879Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689915873346","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"f5e14b79-4870-4fb3-b7c8-1aef6c1a0be2","login":"6608lg"},{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"}]}},{"id":"1689915873565","createdAt":"2023-07-21T05:04:33.565Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689915873346","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"},{"addedAt":Any<String>,"userId":"e25e281d-d72c-4134-8c09-94b942ed51a2","login":"6606lg"}]}}]}
 
-    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689911689018","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911687764","blogName":"new blog","createdAt":"2023-07-21T03:54:49.018Z"},{"id":"1689911688819","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911687764","blogName":"new blog","createdAt":"2023-07-21T03:54:48.819Z"},{"id":"1689911688626","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911687764","blogName":"new blog","createdAt":"2023-07-21T03:54:48.626Z"},{"id":"1689911688434","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911687764","blogName":"new blog","createdAt":"2023-07-21T03:54:48.434Z"},{"id":"1689911688242","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911687764","blogName":"new blog","createdAt":"2023-07-21T03:54:48.242Z"},{"id":"1689911687969","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911687764","blogName":"new blog","createdAt":"2023-07-21T03:54:47.969Z"}]}
+    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689915874736","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915873346","blogName":"new blog","createdAt":"2023-07-21T05:04:34.736Z"},{"id":"1689915874522","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915873346","blogName":"new blog","createdAt":"2023-07-21T05:04:34.522Z"},{"id":"1689915874326","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915873346","blogName":"new blog","createdAt":"2023-07-21T05:04:34.326Z"},{"id":"1689915874072","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915873346","blogName":"new blog","createdAt":"2023-07-21T05:04:34.072Z"},{"id":"1689915873879","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915873346","blogName":"new blog","createdAt":"2023-07-21T05:04:33.879Z"},{"id":"1689915873565","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915873346","blogName":"new blog","createdAt":"2023-07-21T05:04:33.565Z"}]}
 
     Attention: "addedAt": Any<String> is equal to any date string, don't worry about highlighting this field
 
@@ -185,10 +141,10 @@
 
     @@ -3,141 +3,55 @@
           Object {
-            "blogId": "1689911687764",
+            "blogId": "1689915873346",
             "blogName": "new blog",
             "content": "new post content",
-            "createdAt": "2023-07-21T03:54:49.018Z",
+            "createdAt": "2023-07-21T05:04:34.736Z",
     -       "extendedLikesInfo": Object {
     -         "dislikesCount": 1,
     -         "likesCount": 1,
@@ -196,20 +152,20 @@
     -         "newestLikes": Array [
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "905lg",
-    -             "userId": "35cac103-5768-4f3a-b19e-712198481c7b",
+    -             "login": "6606lg",
+    -             "userId": "e25e281d-d72c-4134-8c09-94b942ed51a2",
     -           },
     -         ],
     -       },
-            "id": "1689911689018",
+            "id": "1689915874736",
             "shortDescription": "description",
             "title": "post title",
           },
           Object {
-            "blogId": "1689911687764",
+            "blogId": "1689915873346",
             "blogName": "new blog",
             "content": "new post content",
-            "createdAt": "2023-07-21T03:54:48.819Z",
+            "createdAt": "2023-07-21T05:04:34.522Z",
     -       "extendedLikesInfo": Object {
     -         "dislikesCount": 1,
     -         "likesCount": 1,
@@ -217,20 +173,20 @@
     -         "newestLikes": Array [
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "906lg",
-    -             "userId": "e4902f25-f33f-47a5-a13b-18ffe9274a7a",
+    -             "login": "6607lg",
+    -             "userId": "32f2e4a0-158a-4d7a-9f9a-8c2781a68bde",
     -           },
     -         ],
     -       },
-            "id": "1689911688819",
+            "id": "1689915874522",
             "shortDescription": "description",
             "title": "post title",
           },
           Object {
-            "blogId": "1689911687764",
+            "blogId": "1689915873346",
             "blogName": "new blog",
             "content": "new post content",
-            "createdAt": "2023-07-21T03:54:48.626Z",
+            "createdAt": "2023-07-21T05:04:34.326Z",
     -       "extendedLikesInfo": Object {
     -         "dislikesCount": 0,
     -         "likesCount": 4,
@@ -238,45 +194,45 @@
     -         "newestLikes": Array [
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "907lg",
-    -             "userId": "502ce227-10a0-4633-8e65-217317076f06",
+    -             "login": "6608lg",
+    -             "userId": "f5e14b79-4870-4fb3-b7c8-1aef6c1a0be2",
     -           },
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "906lg",
-    -             "userId": "e4902f25-f33f-47a5-a13b-18ffe9274a7a",
+    -             "login": "6607lg",
+    -             "userId": "32f2e4a0-158a-4d7a-9f9a-8c2781a68bde",
     -           },
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "908lg",
-    -             "userId": "7f335d7f-a34f-40f8-a32d-e029edfbdda4",
+    -             "login": "6609lg",
+    -             "userId": "693bcb68-6eb1-42f5-a340-8643c25845d0",
     -           },
     -         ],
     -       },
-            "id": "1689911688626",
+            "id": "1689915874326",
             "shortDescription": "description",
             "title": "post title",
           },
           Object {
-            "blogId": "1689911687764",
+            "blogId": "1689915873346",
             "blogName": "new blog",
             "content": "new post content",
-            "createdAt": "2023-07-21T03:54:48.434Z",
+            "createdAt": "2023-07-21T05:04:34.072Z",
     -       "extendedLikesInfo": Object {
     -         "dislikesCount": 1,
     -         "likesCount": 0,
     -         "myStatus": "Dislike",
     -         "newestLikes": Array [],
     -       },
-            "id": "1689911688434",
+            "id": "1689915874072",
             "shortDescription": "description",
             "title": "post title",
           },
           Object {
-            "blogId": "1689911687764",
+            "blogId": "1689915873346",
             "blogName": "new blog",
             "content": "new post content",
-            "createdAt": "2023-07-21T03:54:48.242Z",
+            "createdAt": "2023-07-21T05:04:33.879Z",
     -       "extendedLikesInfo": Object {
     -         "dislikesCount": 0,
     -         "likesCount": 2,
@@ -284,25 +240,25 @@
     -         "newestLikes": Array [
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "907lg",
-    -             "userId": "502ce227-10a0-4633-8e65-217317076f06",
+    -             "login": "6608lg",
+    -             "userId": "f5e14b79-4870-4fb3-b7c8-1aef6c1a0be2",
     -           },
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "906lg",
-    -             "userId": "e4902f25-f33f-47a5-a13b-18ffe9274a7a",
+    -             "login": "6607lg",
+    -             "userId": "32f2e4a0-158a-4d7a-9f9a-8c2781a68bde",
     -           },
     -         ],
     -       },
-            "id": "1689911688242",
+            "id": "1689915873879",
             "shortDescription": "description",
             "title": "post title",
           },
           Object {
-            "blogId": "1689911687764",
+            "blogId": "1689915873346",
             "blogName": "new blog",
             "content": "new post content",
-            "createdAt": "2023-07-21T03:54:47.969Z",
+            "createdAt": "2023-07-21T05:04:33.565Z",
     -       "extendedLikesInfo": Object {
     -         "dislikesCount": 0,
     -         "likesCount": 2,
@@ -310,17 +266,17 @@
     -         "newestLikes": Array [
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "906lg",
-    -             "userId": "e4902f25-f33f-47a5-a13b-18ffe9274a7a",
+    -             "login": "6607lg",
+    -             "userId": "32f2e4a0-158a-4d7a-9f9a-8c2781a68bde",
     -           },
     -           Object {
     -             "addedAt": Any<String>,
-    -             "login": "905lg",
-    -             "userId": "35cac103-5768-4f3a-b19e-712198481c7b",
+    -             "login": "6606lg",
+    -             "userId": "e25e281d-d72c-4134-8c09-94b942ed51a2",
     -           },
     -         ],
     -       },
-            "id": "1689911687969",
+            "id": "1689915873565",
             "shortDescription": "description",
             "title": "post title",
           },
@@ -349,9 +305,9 @@
 
     Passed queryParams: ""
 
-    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689911693724","createdAt":"2023-07-21T03:54:53.724Z","blogName":"new blog","blogId":"1689911692480","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"35cac103-5768-4f3a-b19e-712198481c7b","login":"905lg"}]}},{"id":"1689911693512","createdAt":"2023-07-21T03:54:53.512Z","blogName":"new blog","blogId":"1689911692480","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"}]}},{"id":"1689911693306","createdAt":"2023-07-21T03:54:53.306Z","blogName":"new blog","blogId":"1689911692480","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"502ce227-10a0-4633-8e65-217317076f06","login":"907lg"},{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"},{"addedAt":Any<String>,"userId":"7f335d7f-a34f-40f8-a32d-e029edfbdda4","login":"908lg"}]}},{"id":"1689911693094","createdAt":"2023-07-21T03:54:53.094Z","blogName":"new blog","blogId":"1689911692480","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike","newestLikes":[]}},{"id":"1689911692891","createdAt":"2023-07-21T03:54:52.891Z","blogName":"new blog","blogId":"1689911692480","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"502ce227-10a0-4633-8e65-217317076f06","login":"907lg"},{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"}]}},{"id":"1689911692687","createdAt":"2023-07-21T03:54:52.687Z","blogName":"new blog","blogId":"1689911692480","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"e4902f25-f33f-47a5-a13b-18ffe9274a7a","login":"906lg"},{"addedAt":Any<String>,"userId":"35cac103-5768-4f3a-b19e-712198481c7b","login":"905lg"}]}}]}
+    Expected: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689915879264","createdAt":"2023-07-21T05:04:39.264Z","blogName":"new blog","blogId":"1689915878053","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"e25e281d-d72c-4134-8c09-94b942ed51a2","login":"6606lg"}]}},{"id":"1689915879071","createdAt":"2023-07-21T05:04:39.071Z","blogName":"new blog","blogId":"1689915878053","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":1,"dislikesCount":1,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"}]}},{"id":"1689915878880","createdAt":"2023-07-21T05:04:38.880Z","blogName":"new blog","blogId":"1689915878053","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":4,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"f5e14b79-4870-4fb3-b7c8-1aef6c1a0be2","login":"6608lg"},{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"},{"addedAt":Any<String>,"userId":"693bcb68-6eb1-42f5-a340-8643c25845d0","login":"6609lg"}]}},{"id":"1689915878661","createdAt":"2023-07-21T05:04:38.661Z","blogName":"new blog","blogId":"1689915878053","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":0,"dislikesCount":1,"myStatus":"Dislike","newestLikes":[]}},{"id":"1689915878448","createdAt":"2023-07-21T05:04:38.448Z","blogName":"new blog","blogId":"1689915878053","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"None","newestLikes":[{"addedAt":Any<String>,"userId":"f5e14b79-4870-4fb3-b7c8-1aef6c1a0be2","login":"6608lg"},{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"}]}},{"id":"1689915878254","createdAt":"2023-07-21T05:04:38.254Z","blogName":"new blog","blogId":"1689915878053","content":"new post content","shortDescription":"description","title":"post title","extendedLikesInfo":{"likesCount":2,"dislikesCount":0,"myStatus":"Like","newestLikes":[{"addedAt":Any<String>,"userId":"32f2e4a0-158a-4d7a-9f9a-8c2781a68bde","login":"6607lg"},{"addedAt":Any<String>,"userId":"e25e281d-d72c-4134-8c09-94b942ed51a2","login":"6606lg"}]}}]}
 
-    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689911693724","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911692480","blogName":"new blog","createdAt":"2023-07-21T03:54:53.724Z"},{"id":"1689911693512","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911692480","blogName":"new blog","createdAt":"2023-07-21T03:54:53.512Z"},{"id":"1689911693306","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911692480","blogName":"new blog","createdAt":"2023-07-21T03:54:53.306Z"},{"id":"1689911693094","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911692480","blogName":"new blog","createdAt":"2023-07-21T03:54:53.094Z"},{"id":"1689911692891","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911692480","blogName":"new blog","createdAt":"2023-07-21T03:54:52.891Z"},{"id":"1689911692687","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689911692480","blogName":"new blog","createdAt":"2023-07-21T03:54:52.687Z"}]}
+    Received: {"pagesCount":1,"page":1,"pageSize":10,"totalCount":6,"items":[{"id":"1689915879264","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915878053","blogName":"new blog","createdAt":"2023-07-21T05:04:39.264Z"},{"id":"1689915879071","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915878053","blogName":"new blog","createdAt":"2023-07-21T05:04:39.071Z"},{"id":"1689915878880","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915878053","blogName":"new blog","createdAt":"2023-07-21T05:04:38.880Z"},{"id":"1689915878661","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915878053","blogName":"new blog","createdAt":"2023-07-21T05:04:38.661Z"},{"id":"1689915878448","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915878053","blogName":"new blog","createdAt":"2023-07-21T05:04:38.448Z"},{"id":"1689915878254","title":"post title","shortDescription":"description","content":"new post content","blogId":"1689915878053","blogName":"new blog","createdAt":"2023-07-21T05:04:38.254Z"}]}
 
       105 |
       106 |     if (expectedData) {
@@ -362,5 +318,4 @@
       110 | };
 
       at performQueryParamsChecker (src/tests/jest/back/testHelpers/performCheckers.ts:107:20)
-          at runMicrotasks (<anonymous>)
       at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:306:7)
