@@ -42,6 +42,18 @@ export class PostController {
             req.query?.sortDirection === 'asc' ? SortType.asc : SortType.desc,
             req.query?.sortBy && req.query.sortBy,
         )
+
+
+        posts.items =  await Promise.all(posts.items.map(async post => {
+            const extendedLikesInfo = await this.queryLikeStatusRepository.getExtendedLikesInfo(post.id, req.user === undefined ? null : req.user)
+            return {
+                ...post,
+                extendedLikesInfo
+            }
+        }))
+
+
+        // const extendedLikesInfo = await this.queryLikeStatusRepository.getExtendedLikesInfo(req.params.id, req.user === undefined ? null : req.user)
         if (posts !== null) {
             res.status(HttpStatusCode.OK).send(posts)
         } else res.sendStatus(HttpStatusCode.NOT_FOUND)
