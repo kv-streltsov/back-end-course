@@ -1,0 +1,332 @@
+  > Homework 12  Posts likes  POST ->
+  "/posts": should create new post for an existing blog; status 201; content: created post;
+  used additional methods: POST -> /blogs, GET -> /posts/:id;
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 6
+    + Received  + 0
+
+      Object {
+        "blogId": Any<String>,
+        "blogName": Any<String>,
+        "content": Any<String>,
+        "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+    -   "extendedLikesInfo": Object {
+    -     "dislikesCount": Any<Number>,
+    -     "likesCount": Any<Number>,
+    -     "myStatus": StringMatching /^Like$|^Dislike$|^None$/,
+    -     "newestLikes": Any<Array>,
+    -   },
+        "id": Any<String>,
+        "shortDescription": Any<String>,
+        "title": Any<String>,
+      }
+
+      63 |   expectedStatus = 201,
+      64 | }: IPerformCreateTestFlowPayload<T>) => {
+    > 65 |   expect(createEntityResponseData).toEqual(entitySchema);
+         |                                    ^
+      66 |   expect(createEntityResponseStatus).toBe(expectedStatus);
+      67 |
+      68 |   const { data: getByIdResponseData } = await axiosInstance
+
+      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:65:36)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:100:32)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 12  Posts likes  GET -> "/posts/:id": should return status 200; content: post by id;  used additional methods: POST -> /blogs, POST -> /posts;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 6
+
+      Object {
+        "blogId": "1689829172814",
+        "blogName": "new blog",
+        "content": "new post content",
+        "createdAt": "2023-07-20T04:59:32.972Z",
+    +   "extendedLikesInfo": Object {
+    +     "dislikesCount": 0,
+    +     "likesCount": 0,
+    +     "myStatus": "None",
+    +     "newestLikes": Array [],
+    +   },
+        "id": "1689829172972",
+        "shortDescription": "description",
+        "title": "post title",
+      }
+
+      85 |   expect(getByIdResponseStatus).toBe(200);
+      86 |   expect(getByIdResponseData).toEqual(entitySchema);
+    > 87 |   expect(getByIdResponseData).toStrictEqual(createEntityResponseData);
+         |                               ^
+      88 | };
+      89 |
+      90 | export const performPUTTestFlow = async <T>({
+
+      at performGETByIdTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:87:31)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/posts/posts-describe.ts:132:7)
+
+  > Homework 12  Posts likes  POST -> "/blogs/:blogId/posts": should create new post for specific blog; status 201; content: created post;  used additional methods: POST -> /blogs, GET -> /posts/:id;
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 6
+    + Received  + 0
+
+      Object {
+        "blogId": Any<String>,
+        "blogName": Any<String>,
+        "content": Any<String>,
+        "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/,
+    -   "extendedLikesInfo": Object {
+    -     "dislikesCount": Any<Number>,
+    -     "likesCount": Any<Number>,
+    -     "myStatus": StringMatching /^Like$|^Dislike$|^None$/,
+    -     "newestLikes": Any<Array>,
+    -   },
+        "id": Any<String>,
+        "shortDescription": Any<String>,
+        "title": Any<String>,
+      }
+
+      63 |   expectedStatus = 201,
+      64 | }: IPerformCreateTestFlowPayload<T>) => {
+    > 65 |   expect(createEntityResponseData).toEqual(entitySchema);
+         |                                    ^
+      66 |   expect(createEntityResponseStatus).toBe(expectedStatus);
+      67 |
+      68 |   const { data: getByIdResponseData } = await axiosInstance
+
+      at performPOSTTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestsFlow.ts:65:36)
+      at Object.<anonymous> (src/tests/jest/back/describes/blogs/blogs-with-pagination-describe.ts:97:32)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 12  Posts likes  PUT -> "/posts/:postId/like-status": create post then:
+   like the post by user 1, user 2, user 3, user 4.
+   get the post after each like by user 1.
+   NewestLikes should be sorted in descending; status 204;  used additional methods: POST => /blogs, POST => /posts, GET => /posts/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 4
+    + Received  + 4
+
+    @@ -8,17 +8,17 @@
+          "likesCount": 2,
+          "myStatus": "Like",
+          "newestLikes": Array [
+            Object {
+              "addedAt": Any<String>,
+    -         "login": "5516lg",
+    -         "userId": "de5027f0-b4a6-47be-981d-5f7ffa02b274",
+    +         "login": "5515lg",
+    +         "userId": "d364c265-3df3-4d0a-ac6f-2621271ee16d",
+            },
+            Object {
+              "addedAt": Any<String>,
+    -         "login": "5515lg",
+    -         "userId": "d364c265-3df3-4d0a-ac6f-2621271ee16d",
+    +         "login": "5516lg",
+    +         "userId": "de5027f0-b4a6-47be-981d-5f7ffa02b274",
+            },
+          ],
+        },
+        "id": "1689829182488",
+        "shortDescription": "description",
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:84:7)
+
+  > Homework 12  Posts likes  PUT -> "/posts/:postId/like-status": create post then:
+   dislike the post by user 1, user 2;
+   like the post by user 3;
+   get the post after each like by user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, GET => /posts/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 7
+
+    @@ -5,11 +5,17 @@
+        "createdAt": "2023-07-20T04:59:43.653Z",
+        "extendedLikesInfo": Object {
+          "dislikesCount": 1,
+          "likesCount": 0,
+          "myStatus": "Dislike",
+    -     "newestLikes": Array [],
+    +     "newestLikes": Array [
+    +       Object {
+    +         "addedAt": "2023-07-20T04:59:43.824Z",
+    +         "login": "5515lg",
+    +         "userId": "d364c265-3df3-4d0a-ac6f-2621271ee16d",
+    +       },
+    +     ],
+        },
+        "id": "1689829183653",
+        "shortDescription": "description",
+        "title": "post title",
+      }
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:115:7)
+
+  > Homework 12  Posts likes  PUT -> "/posts/:postId/like-status": create post then:
+   like the post by user 1;
+   dislike the post by user 1;
+   set 'none' status by user 1;
+   get the post after each like by user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, GET => /posts/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 7
+
+    @@ -5,11 +5,17 @@
+        "createdAt": "2023-07-20T04:59:45.744Z",
+        "extendedLikesInfo": Object {
+          "dislikesCount": 1,
+          "likesCount": 0,
+          "myStatus": "Dislike",
+    -     "newestLikes": Array [],
+    +     "newestLikes": Array [
+    +       Object {
+    +         "addedAt": "2023-07-20T04:59:46.221Z",
+    +         "login": "5515lg",
+    +         "userId": "d364c265-3df3-4d0a-ac6f-2621271ee16d",
+    +       },
+    +     ],
+        },
+        "id": "1689829185744",
+        "shortDescription": "description",
+        "title": "post title",
+      }
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:177:7)
+
+  > Homework 12  Posts likes  PUT -> "/posts/:postId/like-status": create post then:
+   like the post by user 1 then get by user 2;
+   dislike the post by user 2 then get by the user 1; status 204;  used additional methods: POST => /blogs, POST => /posts, GET => /posts/:id;
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 0
+    + Received  + 5
+
+    @@ -11,10 +11,15 @@
+            Object {
+              "addedAt": Any<String>,
+              "login": "5515lg",
+              "userId": "d364c265-3df3-4d0a-ac6f-2621271ee16d",
+            },
+    +       Object {
+    +         "addedAt": "2023-07-20T04:59:47.312Z",
+    +         "login": "5516lg",
+    +         "userId": "de5027f0-b4a6-47be-981d-5f7ffa02b274",
+    +       },
+          ],
+        },
+        "id": "1689829186690",
+        "shortDescription": "description",
+        "title": "post title",
+
+      110 |       .catch((error) => handleTestError(error));
+      111 |
+    > 112 |     expect(itemAfterLikeAction).toStrictEqual(expectedItemWithLike);
+          |                                 ^
+      113 |   }
+      114 | };
+      115 |
+
+      at performLikeTestFlow (src/tests/jest/back/testHelpers/performTestsFlow/performTestLikesFlow.ts:112:33)
+          at runMicrotasks (<anonymous>)
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:208:7)
+
+  > Homework 12  Posts likes  GET -> "/posts": create 6 posts then:
+  like post 1 by user 1, user 2;
+  like post 2 by user 2, user 3;
+  dislike post 3 by user 1;
+  like post 4 by user 1, user 4, user 2, user 3;
+  like post 5 by user 2, dislike by user 3;
+  like post 6 by user 1, dislike by user 2.
+  Get the posts by user 1 after all likes
+  NewestLikes should be sorted in descending; status 200; content: posts array with pagination;  used additional methods: POST -> /blogs, POST -> /posts, PUT -> posts/:postId/like-status;
+
+
+
+    Expected: ArrayContaining [{"blogId": Any<String>, "blogName": Any<String>, "content": Any<String>, "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "extendedLikesInfo": {"dislikesCount": Any<Number>, "likesCount": Any<Number>, "myStatus": StringMatching /^Like$|^Dislike$|^None$/, "newestLikes": Any<Array>}, "id": Any<String>, "shortDescription": Any<String>, "title": Any<String>}]
+
+    Received: [{"id":"1689829194367","createdAt":"2023-07-20T04:59:54.367Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689829194208"},{"id":"1689829194523","createdAt":"2023-07-20T04:59:54.523Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689829194208"},{"id":"1689829194677","createdAt":"2023-07-20T04:59:54.677Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689829194208"},{"id":"1689829194855","createdAt":"2023-07-20T04:59:54.855Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689829194208"},{"id":"1689829195019","createdAt":"2023-07-20T04:59:55.019Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689829194208"},{"id":"1689829195177","createdAt":"2023-07-20T04:59:55.177Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689829194208"}]
+
+    Wrong entity: {"id":"1689829194367","createdAt":"2023-07-20T04:59:54.367Z","blogName":"new blog","content":"new post content","shortDescription":"description","title":"post title","blogId":"1689829194208"}
+
+      245 |       }).catch((error) => handleTestError(error));
+      246 |
+    > 247 |       expect(create6PostsResult).toBeStrictObjectsArray(postSchema);
+          |                                  ^
+      248 |
+      249 |       const posts6WithLikes = await likeSeveralItemsSeveralTimes({
+      250 |         //userWhoGet should be loggedUsers[0]
+
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:247:34)
+          at runMicrotasks (<anonymous>)
+
+  > Homework 12  Posts likes  GET -> "/blogs/:blogId/posts": create 6 posts then:
+  like post 1 by user 1, user 2;
+  like post 2 by user 2, user 3;
+  dislike post 3 by user 1;
+  like post 4 by user 1, user 4, user 2, user 3;
+  like post 5 by user 2, dislike by user 3;
+  like post 6 by user 1, dislike by user 2.
+  Get the posts by user 1 after all likes
+  NewestLikes should be sorted in descending; status 200; content: posts array with pagination;  used additional methods: POST -> /blogs, POST -> /blogs/:blogId/posts, PUT -> posts/:postId/like-status;
+
+
+
+    Expected: ArrayContaining [{"blogId": Any<String>, "blogName": Any<String>, "content": Any<String>, "createdAt": StringMatching /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/, "extendedLikesInfo": {"dislikesCount": Any<Number>, "likesCount": Any<Number>, "myStatus": StringMatching /^Like$|^Dislike$|^None$/, "newestLikes": Any<Array>}, "id": Any<String>, "shortDescription": Any<String>, "title": Any<String>}]
+
+    Received: [{"id":"1689829195487","createdAt":"2023-07-20T04:59:55.487Z","blogName":"new blog","blogId":"1689829195329","content":"new post content","shortDescription":"description","title":"post title"},{"id":"1689829195647","createdAt":"2023-07-20T04:59:55.647Z","blogName":"new blog","blogId":"1689829195329","content":"new post content","shortDescription":"description","title":"post title"},{"id":"1689829195810","createdAt":"2023-07-20T04:59:55.810Z","blogName":"new blog","blogId":"1689829195329","content":"new post content","shortDescription":"description","title":"post title"},{"id":"1689829195962","createdAt":"2023-07-20T04:59:55.962Z","blogName":"new blog","blogId":"1689829195329","content":"new post content","shortDescription":"description","title":"post title"},{"id":"1689829196138","createdAt":"2023-07-20T04:59:56.138Z","blogName":"new blog","blogId":"1689829195329","content":"new post content","shortDescription":"description","title":"post title"},{"id":"1689829196574","createdAt":"2023-07-20T04:59:56.574Z","blogName":"new blog","blogId":"1689829195329","content":"new post content","shortDescription":"description","title":"post title"}]
+
+    Wrong entity: {"id":"1689829195487","createdAt":"2023-07-20T04:59:55.487Z","blogName":"new blog","blogId":"1689829195329","content":"new post content","shortDescription":"description","title":"post title"}
+
+      297 |       }).catch((error) => handleTestError(error));
+      298 |
+    > 299 |       expect(create6PostsResult).toBeStrictObjectsArray(postSchema);
+          |                                  ^
+      300 |
+      301 |       const posts6WithLikes = await likeSeveralItemsSeveralTimes({
+      302 |         //userWhoGet should be loggedUsers[0]
+
+      at Object.<anonymous> (src/tests/jest/back/describes/likes/postLikes-describe-v2.ts:299:34)
+          at runMicrotasks (<anonymous>)

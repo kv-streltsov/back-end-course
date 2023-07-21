@@ -1,7 +1,5 @@
 import request from 'supertest'
 import {app} from "../src";
-import {likesStatusModel} from "../src/db/schemes/likes.scheme";
-import {commentsModel} from "../src/db/schemes/comments.scheme";
 
 
 const userOne = {
@@ -148,6 +146,7 @@ describe('/12 like posts', () => {
                 content: 'test post content',
                 shortDescription: 'shortDescription test post'
             }).expect(201)
+        console.log(`created post`, post.body)
 
         postId = post.body.id
 
@@ -203,13 +202,11 @@ describe('/12 like posts', () => {
     });
     it('GET LIKE STATUS', async () => {
 
-        // FIRST USER GET COMMENT | SHOULD RETURN 1 LIKE 2 DISLIKE AND MY STATUS `Dislike`
+        // FIRST USER GET COMMENT | SHOULD RETURN 2 LIKE 2 DISLIKE AND MY STATUS `Like`
         let post = await request(app)
             .get(`/posts/${postId}`)
             .set('Authorization', `Bearer ${userOne.accessToken}`).expect(200)
 
-        console.log(`test post`,post.body)
-        console.log(123123,userOne.accessToken )
 
         expect(post.body).toEqual({
             id: postId,

@@ -102,7 +102,11 @@ export class PostController {
 
     async postPost(req: RequestWithBody<InterfacePostInput>, res: Response) {
         const createdPost: InterfacePostView | undefined = await this.postsService.postPost(req.body)
-        res.status(HttpStatusCode.CREATED).send(createdPost)
+        const extendedLikesInfo = await this.queryLikeStatusRepository.getExtendedLikesInfo(createdPost!.id, req.user === undefined ? null : req.user)
+        res.status(HttpStatusCode.CREATED).send({
+            ...createdPost,
+            extendedLikesInfo
+        })
     }
 
     async putPostById(req: RequestWithParamsAndBody<any, InterfacePostView>, res: Response) {
