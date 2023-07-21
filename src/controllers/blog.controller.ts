@@ -15,11 +15,14 @@ import {InterfacePostInBlog} from "../dto/interface.post";
 import  {BlogsServiceClass} from "../domain/blog-service";
 import {inject, injectable} from "inversify";
 import {Blog, blogsModel} from "../db/schemes/blogs.scheme";
+import {QueryPostsRepositoryClass} from "../repositories/query-posts-repository";
+import {QueryLikeStatusRepositoryClass} from "../repositories/query-like-status-repository";
 
 @injectable()
 export class BlogController {
     constructor(
       @inject(QueryBlogsRepositoryClass)protected queryBlogsRepository:QueryBlogsRepositoryClass,
+      @inject(QueryLikeStatusRepositoryClass)protected queryLikeStatusRepository:QueryLikeStatusRepositoryClass,
       @inject(BlogsServiceClass)protected  blogsService: BlogsServiceClass
     ) {}
 
@@ -73,11 +76,16 @@ export class BlogController {
     async postPostByBlogId(req: RequestWithParamsAndBody<{ id: string }, InterfacePostInBlog>,
                            res: Response) {
 
-        const createdBlog = await this.blogsService.postPostInBlog(req.params.id, req.body)
-        if (createdBlog === undefined || createdBlog === null) {
+        const createdPost = await this.blogsService.postPostInBlog(req.params.id, req.body)
+        const extendedLikesInfo = await this.queryLikeStatusRepository.getExtendedLikesInfo(createdPost!.id, req.user === undefined ? null : req.user)
+
+        if (createdPost === undefined || createdPost === null) {
             res.sendStatus(HttpStatusCode.NOT_FOUND)
         } else {
-            res.status(HttpStatusCode.CREATED).send(createdBlog)
+            res.status(HttpStatusCode.CREATED).send({
+                ...createdPost,
+                extendedLikesInfo
+            })
         }
 
     }

@@ -31,14 +31,8 @@ const userFour = {
     accessToken: null,
 }
 
-let commentIdOne: any
-let commentIdTwo: any
-let commentIdThree: any
-let commentIdFour: any
-let commentIdFive: any
-let commentIdSix: any
-
 let postId: any
+let postSecondId: any
 
 describe('/12 like posts', () => {
     /////////////////////////////    REPARATION    /////////////////////////////////////////
@@ -146,9 +140,59 @@ describe('/12 like posts', () => {
                 content: 'test post content',
                 shortDescription: 'shortDescription test post'
             }).expect(201)
-        console.log(`created post`, post.body)
+
+        expect(post.body).toEqual({
+            id: post.body.id,
+            createdAt: expect.any(String),
+            blogName: 'testBlog',
+            title: 'it test test post',
+            blogId: blog.body.id,
+            content: 'test post content',
+            shortDescription: 'shortDescription test post',
+            extendedLikesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None',
+                newestLikes: []
+            }
+        })
+
+
+        // CREATE SECOND POSTS VIA ENDPOINT BLOG
+        const postSecond = await request(app)
+            .post(`/blogs/${blog.body.id}/posts`)
+            .auth('admin', 'qwerty')
+            .send({
+                title: 'it test test post',
+                blogId: blog.body.id,
+                content: 'test post content',
+                shortDescription: 'shortDescription test post'
+            }).expect(201)
+
+        expect(postSecond.body).toEqual({
+            id: postSecond.body.id,
+            createdAt: expect.any(String),
+            blogName: 'testBlog',
+            title: 'it test test post',
+            blogId: blog.body.id,
+            content: 'test post content',
+            shortDescription: 'shortDescription test post',
+            extendedLikesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: 'None',
+                newestLikes: []
+            }
+        })
 
         postId = post.body.id
+        postSecondId = postSecond.body.id
+
+
+
+
+
+
 
 
     });
@@ -162,7 +206,7 @@ describe('/12 like posts', () => {
             .expect(404)
         // PUSH LIKE | status incorrect | SHOULD RETURN 401
         const error = await request(app)
-            .put(`/posts/${111}/like-status`)
+            .put(`/posts/${postId}/like-status`)
             .set('Authorization', `Bearer ${userOne.accessToken}`)
             .send({"likeStatus": "Likee"})
             .expect(400)
