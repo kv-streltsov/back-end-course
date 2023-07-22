@@ -61,6 +61,15 @@ export class BlogController {
             req.query?.sortBy && req.query.sortBy,
             req.params.id.toString()
         )
+
+        posts.items =  await Promise.all(posts.items.map(async (post: { id: string; }) => {
+            const extendedLikesInfo = await this.queryLikeStatusRepository.getExtendedLikesInfo(post.id, req.user === undefined ? null : req.user)
+            return {
+                ...post,
+                extendedLikesInfo
+            }
+        }))
+
         if (posts !== null) {
             res.status(HttpStatusCode.OK).send(posts)
         } else res.sendStatus(HttpStatusCode.NOT_FOUND)

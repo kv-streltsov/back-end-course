@@ -49,7 +49,8 @@ export class QueryBlogsRepositoryClass {
         }
         const count: number = await postsModel.countDocuments({blogId: id})
         const {countItems, sortField} = this.paginationHandler(pageNumber, pageSize, sortBy, sortDirection)
-        const posts = await postsModel.find({blogId: id})
+        const posts = await postsModel
+            .find({blogId: id})
             .select(this.PROJECTION)
             .sort(sortField)
             .skip(countItems)
